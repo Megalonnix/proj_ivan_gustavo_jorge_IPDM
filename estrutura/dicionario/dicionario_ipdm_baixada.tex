@@ -1,0 +1,167 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[portuguese]{babel}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{geometry}
+\geometry{margin=2cm}
+\usepackage{ragged2e}
+
+\title{Dicionário de Dados --- IPDM da Baixada Santista}
+\author{Projeto IPDM --- Ivan, Gustavo e Jorge}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Apresentação}
+Este dicionário descreve as variáveis do conjunto de dados \texttt{df\_ipdm\_baixada\_por\_municipio.csv}, que reúne os índices sintéticos e componentes do Índice Paulista de Desenvolvimento Municipal (IPDM) para os nove municípios da Região Metropolitana da Baixada Santista, nos anos de 2014, 2016, 2018, 2020, 2022 e 2024.
+
+\section*{Dicionário de Variáveis}
+
+\begin{longtable}{@{}p{4.2cm} p{5.0cm} p{1.8cm} p{2.4cm} p{2.0cm}@{}}
+\caption{Dicionário de dados do \texttt{df\_ipdm\_baixada\_por\_municipio}.}\\
+\toprule
+\textbf{Variável} & \textbf{Descrição} & \textbf{Tipo} & \textbf{Valores} & \textbf{Unidade de medida} \\
+\midrule
+\endfirsthead
+
+\toprule
+\textbf{Variável} & \textbf{Descrição} & \textbf{Tipo} & \textbf{Valores} & \textbf{Unidade de medida} \\
+\midrule
+\endhead
+
+\midrule
+\multicolumn{5}{r}{\small\textit{Continua na próxima página\ldots}}\\
+\endfoot
+
+\bottomrule
+\endlastfoot
+
+\texttt{cod\_ibge} &
+Código oficial de 7 dígitos do município, definido pelo IBGE. &
+Numérico (inteiro) &
+7 dígitos (ex.: 3506359) &
+--- \\
+
+\texttt{Municipio} &
+Nome do município pertencente à Região Metropolitana da Baixada Santista. &
+Texto &
+Bertioga, Cubatão, Guarujá, Itanhaém, Mongaguá, Peruíbe, Praia Grande, Santos, São Vicente &
+--- \\
+
+\texttt{Ano} &
+Ano de referência do triênio em que o IPDM foi calculado. &
+Numérico (inteiro) &
+2014, 2016, 2018, 2020, 2022, 2024 &
+Ano \\
+
+\texttt{Riqueza [índice 0-1]} &
+Indicador sintético da dimensão Riqueza do IPDM, composto por PIB per capita, rendimento do trabalho formal, e consumo de energia elétrica. &
+Numérico (decimal) &
+0,321 -- 0,575 &
+Índice (0 a 1) \\
+
+\texttt{Longevidade [índice 0-1]} &
+Indicador sintético da dimensão Longevidade do IPDM, composto pelas taxas de mortalidade infantil, perinatal, de 15 a 39 anos e de 60 a 69 anos. &
+Numérico (decimal) &
+0,560 -- 0,756 &
+Índice (0 a 1) \\
+
+\texttt{Escolaridade [índice 0-1]} &
+Indicador sintético da dimensão Escolaridade do IPDM, composto por atendimento escolar (0--3), proficiência no 5º e 9º ano e distorção idade-série. &
+Numérico (decimal) &
+0,334 -- 0,602 &
+Índice (0 a 1) \\
+
+\texttt{IPDM [índice 0-1]} &
+Índice Paulista de Desenvolvimento Municipal: média aritmética das dimensões Riqueza, Longevidade e Escolaridade. &
+Numérico (decimal) &
+0,442 -- 0,604 &
+Índice (0 a 1) \\
+
+\texttt{Taxas de mortalidade 60 a 69 anos} &
+Taxa de mortalidade da população de 60 a 69 anos, por mil habitantes. &
+Numérico (decimal) &
+13,94 -- 32,99 &
+Por mil habitantes \\
+
+\texttt{Taxas de distorção idade-série no Ensino Médio} &
+Percentual de alunos do Ensino Médio com atraso escolar de dois anos ou mais. &
+Numérico (decimal) &
+8,20 -- 26,80 &
+\% \\
+
+\texttt{Produto Interno Bruto per capita} &
+PIB per capita do município, em valores de 2024. &
+Numérico (decimal) &
+22.112 -- 270.118 &
+R\$ (2024) \\
+
+\texttt{Taxas de mortalidade 15 a 39 anos} &
+Taxa de mortalidade da população de 15 a 39 anos, por mil habitantes. &
+Numérico (decimal) &
+1,07 -- 2,18 &
+Por mil habitantes \\
+
+\texttt{Rendimento do trabalho formal mais benefícios previdenciários per capita} &
+Rendimento médio do trabalho formal somado a benefícios previdenciários (aposentadorias e pensões), per capita. &
+Numérico (decimal) &
+777,74 -- 3.183,93 &
+R\$ (2024) \\
+
+\texttt{Proporção média de alunos do 9º ano com proficiência} &
+Média das proporções de alunos do 9º ano do EF da rede pública com proficiência adequada em Língua Portuguesa e Matemática (Prova Brasil). &
+Numérico (decimal) &
+12,74 -- 37,29 &
+\% \\
+
+\texttt{Taxas de mortalidade perinatal} &
+Taxa de mortalidade perinatal (natimortos + óbitos de 0 a 6 dias), por mil nascidos vivos. &
+Numérico (decimal) &
+8,54 -- 21,38 &
+Por mil nascidos vivos \\
+
+\texttt{Proporção média de alunos do 5º ano com proficiência} &
+Média das proporções de alunos do 5º ano do EF da rede pública com proficiência adequada em Língua Portuguesa e Matemática (Prova Brasil). &
+Numérico (decimal) &
+39,71 -- 71,87 &
+\% \\
+
+\texttt{Consumo anual de energia elétrica comercial, serviços e rural por ligação} &
+Consumo médio anual de energia elétrica nas atividades comercial, de serviços e rural, por ligação elétrica. &
+Numérico (decimal) &
+3,08 -- 43,34 &
+MWh por ligação \\
+
+\texttt{Taxas de mortalidade infantil} &
+Taxa de mortalidade infantil (óbitos de menores de 1 ano), por mil nascidos vivos. &
+Numérico (decimal) &
+7,80 -- 20,14 &
+Por mil nascidos vivos \\
+
+\texttt{Taxas de atendimento escolar de crianças de 0 a 3 anos} &
+Percentual de crianças de 0 a 3 anos matriculadas em creche/escola em relação à população dessa faixa. &
+Numérico (decimal) &
+23,85 -- 58,11 &
+\% \\
+
+\texttt{Consumo anual de energia elétrica residencial por ligação} &
+Consumo médio anual de energia elétrica residencial, por ligação elétrica. &
+Numérico (decimal) &
+2,43 -- 7,54 &
+MWh por ligação \\
+
+\end{longtable}
+
+\section*{Observações}
+\begin{itemize}
+  \item Os valores em decimais usam vírgula como separador decimal, conforme o padrão brasileiro (ex.: \texttt{0,365}).
+  \item Os indicadores sintéticos (\texttt{Riqueza}, \texttt{Longevidade}, \texttt{Escolaridade} e \texttt{IPDM}) variam entre 0 e 1.
+  \item As faixas de valores apresentadas referem-se apenas aos nove municípios da Baixada Santista contemplados no recorte deste projeto, e não ao universo completo dos 645 municípios paulistas.
+  \item Fonte original dos dados: Fundação Seade (IPDM) e demais órgãos citados no Anexo Metodológico (IBGE, MEC/Inep, Rais, INSS).
+\end{itemize}
+
+\end{document}
