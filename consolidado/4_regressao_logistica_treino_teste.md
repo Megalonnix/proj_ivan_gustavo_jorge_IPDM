@@ -59,18 +59,18 @@ limiares possíveis. Leitura rápida:
 Neste split, a AUC deve ficar próxima de 0,5, confirmando numericamente o
 que a matriz de confusão já mostra.
 
-![](figuras/fig4_logistica_sigmoide_teste.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig4_logistica_sigmoide_teste.png)
 
 A curva sigmoide foi ajustada **apenas com o treino**; os pontos laranja são
 as observações de teste. Como o coeficiente do PIB é praticamente nulo, a
 curva resultante é quase plana — leitura visual direta da ausência de sinal.
 
-![](figuras/fig4_logistica_matriz_confusao.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig4_logistica_matriz_confusao.png)
 
 Matriz de confusão visual. A concentração de toda a massa na linha "1"
 reflete o colapso do classificador em uma única classe neste split.
 
-![](figuras/fig4_logistica_roc.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig4_logistica_roc.png)
 
 Curva ROC com AUC anotada. A diagonal tracejada representa o classificador
 aleatório. A proximidade da curva a essa diagonal quantifica o poder
