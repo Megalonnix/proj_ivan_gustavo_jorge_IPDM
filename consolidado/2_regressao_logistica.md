@@ -40,7 +40,7 @@ relação ao modelo nulo. Valores baixos (típicos em logística aplicada a
 fenômenos sociais) indicam que o PIB, sozinho, discrimina pouco entre
 municípios acima e abaixo da mediana.
 
-![](figuras/fig2_logistica_sigmoide.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig2_logistica_sigmoide.png)
 
 A curva sigmoide mostra a probabilidade prevista em função do PIB, com os
 pontos observados (0/1) sobrepostos. A inclinação da curva traduz a força

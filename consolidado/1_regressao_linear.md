@@ -43,19 +43,19 @@ o tamanho amostral efetivo e com a estrutura de painel.
 
 ## 4. Diagnósticos
 
-![](figuras/fig1_linear_dispersao.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig1_linear_dispersao.png)
 
 Dispersão, reta OLS e banda de confiança de 95%. A relação é negativa mas
 ruidosa: há considerável heterogeneidade em torno da reta, coerente com o R²
 baixo.
 
-![](figuras/fig1_linear_residuos.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig1_linear_residuos.png)
 
 Resíduos vs. ajustados. A ausência de curvatura sistemática indica que a
 especificação linear não está grosseiramente errada. Eventual padrão em funil
 apontaria heterocedasticidade.
 
-![](figuras/fig1_linear_qq.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig1_linear_qq.png)
 
 QQ-plot dos resíduos. O teste de Shapiro-Wilk no output dá o veredito formal
 sobre a normalidade — premissa relevante para a validade dos testes t e F em

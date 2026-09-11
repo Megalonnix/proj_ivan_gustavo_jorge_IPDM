@@ -40,14 +40,14 @@ sobreajuste. Com apenas um preditor e 38 pontos, o sobreajuste tende a ser
 pequeno — o risco aqui é o oposto: **subajuste**, já que o PIB explica pouco
 da mortalidade mesmo dentro da amostra.
 
-![](figuras/fig3_linear_teste_reta.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig3_linear_teste_reta.png)
 
 A reta foi ajustada **apenas com os pontos cinza (treino)**; os pontos
 laranja (teste) foram sobrepostos depois. Se a reta descrevesse bem o
 fenômeno, os pontos de teste ficariam próximos dela — a dispersão visível
 quantifica a limitação do modelo.
 
-![](figuras/fig3_linear_previsto_real.png)
+![](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/fig3_linear_previsto_real.png)
 
 Previsto vs. real. Quanto mais próximos da diagonal, melhor. Desvios
 sistemáticos (nuvem acima ou abaixo da linha) indicariam viés; dispersão
