@@ -61,6 +61,13 @@ rowSums(!is.na(df_ipdm_baixada[, c("Indicador 1", "Indicador 2",
 # ==============================================================================
 # 5. CÁLCULO DO IPDM E FORMATAÇÃO DAS VARIÁVEIS (FORMATO WIDE)
 # ==============================================================================
+
+wide <- df_ipdm_baixada %>%
+  mutate(rotulo = coalesce(na_if(`Indicador 5`, ""), na_if(`Indicador 4`, ""))) %>%
+  filter(!is.na(rotulo)) %>%
+  select(cod_ibge, Municipio, Ano, rotulo, Valor) %>%
+  pivot_wider(names_from = rotulo, values_from = Valor)
+
 # Nota: Certifique-se de que o objeto 'wide' foi criado no seu script antes desta etapa.
 wide <- wide %>%
   # Calcula a média simples das três dimensões para gerar o IPDM final
@@ -88,5 +95,4 @@ write.csv2(
   row.names = FALSE,
   fileEncoding = "Latin1"
 )
-           
            
