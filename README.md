@@ -76,8 +76,14 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │   ├── 05-regressao-linear-treino-teste.md
 │   ├── 06-regressao-logistica-treino-teste.md
 │   ├── 07-reamostragem.md
-│   └── 08-regularizacao.md
+│   ├── 08-regularizacao.md
+│   ├── 09-escolha-da-pergunta.md
+│   ├── entrega-1-pergunta.Rnw
+│   ├── entrega-1-pergunta.pdf
+│   └── referencias.bib
 ├── estrutura/
+│   ├── codigo/
+│   │   └── 09-escolha-da-pergunta.R
 │   ├── bancoDeDados/
 │   │   ├── 0_dicionario_ipdm_ORIGINAL.csv
 │   │   ├── dados_ipdm.csv
@@ -149,7 +155,8 @@ proj_ivan_gustavo_jorge_(IPDM)/
 | Pasta | O que é |
 |---|---|
 | `assets/` | Instruções auxiliares do projeto (arquivos `.txt` de orientação interna) |
-| `consolidado/` | Resultados das análises com interpretação racional (relatórios didáticos) |
+| `consolidado/` | Relatórios didáticos das atividades; inclui a análise comparativa da Atividade 09 (`09-escolha-da-pergunta.md`) e a entrega formal em PDF, cujo fonte é `entrega-1-pergunta.Rnw` |
+| `estrutura/codigo/` | Scripts auxiliares de análise e geração de entregas, incluindo a Atividade 09 |
 | `estrutura/bancoDeDados/` | Arquivos `.csv` utilizados nas análises (principalmente o da Baixada Santista) |
 | `estrutura/dicionario/` | Dicionário de variáveis em LaTeX (`.tex`) e PDF |
 | `estrutura/notebooks/` | Cópias das análises `.R`, feitas para rodar em nuvem via Colab |
@@ -173,6 +180,37 @@ Os números de página referem-se aos marcadores `===== Page X =====` do PDF das
 | 06 | [06-regressao-logistica-treino-teste.md](consolidado/06-regressao-logistica-treino-teste.md) | `estrutura/scriptsR/06-regressao-logistica-treino-teste.R` | Aula 06 | pág. 27 | Mesmo exercício da pág. 27, estendido à classificação por analogia. O enunciado não especifica `glm`, mas diz "dois modelos das aulas passadas" |
 | 07 | [07-reamostragem.md](consolidado/07-reamostragem.md) | `estrutura/scriptsR/07-reamostragem.R` | Aula 07 | pág. 23 | Exercício "Traque a divisão única da Aula 6 por validação cruzada, e qualifique um coeficiente por bootstrap: 1) CV(5) comparando dois candidatos; 2) bootstrap do coeficiente" |
 | 08 | [08-regularizacao.md](consolidado/08-regularizacao.md) | `estrutura/scriptsR/08-regularizacao.R` | Aula 08 | pág. 29 | Exercício "library(glmnet)... cv.glmnet(X, yv, alpha = 1); cv.glmnet(X, yv, alpha = 0)" — Lasso e Ridge com curva em U |
+| 09 | [09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md) e [entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf) | `estrutura/codigo/09-escolha-da-pergunta.R` e `consolidado/entrega-1-pergunta.Rnw` | Aula 09 | — | Compara duas perguntas candidatas e documenta a escolha da pergunta de pesquisa; a entrega formal em PDF aprofunda a pergunta escolhida |
+
+---
+
+## Atividade 09 — dois documentos complementares
+
+A Atividade 09 tem dois documentos com papéis diferentes; um não substitui o outro:
+
+- **[09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md):** relatório analítico da atividade. Compara as duas perguntas candidatas, registra os diagnósticos do banco e os resultados da validação cruzada que fundamentam a escolha da Pergunta 1. É gerado pelo script [09-escolha-da-pergunta.R](estrutura/codigo/09-escolha-da-pergunta.R).
+- **[entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf):** versão formal da entrega, voltada à apresentação da pergunta escolhida. Expõe o problema, os dados, a pergunta, os diagnósticos e a justificativa. Seu fonte editável é [entrega-1-pergunta.Rnw](consolidado/entrega-1-pergunta.Rnw), e as referências estão em [referencias.bib](consolidado/referencias.bib).
+
+### Como gerar os dois documentos
+
+É necessário ter **R** instalado. Para gerar o PDF, também é necessário o pacote R `knitr` e uma distribuição LaTeX (por exemplo, MiKTeX ou TeX Live).
+
+Na raiz do repositório, gere primeiro o relatório Markdown:
+
+```bash
+Rscript estrutura/codigo/09-escolha-da-pergunta.R
+```
+
+O script lê o CSV em `estrutura/bancoDeDados/` (com alternativa de download do repositório) e grava `consolidado/09-escolha-da-pergunta.md`.
+
+Em seguida, gere o PDF. No RStudio, abra `consolidado/entrega-1-pergunta.Rnw`, confirme que o mecanismo de Sweave é **knitr** e clique em **Compile PDF**. Alternativamente, no terminal:
+
+```bash
+cd consolidado
+Rscript -e "knitr::knit2pdf('entrega-1-pergunta.Rnw')"
+```
+
+Execute o comando do terminal a partir da raiz do repositório. O `.Rnw` usa o CSV local em `estrutura/bancoDeDados/` (ou o baixa como alternativa), e o processo de compilação usa `referencias.bib`. O PDF é gravado em `consolidado/entrega-1-pergunta.pdf`.
 
 ---
 
