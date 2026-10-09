@@ -115,7 +115,7 @@ A AUC de B (0,5556) confirma: **ainda marginalmente acima do aleatório**. Nada 
 
 O script também roda as matrizes em limiares 0,3, 0,5 e 0,7 para A e B. O comportamento revela o que já sabíamos:
 
-- **Limiar 0,3:** A prevê tudo como classe 1 (27/27 errado... na verdade, no teste, todos os 17 como 1). B acerta mais, mas com muitos falsos positivos.
+- **Limiar 0,3:** A prevê tudo como classe 1 (17/17 errado). B acerta mais, mas com muitos falsos positivos.
 - **Limiar 0,5:** a matriz já vista acima.
 - **Limiar 0,7:** A prevê tudo como 0. B também prevê tudo como 0 — a acurácia cai para o mesmo do baseline.
 
@@ -143,7 +143,9 @@ A combinação "curva suave + pontos misturados" é a assinatura visual de **sin
 
 ![Curvas ROC de A e B no teste, com AUC respectivas](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/06-regressao-logistica-treino-teste_img2.png)
 
-Duas curvas: A em azul, B em roxo. A diagonal cinza tracejada é o aleatório (AUC = 0,5).
+Duas curvas: **A em azul sólido**, **B em laranja tracejado**. A diagonal cinza pontilhada é o aleatório (AUC = 0,5).
+
+O contraste visual entre A e B foi deliberadamente reforçado: a versão anterior do script usava azul e roxo, cores próximas demais para distinguir com segurança. Agora as curvas se separam por **cor e por traço** — o que também resolve o problema para impressão em preto e branco ou para leitores com dificuldade de distinguir cores.
 
 O que observar:
 
