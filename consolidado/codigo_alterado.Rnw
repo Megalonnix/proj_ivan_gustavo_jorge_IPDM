@@ -10,9 +10,8 @@
 
 % --- Codificação e idioma ---
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-\usepackage[brazil,english]{babel}
+\usepackage[brazilian,english]{babel}
 
 % --- Matemática e tabelas ---
 \usepackage{amsmath,amssymb}
@@ -153,7 +152,7 @@ texto_falta <- if (sum(faltantes) == 0) {
 }
 @
 
-\selectlanguage{brazil}
+\selectlanguage{brazilian}
 \frenchspacing
 
 \maketitle
@@ -171,32 +170,24 @@ texto_falta <- if (sum(faltantes) == 0) {
 % ==========================================================================
 \section{Introdução}
 % ==========================================================================
-Apresente o domínio do trabalho e diga por que ele interessa. Feche o primeiro
-parágrafo dizendo, em uma frase, o que este texto faz: apresenta o banco
-escolhido, formula a pergunta do trabalho e mostra que os dados têm condição de
-respondê-la.
+O monitoramento da mortalidade é essencial para o planejamento de políticas públicas de saúde, sobretudo para a população idosa (60 a 69 anos), que demanda maior atenção e recursos do sistema de saúde. Compreender como essa mortalidade varia na Baixada Santista pode ajudar na alocação mais eficiente de recursos e na identificação de municípios que necessitam de intervenções prioritárias. O presente texto apresenta o banco de dados escolhido, formula a pergunta do trabalho e mostra que os dados têm condição de respondê-la, auxiliando as secretarias de saúde da região.
 
 Referências entram pela NBR 10520. Com o autor ao fim da frase, o formato sai
 entre parênteses \cite{james2021}; com o autor no corpo do texto, use
 \verb|\citeonline| --- segundo \citeonline{bruce2019}, a escolha da métrica vem
-antes da escolha do modelo. Para indicar página: \cite[p.~23]{james2021}.
+antes da escolha do modelo.
 
 % ==========================================================================
 \section{O banco de dados e o problema}
 % ==========================================================================
-Descreva a origem do banco, com a referência \cite{fonte_dados}. Diga o que
-representa cada linha e quais são as colunas principais. O conjunto usado tem
-$n = \Sexpr{n}$ observações e $p = \Sexpr{p}$ preditores candidatos.
+O banco de dados utilizado é o Índice Paulista de Desempenho Municipal (IPDM) da Baixada Santista, mantido pela Fundação Seade \cite{fonte_dados}. Cada linha representa o registro de um município da Baixada Santista em um determinado ano. As colunas principais incluem indicadores sociais (como riqueza e escolaridade) e a taxa de mortalidade na faixa de 60 a 69 anos. O conjunto usado tem $n = \Sexpr{n}$ observações e $p = \Sexpr{p}$ preditores candidatos.
 
-Explique a escolha: por que este banco. E termine situando o \emph{problema} ---
-a decisão concreta, tomada por alguém, que dependeria de uma resposta melhor do
-que a que se tem hoje.
+A escolha deste banco se justifica pela relevância e disponibilidade de dados consistentes sobre as condições de vida e saúde na região. O \emph{problema} a ser resolvido envolve a decisão, por parte das secretarias de saúde da Baixada Santista, de onde priorizar a atenção e os recursos voltados à população de 60 a 69 anos. Uma resposta baseada em dados permitiria que a gestão regional sinalizasse e priorizasse áreas de maior risco com mais segurança do que a abordagem atual.
 
 % ==========================================================================
 \section{A pergunta}
 % ==========================================================================
-Enuncie aqui a pergunta, em uma frase, sem jargão técnico. A
-Tabela~\ref{tab:ficha} detalha os sete campos que a definem.
+A pergunta central do trabalho é: \textit{Quanto a mortalidade de 60 a 69 anos varia com onde (município) e quando (ano) — e quais municípios ficam acima do esperado para o seu ano?} A Tabela~\ref{tab:ficha} detalha os sete campos que a definem.
 
 \begin{table}[htb]
   \centering
@@ -207,23 +198,21 @@ Tabela~\ref{tab:ficha} detalha os sete campos que a definem.
     \toprule
     \textbf{Campo} & \textbf{Preenchimento} \\
     \midrule
-    1. A pergunta, em uma frase & \textit{escreva aqui} \\
+    1. A pergunta, em uma frase & \textit{Quanto a mortalidade de 60 a 69 anos varia com onde (município) e quando (ano) — e quais municípios ficam acima do esperado para o seu ano?} \\
     2. Resposta $Y$: coluna, tipo, unidade & \texttt{\Sexpr{resposta_tex}} ---
-       \Sexpr{palavra_resposta} --- \textit{unidade} \\
-    3. Preditores $X$: quais e quantos & \textit{liste} \quad ($p = \Sexpr{p}$) \\
+       \Sexpr{palavra_resposta} --- \textit{mortes por mil hab.} \\
+    3. Preditores $X$: quais e quantos & \textit{\texttt{municipio} (9 níveis) e \texttt{ano} como categoria (6 níveis)} \quad ($p = \Sexpr{p}$) \\
     4. Tipo: as três decisões & supervisionado; \Sexpr{palavra_tipo};
-       \textit{predição ou inferência?} \\
-    5. Métrica & \Sexpr{palavra_metrica} \\
+       \textit{inferência} \\
+    5. Métrica & \Sexpr{palavra_metrica} em validação cruzada (5 dobras) \\
     6. Linha de base a bater & \Sexpr{texto_base} \quad (\Sexpr{nome_base}) \\
-    7. Dono do problema & \textit{quem decidiria o quê com a resposta?} \\
+    7. Dono do problema & \textit{Secretarias de saúde da Baixada: decidir onde priorizar a atenção à população de 60 a 69 anos} \\
     \bottomrule
   \end{tabular}
   \fonte{Elaborada pelos autores.}
 \end{table}
 
-Justifique o tipo escolhido. Lembre que o campo 7 é o que separa uma pergunta de
-um exercício: se ninguém decidiria nada diferente com a resposta, a pergunta
-precisa ser reformulada.
+A abordagem escolhida é de inferência, pois o objetivo principal é entender e explicar o comportamento da variável de resposta com base nos preditores, identificando desvios e padrões estruturais. Conforme evidenciado no campo 7, a resposta pode influenciar diretamente a tomada de decisão das secretarias de saúde da Baixada Santista na priorização de recursos.
 
 % ==========================================================================
 \section{Defesa da pergunta}
@@ -250,14 +239,12 @@ A Tabela~\ref{tab:diag} reúne as quatro verificações feitas sobre o banco.
 \end{table}
 
 \textbf{Vazamento.} A linha ``maior correlação'' da Tabela~\ref{tab:diag}
-aponta o preditor mais parecido com a resposta. Diga se essa semelhança é
-natural ou se denuncia uma coluna que \emph{já contém} a resposta.
+aponta o preditor \texttt{longevidade} como o mais parecido com a resposta. Como o dicionário de variáveis mostra que \texttt{longevidade} já contém a taxa de mortalidade de 60–69 anos e que o \texttt{ipdm} contém \texttt{longevidade}, isso denuncia variáveis que já contêm a resposta. Logo, optamos por mantê-las fora da formulação desta pergunta para evitar vazamento de dados.
 
 \textbf{Tamanho.} São $\Sexpr{n}$ observações para $\Sexpr{p}$ preditores.
-Comente se há observações suficientes por coluna.
+Com a relação de $n/p \approx 4,2$, o cenário é apertado, mas viável: cada categoria aparece ao menos 6 vezes e o erro do modelo é medido fora da amostra (validação cruzada).
 
-\textbf{Balanço e faltantes.} Comente o balanço das classes (quando a resposta
-for qualitativa) e a presença de valores faltantes.
+\textbf{Balanço e faltantes.} O banco não possui valores faltantes (\Sexpr{texto_falta}), não sendo necessário aplicar técnicas de imputação. Como a resposta é quantitativa, o balanço de classes \Sexpr{texto_balanco}.
 
 A Figura~\ref{fig:resposta} mostra a distribuição da resposta.
 
@@ -278,9 +265,9 @@ if (quantitativa) {
   \fonte{Elaborada pelos autores.}
 \end{figure}
 
-\textbf{Veredito.} Feche dizendo se a pergunta se sustenta.
+\textbf{Veredito.} A pergunta se sustenta. O modelo base atinge um RMSE de $3,84$, enquanto a inclusão dos preditores \texttt{municipio} e \texttt{ano} reduz o erro para um RMSE de $2,20$ em validação cruzada, removendo $42,6\%$ do erro da linha de base.
 
-A pergunta é \textbf{provisória}: será revista depois da Aula 12.
+A pergunta é \textbf{provisória}: será revista depois da Aula 12, pois a aplicação de árvores, \emph{ensembles} e técnicas de regularização pode refinar a abordagem e permitir testar interações mais complexas.
 
 \postextual
 \bibliography{referencias}
