@@ -1,0 +1,361 @@
+% ==========================================================
+% ENTREGA 1 — A pergunta do trabalho
+% Teoria do Aprendizado Estatístico — Ciências de Dados
+% Fatec Baixada Santista – Rubens Lara
+% Derivado de modelo-trabalho.Rnw (R + knitr + abnTeX2)
+% ==========================================================
+%
+% O QUE ENTREGAR
+%   Um texto de NO MÁXIMO 3 PÁGINAS, com quatro seções:
+%     1. Introdução ................... o contexto e o objetivo
+%     2. O banco de dados e o problema  a escolha e a motivação dela
+%     3. A pergunta ................... a pergunta e a ficha de 7 campos
+%     4. Defesa da pergunta ........... a evidência de que ela se sustenta
+%   Mais as Referências (não contam nas 3 páginas).
+%
+% ONDE ENTREGAR
+%   O PDF e este .Rnw em  consolidados/
+%   O código que gerou os números em  estrutura/codigo/
+%
+% COMO COMPILAR
+%   RStudio: Tools > Global Options > Sweave >
+%            "Weave Rnw files using: knitr" e "Typeset LaTeX into PDF using: pdfLaTeX".
+%            Depois, botão "Compile PDF".
+%   Terminal: Rscript -e "knitr::knit2pdf('entrega-1-pergunta.Rnw')"
+%
+% ARQUIVOS NECESSÁRIOS NA MESMA PASTA
+%   entrega-1-pergunta.Rnw   (este arquivo)
+%   referencias.bib          (as referências em BibTeX)
+%
+% REQUISITOS
+%   R com knitr; LaTeX com abntex2 (TeX Live: texlive-publishers).
+%   Salve em UTF-8. Se acentos saírem como <U+00E9>, a sessão do R não
+%   está em locale UTF-8 (Linux: LANG=pt_BR.UTF-8 ou C.UTF-8).
+% ==========================================================
+
+\documentclass[
+  article,
+  12pt,
+  oneside,
+  a4paper,
+  english,
+  brazil
+]{abntex2}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{icomma}
+\usepackage{booktabs}
+\usepackage[alf]{abntex2cite}
+
+\hypersetup{hidelinks}
+
+% ----------------------------------------------------------
+% DADOS DA ENTREGA — preencha aqui
+% ----------------------------------------------------------
+\titulo{A pergunta do trabalho: \textit{Quanto a mortalidade de 60 a 69 anos na Baixada Santista depende de onde (município) e de quando (ano)?}}
+% O abntex2 imprime um "titulo estrangeiro" logo abaixo do titulo quando o
+% documento declara mais de um idioma. Deixe vazio se nao houver.
+\tituloestrangeiro{}
+\autor{Ivan, Gustavo e Jorge}
+\local{Santos-SP}
+\data{\today}
+
+\newcommand{\nomecurso}{Tecnologia em Ciência de Dados}
+\newcommand{\nomedisciplina}{Teoria do Aprendizado Estatístico}
+\newcommand{\nomeprofessor}{Prof.\ Dr.\ João Paulo Ferreira de Mello}
+\newcommand{\repositorio}{proj\_ivan\_gustavo\_jorge\_IPDM}
+% Um integrante por linha: Nome Completo -- RA
+\newcommand{\integrantes}{%
+  Ivan -- RA 1999000 \\
+  Gustavo -- RA 2004000 \\
+  Jorge -- RA 2006000%
+}
+
+\begin{document}
+
+<<setup, include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+  echo       = FALSE,   # o codigo NAO aparece: ele mora em estrutura/codigo/
+  message    = FALSE,
+  warning    = FALSE,
+  fig.align  = "center",
+  out.width  = "0.52\\linewidth",
+  fig.width  = 4,
+  fig.height = 4
+)
+options(OutDec = ",", digits = 4)
+@
+
+<<dados, include=FALSE>>=
+# =========================================================================
+#  BLOCO DO BANCO DE DADOS: IPDM da Baixada Santista (Seade)
+#  O resto do documento se ajusta sozinho a partir daqui.
+# =========================================================================
+# Caminho local (este .Rnw fica em consolidados/; compile de dentro dela).
+# Se o arquivo nao for achado, le direto do GitHub.
+arq_csv <- "../estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv"
+if (!file.exists(arq_csv)) {
+  arq_csv <- "https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv"
+}
+bruto <- read.csv(arq_csv, sep = ";", dec = ",", fileEncoding = "latin1",
+                  check.names = FALSE, stringsAsFactors = FALSE)
+
+dados <- data.frame(
+  municipio         = factor(bruto[[2]]),
+  ano               = as.integer(bruto[[3]]),
+  riqueza           = as.numeric(bruto[[4]]),
+  longevidade       = as.numeric(bruto[[5]]),
+  escolaridade      = as.numeric(bruto[[6]]),
+  ipdm              = as.numeric(bruto[[7]]),
+  mortalidade_60_69 = as.numeric(bruto[[8]]),
+  distorcao_em      = as.numeric(bruto[[9]]),
+  pib_per_capita    = as.numeric(bruto[[10]])
+)
+resposta <- "mortalidade_60_69"
+# =========================================================================
+
+# REGRA: nada de acento dentro de string de R -- o acento quebra quando a
+# sessao do R nao esta em locale UTF-8. Onde precisar, escreva o acento em
+# LaTeX ("m\\'edia", "regress\\~ao"): o \Sexpr repassa intacto.
+tex <- function(x) gsub("_", "\\\\_", x)   # protege o sublinhado dos nomes
+
+y            <- dados[[resposta]]
+quantitativa <- is.numeric(y)
+n            <- nrow(dados)
+p            <- 13   # municipio (8 dummies) + ano como categoria (5 dummies)
+resposta_tex <- tex(resposta)
+
+# --- linha de base: o desempenho do palpite mais burro possivel ----------
+if (quantitativa) {
+  valor_base       <- sd(y, na.rm = TRUE)
+  texto_base       <- paste0("RMSE = ", format(round(valor_base, 2), nsmall = 2))
+  nome_base        <- "chutar sempre a m\\'edia"
+  palavra_tipo     <- "regress\\~ao"
+  palavra_resposta <- "quantitativa"
+  palavra_metrica  <- "RMSE, na unidade de $Y$"
+} else {
+  valor_base       <- max(table(y)) / sum(table(y))
+  texto_base       <- paste0("acur\\'acia = ", format(round(valor_base, 3), nsmall = 3))
+  nome_base        <- "chutar a classe mais comum"
+  palavra_tipo     <- "classifica\\c{c}\\~ao"
+  palavra_resposta <- "qualitativa"
+  palavra_metrica  <- "acur\\'acia ou AUC"
+}
+
+# --- suspeita de vazamento: quem mais se parece com a resposta -----------
+num <- dados[sapply(dados, is.numeric)]
+if (quantitativa && ncol(num) > 1) {
+  cc <- abs(cor(num, use = "complete.obs")[, resposta])
+  cc <- sort(cc[names(cc) != resposta], decreasing = TRUE)
+  texto_cor <- paste0("\\texttt{", tex(names(cc)[1]), "}: ",
+                      format(round(cc[1], 3), nsmall = 3))
+} else {
+  texto_cor <- "n\\~ao se aplica (resposta qualitativa)"
+}
+
+# --- balanco das classes e valores faltantes -----------------------------
+if (quantitativa) {
+  texto_balanco <- "n\\~ao se aplica (resposta quantitativa)"
+} else {
+  texto_balanco <- paste(paste0("\\texttt{", tex(names(table(y))), "}: ",
+                                as.integer(table(y))), collapse = " | ")
+}
+faltantes <- colSums(is.na(dados))
+texto_falta <- if (sum(faltantes) == 0) {
+  "nenhum"
+} else {
+  paste(paste0("\\texttt{", tex(names(faltantes)[faltantes > 0]), "}: ",
+               faltantes[faltantes > 0]), collapse = " | ")
+}
+@
+
+\selectlanguage{brazil}
+\frenchspacing
+
+% ----------------------------------------------------------
+% IDENTIFICAÇÃO
+% ----------------------------------------------------------
+\maketitle
+
+\begin{center}
+  \small
+  Fatec Baixada Santista -- Rubens Lara \\
+  \nomecurso{} \quad|\quad \nomedisciplina{} \quad|\quad \nomeprofessor{} \\[0.4em]
+  \integrantes \\[0.4em]
+  Repositório: \texttt{\repositorio}
+\end{center}
+
+\textual
+
+% ==========================================================================
+\section{Introdução}
+% ==========================================================================
+% ~meia página. O QUE VAI AQUI:
+%   - de que assunto trata o trabalho (o domínio, em linguagem comum);
+%   - por que esse assunto importa, e para quem;
+%   - o que este texto entrega: a pergunta que o grupo vai perseguir
+%     no resto do semestre, e a evidência de que ela se sustenta.
+% NÃO adiante aqui os números da Seção 4.
+
+Apresente o domínio do trabalho e diga por que ele interessa. Feche o primeiro
+parágrafo dizendo, em uma frase, o que este texto faz: apresenta o banco
+escolhido, formula a pergunta do trabalho e mostra que os dados têm condição de
+respondê-la.
+
+Referências entram pela NBR 10520. Com o autor ao fim da frase, o formato sai
+entre parênteses \cite{james2021}; com o autor no corpo do texto, use
+\verb|\citeonline| --- segundo \citeonline{bruce2019}, a escolha da métrica vem
+antes da escolha do modelo. Para indicar página: \cite[p.~23]{james2021}.
+
+% ==========================================================================
+\section{O banco de dados e o problema}
+% ==========================================================================
+% ~três quartos de página. O QUE VAI AQUI:
+%   - ORIGEM: de onde veio o banco (órgão, portal, empresa, coleta própria),
+%     com a referência bibliográfica e a data de acesso;
+%   - CONTEÚDO: o que é uma LINHA (uma pessoa? um mês? uma transação?),
+%     quantas linhas, quantas colunas, quais são as principais;
+%   - MOTIVAÇÃO: por que este banco, e não outro. Responda honestamente:
+%     foi interesse pelo assunto? disponibilidade? experiência prévia
+%     do grupo? Todas são razões legítimas -- o que não vale é não ter
+%     razão nenhuma;
+%   - O PROBLEMA: que decisão, no mundo real, depende desse assunto.
+
+Descreva a origem do banco, com a referência \cite{fonte_dados}. Diga o que
+representa cada linha e quais são as colunas principais. O conjunto usado tem
+$n = \Sexpr{n}$ observações e $p = \Sexpr{p}$ preditores candidatos.
+
+Explique a escolha: por que este banco. E termine situando o \emph{problema} ---
+a decisão concreta, tomada por alguém, que dependeria de uma resposta melhor do
+que a que se tem hoje.
+
+% ==========================================================================
+\section{A pergunta}
+% ==========================================================================
+% ~três quartos de página. O QUE VAI AQUI:
+%   - a pergunta em UMA FRASE, sem jargão -- alguém de fora da área
+%     precisa entendê-la;
+%   - a ficha de sete campos preenchida (Tabela 1);
+%   - um parágrafo justificando o TIPO: por que regressão e não
+%     classificação (ou o contrário), e por que predição e não inferência.
+
+Enuncie aqui a pergunta, em uma frase, sem jargão técnico. A
+Tabela~\ref{tab:ficha} detalha os sete campos que a definem.
+
+\begin{table}[htb]
+  \centering
+  \caption{Ficha da pergunta}
+  \label{tab:ficha}
+  \small
+  \begin{tabular}{@{}p{0.30\textwidth}p{0.62\textwidth}@{}}
+    \toprule
+    \textbf{Campo} & \textbf{Preenchimento} \\
+    \midrule
+    1. A pergunta, em uma frase & \textit{escreva aqui} \\
+    2. Resposta $Y$: coluna, tipo, unidade & \texttt{\Sexpr{resposta_tex}} ---
+       \Sexpr{palavra_resposta} --- \textit{unidade} \\
+    3. Preditores $X$: quais e quantos & \textit{liste} \quad ($p = \Sexpr{p}$) \\
+    4. Tipo: as três decisões & supervisionado; \Sexpr{palavra_tipo};
+       \textit{predição ou inferência?} \\
+    5. Métrica & \Sexpr{palavra_metrica} \\
+    6. Linha de base a bater & \Sexpr{texto_base} \quad (\Sexpr{nome_base}) \\
+    7. Dono do problema & \textit{quem decidiria o quê com a resposta?} \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Elaborada pelos autores.}
+\end{table}
+
+Justifique o tipo escolhido. Lembre que o campo 7 é o que separa uma pergunta de
+um exercício: se ninguém decidiria nada diferente com a resposta, a pergunta
+precisa ser reformulada.
+
+% ==========================================================================
+\section{Defesa da pergunta}
+% ==========================================================================
+% ~uma página. É A SEÇÃO QUE PESA MAIS. O QUE VAI AQUI:
+%   - o diagnóstico do banco (Tabela 2), comentado item a item;
+%   - a passagem pelos quatro descartes: vazamento, n contra p, balanço
+%     de classes, faltantes -- dizendo o que foi encontrado e o que o
+%     grupo fez a respeito;
+%   - a figura da resposta (Figura 1), com uma frase de leitura;
+%   - o veredito: a pergunta se sustenta? Se um descarte pegou, o que
+%     mudou na pergunta por causa dele?
+% Os números desta seção saem do bloco <<dados>> -- eles se atualizam
+% sozinhos quando voces trocarem o banco.
+
+A Tabela~\ref{tab:diag} reúne as quatro verificações feitas sobre o banco.
+
+\begin{table}[htb]
+  \centering
+  \caption{Diagnóstico do banco}
+  \label{tab:diag}
+  \small
+  \begin{tabular}{@{}p{0.32\textwidth}p{0.60\textwidth}@{}}
+    \toprule
+    \textbf{Verificação} & \textbf{Resultado} \\
+    \midrule
+    Tamanho ($n \times p$)   & $\Sexpr{n} \times \Sexpr{p}$ \\
+    Linha de base            & \Sexpr{texto_base} \quad (\Sexpr{nome_base}) \\
+    Maior correlação com $Y$ & \Sexpr{texto_cor} \\
+    Balanço das classes      & \Sexpr{texto_balanco} \\
+    Valores faltantes        & \Sexpr{texto_falta} \\
+    \bottomrule
+  \end{tabular}
+  \fonte{Elaborada pelos autores.}
+\end{table}
+
+\textbf{Vazamento.} A linha ``maior correlação'' da Tabela~\ref{tab:diag}
+aponta o preditor mais parecido com a resposta. Diga se essa semelhança é
+natural ou se denuncia uma coluna que \emph{já contém} a resposta --- e, nesse
+caso, o que foi removido. Quando a resposta é qualitativa a correlação não se
+aplica: verifique coluna a coluna se alguma separa as classes quase
+perfeitamente.
+
+\textbf{Tamanho.} São $\Sexpr{n}$ observações para $\Sexpr{p}$ preditores.
+Comente se há observações suficientes por coluna, e o que isso implica para a
+escolha do modelo.
+
+\textbf{Balanço e faltantes.} Comente o balanço das classes (quando a resposta
+for qualitativa) e a presença de valores faltantes, dizendo o que o grupo
+pretende fazer com eles.
+
+A Figura~\ref{fig:resposta} mostra a distribuição da resposta.
+
+\begin{figure}[htb]
+  \centering
+  \caption{Distribuição da resposta \texttt{\Sexpr{resposta_tex}}}
+  \label{fig:resposta}
+<<fig-resposta>>=
+par(mar = c(4, 4, 1, 1), pty = "s")
+if (quantitativa) {
+  hist(y, breaks = 15, col = "#D6EAF3", border = "white",
+       main = "", xlab = resposta, ylab = "frequencia")
+} else {
+  barplot(table(y), col = "#D6EAF3", border = "white",
+          xlab = resposta, ylab = "frequencia")
+}
+@
+  \fonte{Elaborada pelos autores.}
+\end{figure}
+
+\textbf{Veredito.} Feche dizendo se a pergunta se sustenta. Se algum descarte
+pegou, diga o que mudou na pergunta por causa dele --- uma pergunta corrigida
+por evidência vale mais do que uma pergunta que nunca foi testada.
+
+A pergunta é \textbf{provisória}: será revista depois da Aula 12, quando o
+grupo tiver o kit supervisionado completo. Registre em uma frase o que as
+próximas aulas podem mudar nesta resposta.
+
+% ----------------------------------------------------------
+% REFERÊNCIAS — não contam nas 3 páginas.
+% Só aparecem as obras citadas. Para incluir uma obra não citada,
+% use \nocite{chave}.
+% ----------------------------------------------------------
+\postextual
+\bibliography{referencias}
+
+\end{document}
