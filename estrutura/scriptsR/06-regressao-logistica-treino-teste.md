@@ -1,7 +1,7 @@
 # Relatório da Atividade 06 — Classificação
 
 **Gerado por:** `06-regressao-logistica-treino-teste.R`  
-**Data:** 2026-10-09 03:44:54  
+**Data:** 2026-10-09 08:25:11  
 **Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
 
 > **Alvo:** `mortalidade_alta` = 1 se mortalidade > mediana do TREINO.
@@ -30,14 +30,21 @@ Prop. classe 1 treino: 0.486
 Prop. classe 1 teste:  0.471
 
 --- A: simples ---
-             Estimate Std. Error z value Pr(>|z|)
-(Intercept)    1.0216     2.5883  0.3947   0.6931
-escolaridade  -2.2021     5.2559 -0.4190   0.6752
+             Estimate Std. Error
+(Intercept)    1.0216     2.5883
+escolaridade  -2.2021     5.2559
+             z value Pr(>|z|)
+(Intercept)   0.3947   0.6931
+escolaridade -0.4190   0.6752
 --- B: múltiplo ---
-             Estimate Std. Error z value Pr(>|z|)
-(Intercept)   -4.2198     4.2610 -0.9903   0.3220
-escolaridade   2.3661     6.0521  0.3909   0.6958
-distorcao_em   0.1788     0.1180  1.5149   0.1298
+             Estimate Std. Error
+(Intercept)   -4.2198     4.2610
+escolaridade   2.3661     6.0521
+distorcao_em   0.1788     0.1180
+             z value Pr(>|z|)
+(Intercept)  -0.9903   0.3220
+escolaridade  0.3909   0.6958
+distorcao_em  1.5149   0.1298
 
 ================ TESTE (limiar 0.5) ================
 --- A ---

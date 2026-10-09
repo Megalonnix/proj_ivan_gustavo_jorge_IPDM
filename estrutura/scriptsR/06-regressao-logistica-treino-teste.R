@@ -103,14 +103,18 @@ rs <- roc_xy(ps, teste$y); rm_ <- roc_xy(pm, teste$y)
 
 arq2 <- file.path(pasta_fig, "06-regressao-logistica-treino-teste_img2.png")
 png(arq2, width = 800, height = 700); par(mar = c(4,4,1,1), pty = "s")
-plot(rs$fpr, rs$tpr, type = "l", lwd = 3, col = cazul, xlim = c(0,1), ylim = c(0,1),
+plot(rs$fpr, rs$tpr, type = "l", lwd = 3, lty = 1, col = cazul,
+     xlim = c(0,1), ylim = c(0,1),
      xlab = "FPR", ylab = "TPR",
      main = sprintf("ROC teste — A vs B (AUC_A=%.3f | AUC_B=%.3f)", auc_s, auc_m))
-lines(rm_$fpr, rm_$tpr, lwd = 3, col = croxo)
-abline(0, 1, lty = 2, col = "gray50")
+lines(rm_$fpr, rm_$tpr, lwd = 3, lty = 2, col = claranja)
+abline(0, 1, lty = 3, col = "gray50")
 legend("bottomright",
        c(sprintf("A (AUC=%.3f)", auc_s), sprintf("B (AUC=%.3f)", auc_m), "Aleatório"),
-       col = c(cazul,croxo,"gray50"), lwd = c(3,3,1), lty = c(1,1,2), bty = "n")
+       col = c(cazul, claranja, "gray50"),
+       lwd = c(3, 3, 1),
+       lty = c(1, 2, 3),
+       bty = "n")
 dev.off()
 
 # CV
@@ -169,7 +173,8 @@ cabecalho <- c(
   paste0("- `", arq2, "` — ROC (A vs B)"),
   "",
   "## Output bruto",
-  "", "```", paste(buffer, collapse = "\n"), "```",
+  "",
+  "```", paste(buffer, collapse = "\n"), "```",
   "",
   "## Notas",
   "",
