@@ -227,9 +227,11 @@ O Colab é uma plataforma da Google que roda notebooks no navegador, sem instala
 **Como rodar:**
 
 1. Acesse [colab.research.google.com](https://colab.research.google.com).
-2. **File → Upload notebook** → selecione o `.ipynb` desejado (ex.: `01-dicionario-variaveis.ipynb`).
-3. Se o kernel não estiver em R, troque: **Runtime → Change runtime type → Runtime type: R**.
-4. **Runtime → Run all** (ou `Ctrl+F9`).
+2. No menu superior esquerdo, clique em **`File`** (ou **`Arquivo`**) → **`Upload notebook`** (ou **`Fazer upload de notebook`**).
+   - **Alternativa:** se a janela **"Open notebook"** aparecer na tela inicial, use a aba **`Upload`** na parte de baixo dela.
+3. Selecione o `.ipynb` desejado (ex.: `01-dicionario-variaveis.ipynb`).
+4. Se o kernel não estiver em R, troque: **Runtime → Change runtime type → Runtime type: R**.
+5. **Runtime → Run all** (ou `Ctrl+F9`).
 
 **Sobre os dados:** os notebooks buscam o CSV automaticamente no repositório do GitHub. Não é preciso subir o arquivo manualmente.
 
