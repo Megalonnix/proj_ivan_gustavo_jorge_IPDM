@@ -92,3 +92,11 @@ atividades.
 
 Próxima parada: diagnóstico exploratório, baselines e um primeiro olhar sobre a
 distribuição do alvo.
+
+---
+
+## Documentos complementares
+
+- 📄 [Dicionário de dados (PDF)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/dicionario/dicionario_ipdm_baixada.pdf) — versão formatada, para leitura.
+- 📝 [Dicionário de dados (fonte LaTeX)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/dicionario/dicionario_ipdm_baixada.tex) — para editar/recompilar.
+- 📊 [Banco de dados (CSV)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv) — os dados brutos.
