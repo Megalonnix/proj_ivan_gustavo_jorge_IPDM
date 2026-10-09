@@ -1,5 +1,10 @@
 # Atividade 01 — Conhecendo o terreno: dicionário de variáveis e tipagem
 
+> **Este documento é o resultado do script**
+> [`estrutura/scriptsR/01-dicionario-variaveis.R`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/01-dicionario-variaveis.R).
+> O script produz os números; este consolidado é a leitura humana deles —
+> com o porquê das decisões e o que aprender com cada resultado.
+
 > **Alvo do projeto:** `mortalidade_60_69` (mortes por mil habitantes na faixa 60–69).
 > Leia isso como uma promessa: toda decisão a seguir gira em torno desse número.
 
@@ -97,6 +102,11 @@ distribuição do alvo.
 
 ## Documentos complementares
 
+**Script que gera este consolidado:**
+- 🧮 [`01-dicionario-variaveis.R`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/01-dicionario-variaveis.R) — **a fonte** deste documento.
+
+**Demais documentos relacionados:**
 - 📄 [Dicionário de dados (PDF)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/dicionario/dicionario_ipdm_baixada.pdf) — versão formatada, para leitura.
 - 📝 [Dicionário de dados (fonte LaTeX)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/dicionario/dicionario_ipdm_baixada.tex) — para editar/recompilar.
 - 📊 [Banco de dados (CSV)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv) — os dados brutos.
+- 📋 [Relatório técnico do script (`01-dicionario-variaveis.md`)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/01-dicionario-variaveis.md) — output bruto do script, sem a camada didática.
