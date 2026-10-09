@@ -165,17 +165,127 @@ Os números de página referem-se aos marcadores `===== Page X =====` do PDF das
 
 ---
 
-## Como rodar os códigos
+## 🚨 **Como executar o projeto:**
 
-Na raiz do repositório, com R instalado no sistema operacional:
+> [!IMPORTANT]
+> **Esta seção é o guia de execução do projeto.**
+> Ela explica como rodar as análises de **duas formas**: (1) **localmente**, pelos scripts `.R`, com saída completa (figuras + outputs técnicos); ou (2) **na nuvem**, pelos notebooks `.ipynb` via **Google Colab**, sem instalar nada.
+> As duas formas **produzem os mesmos resultados** — os notebooks são cópias dos scripts.
 
-```bash
-Rscript estrutura/scriptsR/01-dicionario-variaveis.R
-Rscript estrutura/scriptsR/02-analise-exploratoria.R
-Rscript estrutura/scriptsR/03-regressao-linear.R
-Rscript estrutura/scriptsR/04-regressao-logistica.R
-Rscript estrutura/scriptsR/05-regressao-linear-treino-teste.R
-Rscript estrutura/scriptsR/06-regressao-logistica-treino-teste.R
-Rscript estrutura/scriptsR/07-reamostragem.R
-Rscript estrutura/scriptsR/08-regularizacao.R
+| Forma | Onde roda | Para quê |
+|---|---|---|
+| `.R` (scripts) | Localmente, no seu PC | Execução completa, com detecção automática de pastas e geração de figuras `.png` |
+| `.ipynb` (notebooks) | Na nuvem, via **Google Colab** | Reprodução sem instalar nada, útil quando não há R local |
+
+---
+
+### Parte 1 — Rodar os scripts `.R` localmente
+
+**Pré-requisitos:**
+
+1. **R instalado** ([cran.r-project.org](https://cran.r-project.org/)).
+2. **RStudio** (opcional, mas recomendado) — [posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/).
+3. **Pacotes usados:** `glmnet` (apenas para a Atividade 08). Para instalar:
+   ```r
+   install.packages("glmnet")
+   ```
+4. **Clone o repositório** (ou baixe o `.zip` e extraia):
+   ```bash
+   git clone https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM.git
+   ```
+
+**Como rodar:**
+
+1. Abra um terminal (ou o Console do RStudio) **na raiz do repositório**.
+2. Execute os scripts em ordem:
+   ```bash
+   Rscript estrutura/scriptsR/01-dicionario-variaveis.R
+   Rscript estrutura/scriptsR/02-analise-exploratoria.R
+   Rscript estrutura/scriptsR/03-regressao-linear.R
+   Rscript estrutura/scriptsR/04-regressao-logistica.R
+   Rscript estrutura/scriptsR/05-regressao-linear-treino-teste.R
+   Rscript estrutura/scriptsR/06-regressao-logistica-treino-teste.R
+   Rscript estrutura/scriptsR/07-reamostragem.R
+   Rscript estrutura/scriptsR/08-regularizacao.R
+   ```
+3. Cada script imprime o output no terminal, grava as figuras em `estrutura/scriptsR/figuras/` e gera um `.md` de output na mesma pasta.
+
+**Não é preciso configurar caminhos manualmente.** Os scripts:
+
+- Detectam a própria pasta via `rstudioapi` (quando rodados pelo RStudio);
+- Buscam o CSV primeiro localmente em `estrutura/bancoDeDados/`;
+- Se não encontrarem, baixam do GitHub como fallback.
+
+Ou seja: com o repositório clonado, basta rodar.
+
+---
+
+### Parte 2 — Rodar os notebooks `.ipynb` no Google Colab
+
+O Colab é uma plataforma da Google que roda notebooks no navegador, sem instalação. **Existem duas formas** de rodar R no Colab — depende de como o notebook foi montado.
+
+---
+
+#### Caso A — Notebook com **kernel R nativo** (recomendado)
+
+Aqui o notebook inteiro é R. No canto superior direito do Colab, aparece escrito **"R"** ao lado do botão "Conectar".
+
+**Como rodar:**
+
+1. Acesse [colab.research.google.com](https://colab.research.google.com).
+2. **File → Upload notebook** → selecione o `.ipynb` desejado (ex.: `01-dicionario-variaveis.ipynb`).
+3. Se o kernel não estiver em R, troque: **Runtime → Change runtime type → Runtime type: R**.
+4. **Runtime → Run all** (ou `Ctrl+F9`).
+
+**Sobre os dados:** os notebooks podem buscar o CSV diretamente do GitHub ou exigir upload manual. Se houver célula com `read.csv(...)`, confira o caminho antes de rodar.
+
+**Sobre pacotes:** o Colab já vem com a maioria dos pacotes base. Se algum faltar (ex.: `glmnet`), adicione uma célula no topo:
+```r
+install.packages("glmnet")
 ```
+
+---
+
+#### Caso B — Notebook **Python com mágica `%%R`**
+
+Aqui o notebook é Python, mas cada célula de R começa com `%%R`. No canto superior direito do Colab, aparece **"Python 3"**.
+
+**Como rodar:**
+
+1. Acesse [colab.research.google.com](https://colab.research.google.com).
+2. **File → Upload notebook** → selecione o `.ipynb`.
+3. **Antes de rodar o resto**, execute uma célula (no topo) com:
+   ```python
+   %load_ext rpy2.ipython
+   ```
+   Isso ativa o suporte a R dentro do Python.
+4. Se `rpy2` não estiver disponível, instale antes:
+   ```python
+   !pip install rpy2
+   ```
+5. **Runtime → Run all**.
+
+**Observações importantes do Caso B:**
+
+- Cada célula de R **precisa** começar com `%%R` na primeira linha. Sem isso, o Colab interpreta como Python e dá erro.
+- As variáveis **não persistem entre células** por padrão. Para manter o estado entre células R consecutivas, use a flag `-i` (input) e `-o` (output):
+   ```python
+   %%R -i dados
+   summary(dados)
+   ```
+- Gráficos gerados em células `%%R` aparecem direto no output. Se não aparecerem, adicione `-w 700 -h 700` para definir tamanho.
+
+---
+
+#### Qual dos dois casos é o meu?
+
+Abra o `.ipynb` em um editor de texto (ou no próprio Colab, em modo "View raw"). Olhe as primeiras linhas:
+
+- Se aparecer `"kernelspec": { "name": "ir" ... }` → **Caso A** (kernel R).
+- Se aparecer `"kernelspec": { "name": "python3" ... }` → **Caso B** (Python com `%%R`).
+
+---
+
+### Resumo em uma frase
+
+**Local (`.R`) = projeto completo, com figuras e output técnico. Colab (`.ipynb`) = mesma análise, sem instalar nada, útil para verificação rápida.**
