@@ -40,7 +40,7 @@ O curso é dividido em cinco blocos temáticos. Essa divisão **não é interpre
 |---|---|---|---|
 | **I** | Fundamentos do aprendizado estatístico | Aulas 01, 02, 03 | `01-dicionario-variaveis.R`, `02-analise-exploratoria.R` |
 | **II** | Supervisionado: avaliação e regularização | Aulas 04, 05, 06, 07, 08 | `03-regressao-linear.R`, `04-regressao-logistica.R`, `05-regressao-linear-treino-teste.R`, `06-regressao-logistica-treino-teste.R`, `07-reamostragem.R`, `08-regularizacao.R` |
-| **III** | Modelos flexíveis: suavização, árvores, ensembles | ainda não cursadas | — |
+| **III** | Modelos flexíveis: suavização, árvores, ensembles | Aula 09 (início) | — |
 | **IV** | Redes neurais e SVM | ainda não cursadas | — |
 | **V** | Não supervisionado: agrupamento, EM, PCA/ICA | ainda não cursadas | — |
 
@@ -48,13 +48,13 @@ O curso é dividido em cinco blocos temáticos. Essa divisão **não é interpre
 
 - **Blocos I a V (nomes e conteúdo):** transcrição literal do slide 2 da Aula 01.
 - **Datas de prova por bloco:** tabela do slide 3 da Aula 01 — P1 (29/09) cobre Blocos I–II; P2 (13/11) cobre Blocos III–IV.
-- **Quais aulas pertencem a cada bloco:** deduzido da ordem cronológica dos slides disponíveis (`materiais-aulas/`). As Aulas 01–08 vão de 04/08 a 18/09 e caem inteiramente antes da P1, logo são Blocos I–II.
-- **Blocos III, IV e V como "ainda não cursadas":** **inferência nossa**, não afirmação de slide. Evidências:
-  1. Os slides disponíveis em `materiais-aulas/` param na Aula 08.
-  2. A Aula 08 fecha com o aviso: *"Próxima aula: ... viramos a chave: modelos que não supõem forma fixa — suavização, splines e GAM"* — abertura do Bloco III.
+- **Quais aulas pertencem a cada bloco:** deduzido da ordem cronológica dos slides disponíveis (`slides_aulas/`). As Aulas 01–08 vão de 04/08 a 18/09 e caem inteiramente antes da P1, logo são Blocos I–II. A Aula 09 (`TEA_aula09.PDF`) é a primeira do Bloco III.
+- **Blocos III, IV e V sem atividade no projeto:** **inferência nossa**, não afirmação de slide. Evidências:
+  1. As entregas do projeto param na Atividade 08, que cobre temas do Bloco II (regularização).
+  2. A Aula 08 fecha com o aviso: *"Próxima aula: ... viramos a chave: modelos que não supõem forma fixa — suavização, splines e GAM"* — abertura do Bloco III, concretizada na Aula 09.
 - **Atividades por bloco:** associação direta entre o tema da atividade e o tema da aula correspondente (ex.: `01-dicionario-variaveis.R` ↔ Aula 02, que é sobre dicionário e tipagem).
 
-Se algum dia surgirem slides das Aulas 09+, esta tabela precisa ser revisada nas linhas III–V.
+Quando surgirem entregas para os Blocos III–V, esta tabela precisa ser revisada nas linhas III–V.
 
 ---
 
@@ -133,6 +133,16 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │           ├── 08-regularizacao_img1.png
 │           ├── 08-regularizacao_img2.png
 │           └── 08-regularizacao_img3.png
+├── slides_aulas/
+│   ├── TAE_aula01.PDF
+│   ├── TAE_aula02.PDF
+│   ├── TAE_aula03.PDF
+│   ├── TAE_aula04.PDF
+│   ├── TAE_aula05.PDF
+│   ├── TAE_aula06.PDF
+│   ├── TAE_aula07.PDF
+│   ├── TAE_aula08.PDF
+│   └── TEA_aula09.PDF
 └── to.delete/
 ```
 
@@ -144,13 +154,14 @@ proj_ivan_gustavo_jorge_(IPDM)/
 | `estrutura/dicionario/` | Dicionário de variáveis em LaTeX (`.tex`) e PDF |
 | `estrutura/notebooks/` | Cópias das análises `.R`, feitas para rodar em nuvem via Colab |
 | `estrutura/scriptsR/` | Análises pedidas nos slides do professor — scripts `.R`, outputs técnicos `.md` e `figuras/` |
+| `slides_aulas/` | Slides das aulas do professor (PDFs), base para o mapeamento aulas × blocos × atividades |
 | `to.delete/` | Pasta temporária, a ser removida |
 
 ---
 
 ## Atividades × aulas
 
-Os números de página referem-se aos marcadores `===== Page X =====` do PDF das aulas (extração do arquivo original). A numeração interna dos slides do professor é diferente (ex.: a pág. 18 da Aula 04 corresponde ao slide "12/15").
+Os números de página referem-se aos marcadores `===== Page X =====` do PDF das aulas (extração do arquivo original em `slides_aulas/`). A numeração interna dos slides do professor é diferente (ex.: a pág. 18 da Aula 04 corresponde ao slide "12/15").
 
 | # | Entrega | Script | Aula | Slide (PDF) | Por que |
 |---|---|---|---|---|---|
