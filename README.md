@@ -1,71 +1,82 @@
-# Projeto IPDM - Baixada Santista
+# Teoria do Aprendizado Estatístico — Projeto IPDM
 
-- **Disciplina:** Teoria do Aprendizado Estatístico
-- **Integrantes:** Ivan, Gustavo, Jorge
-- **Fonte de dados:** Fundação Seade - IPDM (Índice Paulista de Desenvolvimento Municipal)
-- **Recorte:** 9 municípios da Região Metropolitana da Baixada Santista, 6 anos (2014, 2016, 2018, 2020, 2022, 2024) - 54 observações
+**Ciência de Dados · Fatec Rubens Lara - Baixada Santista**
 
----
+Estimar e avaliar modelos de aprendizado a partir de dados — da análise exploratória e regressão linear/logística à validação treino/teste, reamostragem e regularização — com implementação em **R**.
 
-## ⚠️ AVISO — BRANCH EXPERIMENTAL ARQUIVADO
-
-> **Este projeto foi conduzido como exercício experimental da disciplina.**
-> O trabalho principal do grupo seguiu por outra trilha. Este repositório foi
-> **arquivado em um branch secundário** por dois motivos:
->
-> 1. **Preservar a memória do experimento.** Os resultados são modestos
->    (sinal fraco, amostra pequena, outlier dominante), mas a **organização
->    interna** — estrutura de diretórios, pipeline modular, convenções de
->    documentação, micro-relatórios embutidos nos `.R` — foi considerada
->    valiosa o suficiente para virar **alicerce de análises futuras**.
->
-> 2. **Servir como referência de estrutura.** A forma como cada etapa foi
->    documentada (decisões explícitas, limitações declaradas, diagnósticos
->    numéricos para figuras, autocrítica retroativa) é o que se pretende
->    reaproveitar em projetos subsequentes — não o conteúdo substantivo.
->
-> **Leitura recomendada:** este repositório não deve ser lido como "estudo
-> sobre a Baixada Santista" e sim como **modelo de organização de projeto
-> analítico reprodutível**.
+![Equipe](https://img.shields.io/badge/equipe-Ivan%2C%20Gustavo%20e%20Jorge-0B3954)
+![Banco](https://img.shields.io/badge/banco-IPDM%20Seade-lightgrey)
 
 ---
 
-## ☢️ **IMPORTANTE — LEIA ANTES DE EXECUTAR!**
+## Sobre a disciplina
 
-> **Este projeto é multi-arquivo e usa caminhos relativos entre os módulos.**
-> A execução **só funciona** se as duas regras abaixo forem seguidas à risca.
+**Objetivo:**  
+Utilizar conhecimentos estatísticos para análise e projeto de algoritmos de aprendizado de máquina para modelar, compreender e analisar conjuntos de dados complexos. Escrever esses algoritmos em pseudocódigo e executá-los por meio de linguagens de programação. Utilizar os conhecimentos adquiridos em problemas de Ciência de Dados para fundamentar a tomada de decisões baseadas em informações obtidas por meio de algoritmos de aprendizado de máquina.
 
-### ☢️ **Regra 1 — Clone ou baixe o repositório inteiro!**
+**Ementa:**  
+Teoria da aprendizagem estatística. Métodos de reamostragem. Expansão e regularização. Métodos de suavização. Método EM (Expectation-Maximization). Avaliação e seleção de modelos. Árvores de decisão. Redes neurais e aprendizado de máquina (redes Adaline, Madaline, Perceptron e Multilayer Perceptron - MLP). Máquina de vetores suporte. Agrupamentos. Componentes principais e independentes. Aplicação desses conhecimentos para solução dos problemas de Ciência de Dados, utilizando linguagem de programação.
 
-**Não rode arquivos isolados.** O projeto depende da estrutura completa de pastas
-(`estrutura/scriptsR/`, `estrutura/bancoDeDados/`, etc.).
+**Professor:**  
+Prof. Dr. João Paulo Ferreira de Mello  
+([joao.mello12@fatec.sp.gov.br](mailto:joao.mello12@fatec.sp.gov.br))
 
-**Via Git:**
-```bash
-git clone https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM
+**Equipe:**  
+Ivan, Gustavo e Jorge
+
+**Linguagem das entregas:**  
+Sempre **R**.
+
+**Banco de trabalho:**  
+Fundação Seade — IPDM (Índice Paulista de Desenvolvimento Municipal), recorte dos 9 municípios da Região Metropolitana da Baixada Santista em 6 anos (2014, 2016, 2018, 2020, 2022, 2024), totalizando 54 observações. O banco vive em `estrutura/bancoDeDados/` do próprio repositório, com cópia local usada como fallback pelos scripts em R.
+
+---
+
+## Cinco blocos do curso
+
+O curso é dividido em cinco blocos temáticos. Essa divisão **não é interpretação nossa** — está literalmente na **Aula 01 (slide 2, "Os cinco blocos do curso")** e é reforçada pela tabela de datas de prova no **slide 3 da mesma aula** (P1 cobre Blocos I–II; P2 cobre Blocos III–IV).
+
+| Bloco | Conteúdo (texto literal do slide) | Aulas que cobrem | Atividades do projeto |
+|---|---|---|---|
+| **I** | Fundamentos do aprendizado estatístico | Aulas 01, 02, 03 | `01-dicionario-variaveis.R`, `02-analise-exploratoria.R` |
+| **II** | Supervisionado: avaliação e regularização | Aulas 04, 05, 06, 07, 08 | `03-regressao-linear.R`, `04-regressao-logistica.R`, `05-regressao-linear-treino-teste.R`, `06-regressao-logistica-treino-teste.R`, `07-reamostragem.R`, `08-regularizacao.R` |
+| **III** | Modelos flexíveis: suavização, árvores, ensembles | ainda não cursadas | — |
+| **IV** | Redes neurais e SVM | ainda não cursadas | — |
+| **V** | Não supervisionado: agrupamento, EM, PCA/ICA | ainda não cursadas | — |
+
+**Como montamos este mapeamento (para o leitor do futuro):**
+
+- **Blocos I a V (nomes e conteúdo):** transcrição literal do slide 2 da Aula 01.
+- **Datas de prova por bloco:** tabela do slide 3 da Aula 01 — P1 (29/09) cobre Blocos I–II; P2 (13/11) cobre Blocos III–IV.
+- **Quais aulas pertencem a cada bloco:** deduzido da ordem cronológica dos slides disponíveis (`materiais-aulas/`). As Aulas 01–08 vão de 04/08 a 18/09 e caem inteiramente antes da P1, logo são Blocos I–II.
+- **Blocos III, IV e V como "ainda não cursadas":** **inferência nossa**, não afirmação de slide. Evidências:
+  1. Os slides disponíveis em `materiais-aulas/` param na Aula 08.
+  2. A Aula 08 fecha com o aviso: *"Próxima aula: ... viramos a chave: modelos que não supõem forma fixa — suavização, splines e GAM"* — abertura do Bloco III.
+- **Atividades por bloco:** associação direta entre o tema da atividade e o tema da aula correspondente (ex.: `01-dicionario-variaveis.R` ↔ Aula 02, que é sobre dicionário e tipagem).
+
+Se algum dia surgirem slides das Aulas 09+, esta tabela precisa ser revisada nas linhas III–V.
+
+---
+
+## Estrutura do repositório
+
 ```
-
----
-
-## Resumo
-
-Projeto de aprendizado estatístico focado em Regressão Linear e Logística aplicadas ao Índice Paulista de Desenvolvimento Municipal (IPDM). O pipeline cobre desde a análise exploratória até o ajuste de modelos (com e sem separação de treino/teste), protocolo de avaliação e seleção de modelos, e diagnóstico de viés-variância. O par central modelado é mortalidade 60–69 em função do PIB per capita na Baixada Santista.
-
----
-
-## Estrutura do projeto
-
-```text
 proj_ivan_gustavo_jorge_(IPDM)/
 ├── README.md
+├── .gitignore
+├── assets/
+│   ├── instrucoes_arquivos_ipynb.txt
+│   ├── instrucoes_consolidados.txt
+│   └── instrucoes_conversa_LLM.txt
 ├── consolidado/
-│   ├── 0_analiseExploratoria.md
-│   ├── 1_regressao_linear.md
-│   ├── 2_regressao_logistica.md
-│   ├── 3_regressao_linear_treino_teste.md
-│   ├── 4_regressao_logistica_treino_teste.md
-│   ├── 5_avaliacao_selecao_modelos.md
-│   └── 6_relatorio_final.md
+│   ├── 01-dicionario-variaveis.md
+│   ├── 02-analise-exploratoria.md
+│   ├── 03-regressao-linear.md
+│   ├── 04-regressao-logistica.md
+│   ├── 05-regressao-linear-treino-teste.md
+│   ├── 06-regressao-logistica-treino-teste.md
+│   ├── 07-reamostragem.md
+│   └── 08-regularizacao.md
 ├── estrutura/
 │   ├── bancoDeDados/
 │   │   ├── 0_dicionario_ipdm_ORIGINAL.csv
@@ -75,82 +86,96 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │   │   ├── dicionario_ipdm_baixada.pdf
 │   │   └── dicionario_ipdm_baixada.tex
 │   ├── notebooks/
+│   │   ├── 01-dicionario-variaveis.ipynb
+│   │   ├── 02-analise-exploratoria.ipynb
+│   │   ├── 03-regressao-linear.ipynb
+│   │   ├── 04-regressao-logistica.ipynb
+│   │   ├── 05-regressao-linear-treino-teste.ipynb
+│   │   ├── 06-regressao-logistica-treino-teste.ipynb
+│   │   ├── 07-reamostragem.ipynb
+│   │   └── 08-regularizacao.ipynb
 │   └── scriptsR/
-│       ├── 0_analiseExploratoria.R
-│       ├── 1_regressao_linear.R
-│       ├── 2_regressao_logistica.R
-│       ├── 3_regressao_linear_treino_teste.R
-│       ├── 4_regressao_logistica_treino_teste.R
-│       ├── 5_avaliacao_selecao_modelos.R
+│       ├── 01-dicionario-variaveis.R
+│       ├── 01-dicionario-variaveis.md
+│       ├── 02-analise-exploratoria.R
+│       ├── 02-analise-exploratoria.md
+│       ├── 03-regressao-linear.R
+│       ├── 03-regressao-linear.md
+│       ├── 04-regressao-logistica.R
+│       ├── 04-regressao-logistica.md
+│       ├── 05-regressao-linear-treino-teste.R
+│       ├── 05-regressao-linear-treino-teste.md
+│       ├── 06-regressao-logistica-treino-teste.R
+│       ├── 06-regressao-logistica-treino-teste.md
+│       ├── 07-reamostragem.R
+│       ├── 07-reamostragem.md
+│       ├── 08-regularizacao.R
+│       ├── 08-regularizacao.md
 │       └── figuras/
+│           ├── 02-analise-exploratoria_img1.png
+│           ├── 02-analise-exploratoria_img2.png
+│           ├── 02-analise-exploratoria_img3.png
+│           ├── 03-regressao-linear_img1.png
+│           ├── 03-regressao-linear_img2.png
+│           ├── 03-regressao-linear_img3.png
+│           ├── 03-regressao-linear_img4.png
+│           ├── 03-regressao-linear_img5.png
+│           ├── 03-regressao-linear_img6.png
+│           ├── 04-regressao-logistica_img1.png
+│           ├── 04-regressao-logistica_img2.png
+│           ├── 05-regressao-linear-treino-teste_img1.png
+│           ├── 05-regressao-linear-treino-teste_img2.png
+│           ├── 05-regressao-linear-treino-teste_img3.png
+│           ├── 06-regressao-logistica-treino-teste_img1.png
+│           ├── 06-regressao-logistica-treino-teste_img2.png
+│           ├── 07-reamostragem_img1.png
+│           ├── 07-reamostragem_img2.png
+│           ├── 08-regularizacao_img1.png
+│           ├── 08-regularizacao_img2.png
+│           └── 08-regularizacao_img3.png
 └── to.delete/
 ```
 
----
-
-## Pipeline
-
-| Módulo | Arquivo | O que faz |
-|--------|---------|-----------|
-| 0 | `0_analiseExploratoria.R` | Análise exploratória, tipagem de variáveis e construção do banco consolidado |
-| 1 | `1_regressao_linear.R` | Regressão linear simples e múltipla; análise de sensibilidade ao outlier (Cubatão) |
-| 2 | `2_regressao_logistica.R` | Regressão logística na amostra completa; três limiares de decisão (0,3 / 0,5 / 0,7) e AUC |
-| 3 | `3_regressao_linear_treino_teste.R` | Regressão linear com split treino (70%) / teste (30%); RMSE, MAE e R² out-of-sample |
-| 4 | `4_regressao_logistica_treino_teste.R` | Regressão logística com split, matriz de confusão, três limiares e curva ROC |
-| 5 | `5_avaliacao_selecao_modelos.R` | Protocolo treino/validação/teste, viés-variância (curva do U) e seleção entre candidatos |
-
-**Dependências entre módulos:**
-Os scripts são autocontidos para execução dos modelos, mas assumem que os dados em `estrutura/bancoDeDados/` já estão íntegros e que a exploração inicial (`0_analiseExploratoria.R`) contextualiza as escolhas.
+| Pasta | O que é |
+|---|---|
+| `assets/` | Instruções auxiliares do projeto (arquivos `.txt` de orientação interna) |
+| `consolidado/` | Resultados das análises com interpretação racional (relatórios didáticos) |
+| `estrutura/bancoDeDados/` | Arquivos `.csv` utilizados nas análises (principalmente o da Baixada Santista) |
+| `estrutura/dicionario/` | Dicionário de variáveis em LaTeX (`.tex`) e PDF |
+| `estrutura/notebooks/` | Cópias das análises `.R`, feitas para rodar em nuvem via Colab |
+| `estrutura/scriptsR/` | Análises pedidas nos slides do professor — scripts `.R`, outputs técnicos `.md` e `figuras/` |
+| `to.delete/` | Pasta temporária, a ser removida |
 
 ---
 
-## Convenções de documentação
+## Atividades × aulas
 
-Este projeto adota três convenções internas que devem ser preservadas em
-qualquer reuso da estrutura:
+Os números de página referem-se aos marcadores `===== Page X =====` do PDF das aulas (extração do arquivo original). A numeração interna dos slides do professor é diferente (ex.: a pág. 18 da Aula 04 corresponde ao slide "12/15").
 
-1. **Micro-relatório em cada `.R`.** Todo script termina com um bloco
-   comentado contendo decisões metodológicas, leitura esperada dos
-   resultados, limitações e amarração com os demais scripts. O bloco não é
-   executado — serve para leitura humana e de LLM.
-
-2. **Bloco `DIAGNÓSTICO VISUAL` antes de cada figura.** Antes de gerar uma
-   imagem, o script imprime no console os números necessários para
-   **descrevê-la sem vê-la** (faixas, amplitudes, correlações, posição de
-   outliers). Isso permite auditoria e redação do consolidado sem acesso
-   às imagens.
-
-3. **Consolidado em `.md` com tabelas, não prosa.** Cada módulo tem um
-   arquivo Markdown próprio em `consolidado/`, com seções numeradas,
-   tabelas para qualquer valor numérico, e limitações declaradas no mesmo
-   nível hierárquico das conclusões.
+| # | Entrega | Script | Aula | Slide (PDF) | Por que |
+|---|---|---|---|---|---|
+| 01 | [01-dicionario-variaveis.md](consolidado/01-dicionario-variaveis.md) | `estrutura/scriptsR/01-dicionario-variaveis.R` | Aula 02 | pág. 20 | Exercício "Sobre um data.frame (o seu, ou iris): inspecione, corrija os tipos e comece o dicionário" |
+| 02 | [02-analise-exploratoria.md](consolidado/02-analise-exploratoria.md) | `estrutura/scriptsR/02-analise-exploratoria.R` | Aula 03 | pág. 23 | Exercício "Aplique ao banco que você escolheu: 1) EDA de variável quantitativa; 2) relação entre duas variáveis; 3) densidade Normal sobreposta; 4) faltantes" |
+| 03 | [03-regressao-linear.md](consolidado/03-regressao-linear.md) | `estrutura/scriptsR/03-regressao-linear.R` | Aula 04 | pág. 18 | Exercício "Escolha uma resposta quantitativa e um ou mais preditores: 1) regressão simples; 2) gráfico quadrado com reta; 3) múltipla; 4) resíduos vs ajustado" |
+| 04 | [04-regressao-logistica.md](consolidado/04-regressao-logistica.md) | `estrutura/scriptsR/04-regressao-logistica.R` | Aula 05 | pág. 29 | Exercício "Escolha uma resposta binária y (0/1): 1) logística + razões de chance; 2) matriz de confusão; 3) limiares 0,3/0,5/0,7; 4) AUC" |
+| 05 | [05-regressao-linear-treino-teste.md](consolidado/05-regressao-linear-treino-teste.md) | `estrutura/scriptsR/05-regressao-linear-treino-teste.R` | Aula 06 | pág. 27 | Exercício "Aplique o protocolo ao seu banco, com dois modelos das aulas passadas: 1) dividir 70/30; 2) ajustar dois candidatos só no treino; 3) comparar no teste" |
+| 06 | [06-regressao-logistica-treino-teste.md](consolidado/06-regressao-logistica-treino-teste.md) | `estrutura/scriptsR/06-regressao-logistica-treino-teste.R` | Aula 06 | pág. 27 | Mesmo exercício da pág. 27, estendido à classificação por analogia. O enunciado não especifica `glm`, mas diz "dois modelos das aulas passadas" |
+| 07 | [07-reamostragem.md](consolidado/07-reamostragem.md) | `estrutura/scriptsR/07-reamostragem.R` | Aula 07 | pág. 23 | Exercício "Traque a divisão única da Aula 6 por validação cruzada, e qualifique um coeficiente por bootstrap: 1) CV(5) comparando dois candidatos; 2) bootstrap do coeficiente" |
+| 08 | [08-regularizacao.md](consolidado/08-regularizacao.md) | `estrutura/scriptsR/08-regularizacao.R` | Aula 08 | pág. 29 | Exercício "library(glmnet)... cv.glmnet(X, yv, alpha = 1); cv.glmnet(X, yv, alpha = 0)" — Lasso e Ridge com curva em U |
 
 ---
 
-## Como explorar o projeto
+## Como rodar os códigos
 
-1. **Clone o repositório** (instruções no topo deste README).
+Na raiz do repositório, com R instalado no sistema operacional:
 
-2. **Abra o R (ou RStudio)** e defina o diretório de trabalho como a **raiz do projeto** — a pasta que contém este `README.md`. 
-
-   ```r
-   setwd("caminho/para/proj_ivan_gustavo_jorge_(IPDM)")
-   ```
-
-3. **Navegue até `estrutura/scriptsR/`** e escolha um script para explorar.
-
-4. Você pode utilizar o comando `source()` ou executar o script linha por linha para reproduzir as análises. Todos os gráficos gerados são salvos automaticamente na pasta `estrutura/scriptsR/figuras/`.
-
-### Documentação detalhada
-
-Cada modelo tem um relatório próprio em `consolidado/`, contendo objetivo, especificação técnica, interpretação dos resultados (em Markdown) e diagnósticos:
-
-- [`0_analiseExploratoria.md`](consolidado/0_analiseExploratoria.md)
-- [`1_regressao_linear.md`](consolidado/1_regressao_linear.md)
-- [`2_regressao_logistica.md`](consolidado/2_regressao_logistica.md)
-- [`3_regressao_linear_treino_teste.md`](consolidado/3_regressao_linear_treino_teste.md)
-- [`4_regressao_logistica_treino_teste.md`](consolidado/4_regressao_logistica_treino_teste.md)
-- [`5_avaliacao_selecao_modelos.md`](consolidado/5_avaliacao_selecao_modelos.md)
-- [`6_relatorio_final.md`](consolidado/6_relatorio_final.md) — síntese reflexiva
-
-Leia-os preferencialmente em ordem para entender o fluxo de modelagem, do ajuste simples às métricas de validação out-of-sample e ao protocolo de seleção.
+```bash
+Rscript estrutura/scriptsR/01-dicionario-variaveis.R
+Rscript estrutura/scriptsR/02-analise-exploratoria.R
+Rscript estrutura/scriptsR/03-regressao-linear.R
+Rscript estrutura/scriptsR/04-regressao-logistica.R
+Rscript estrutura/scriptsR/05-regressao-linear-treino-teste.R
+Rscript estrutura/scriptsR/06-regressao-logistica-treino-teste.R
+Rscript estrutura/scriptsR/07-reamostragem.R
+Rscript estrutura/scriptsR/08-regularizacao.R
+```
