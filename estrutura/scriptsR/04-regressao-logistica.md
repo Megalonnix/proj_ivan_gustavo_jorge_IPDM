@@ -1,7 +1,7 @@
 # Relatório da Atividade 04 — Regressão Logística
 
 **Gerado por:** `04-regressao-logistica.R`  
-**Data:** 2026-10-08 19:01:02  
+**Data:** 2026-10-08 21:09:36  
 **Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
 
 > **Alvo binário:** `mortalidade_alta` = 1 se mortalidade_60_69 > mediana.

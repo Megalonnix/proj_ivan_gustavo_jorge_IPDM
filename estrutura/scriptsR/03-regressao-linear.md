@@ -1,7 +1,7 @@
 # Relatório da Atividade 03 — Regressão Linear
 
 **Gerado por:** `03-regressao-linear.R`  
-**Data:** 2026-10-08 19:00:24  
+**Data:** 2026-10-08 21:09:29  
 **Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
 
 > **Alvo:** `mortalidade_60_69` (mortes por mil hab., 60–69).

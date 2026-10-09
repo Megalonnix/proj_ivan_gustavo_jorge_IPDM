@@ -1,7 +1,7 @@
 # Relatório da Atividade 05 — Treino/Teste e CV(5)
 
 **Gerado por:** `05-regressao-linear-treino-teste.R`  
-**Data:** 2026-10-08 19:01:40  
+**Data:** 2026-10-08 21:09:51  
 **Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
 
 > **Alvo:** `mortalidade_60_69`. Unidade: mortes por mil hab.

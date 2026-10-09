@@ -1,7 +1,7 @@
 # Relatório da Atividade 08 — Regularização
 
 **Gerado por:** `08-regularizacao.R`  
-**Data:** 2026-10-08 19:03:18  
+**Data:** 2026-10-08 21:10:15  
 **Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
 
 > **Alvo:** `mortalidade_60_69`. Predictores válidos (excluídos ipdm e longevidade).

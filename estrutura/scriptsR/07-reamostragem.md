@@ -1,7 +1,7 @@
 # Relatório da Atividade 07 — Reamostragem
 
 **Gerado por:** `07-reamostragem.R`  
-**Data:** 2026-10-08 19:02:49  
+**Data:** 2026-10-08 21:10:07  
 **Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
 
 > **Alvo:** `mortalidade_60_69`. Predictor: `escolaridade`.
