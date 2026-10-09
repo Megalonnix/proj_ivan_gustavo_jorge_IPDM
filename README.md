@@ -222,16 +222,23 @@ Ou seja: com o repositório clonado, basta rodar.
 
 ### Parte 2 — Rodar os notebooks `.ipynb` no Google Colab
 
-O Colab é uma plataforma da Google que roda notebooks no navegador, sem instalação. Os notebooks deste projeto usam **kernel R nativo** — no canto superior direito do Colab, aparece escrito **"R"** ao lado do botão "Conectar".
+Os notebooks podem ser abertos diretamente no **Google Colab**, sem instalar nada e sem fazer upload manual. Basta clicar em um dos links abaixo — cada um abre o notebook correspondente já no Colab. Depois de aberto, selecione o runtime R.
 
-**Como rodar:**
+| # | Abrir no Colab |
+|---|---|
+| 01 | [01-dicionario-variaveis.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/01-dicionario-variaveis.ipynb) |
+| 02 | [02-analise-exploratoria.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/02-analise-exploratoria.ipynb) |
+| 03 | [03-regressao-linear.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/03-regressao-linear.ipynb) |
+| 04 | [04-regressao-logistica.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/04-regressao-logistica.ipynb) |
+| 05 | [05-regressao-linear-treino-teste.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/05-regressao-linear-treino-teste.ipynb) |
+| 06 | [06-regressao-logistica-treino-teste.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/06-regressao-logistica-treino-teste.ipynb) |
+| 07 | [07-reamostragem.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/07-reamostragem.ipynb) |
+| 08 | [08-regularizacao.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/08-regularizacao.ipynb) |
 
-1. Acesse [colab.research.google.com](https://colab.research.google.com).
-2. No menu superior esquerdo, clique em **`File`** (ou **`Arquivo`**) → **`Upload notebook`** (ou **`Fazer upload de notebook`**).
-   - **Alternativa:** se a janela **"Open notebook"** aparecer na tela inicial, use a aba **`Upload`** na parte de baixo dela.
-3. Selecione o `.ipynb` desejado (ex.: `01-dicionario-variaveis.ipynb`).
-4. Se o kernel não estiver em R, troque: **Runtime → Change runtime type → Runtime type: R**.
-5. **Runtime → Run all** (ou `Ctrl+F9`).
+**Como rodar depois que o notebook abrir:**
+
+1. Se o kernel não estiver em R, troque: **Runtime → Change runtime type → Runtime type: R**.
+2. **Runtime → Run all** (ou `Ctrl+F9`).
 
 **Sobre os dados:** os notebooks buscam o CSV automaticamente no repositório do GitHub. Não é preciso subir o arquivo manualmente.
 
@@ -239,10 +246,6 @@ O Colab é uma plataforma da Google que roda notebooks no navegador, sem instala
 ```r
 install.packages("glmnet")
 ```
-
-**Nenhuma configuração extra é necessária** — os notebooks rodam de ponta a ponta apenas com o upload do arquivo `.ipynb`.
-
----
 
 ### Resumo em uma frase
 
