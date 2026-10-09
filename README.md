@@ -179,7 +179,7 @@ Os números de página referem-se aos marcadores `===== Page X =====` do PDF das
 
 ---
 
-### Parte 1 — Rodar os scripts `.R` localmente
+### 🚨 **Método 1:** Rodar os scripts `.R` localmente
 
 **Pré-requisitos:**
 
@@ -220,7 +220,7 @@ Ou seja: com o repositório clonado, basta rodar.
 
 ---
 
-### Parte 2 — Rodar os notebooks `.ipynb` no Google Colab
+### 🚨 **Método 2:** — Rodar os notebooks `.ipynb` no Google Colab
 
 Os notebooks podem ser abertos diretamente no **Google Colab**, sem instalar nada e sem fazer upload manual. Basta clicar em um dos links abaixo — cada um abre o notebook correspondente já no Colab. Depois de aberto, selecione o runtime R.
 
