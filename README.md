@@ -222,13 +222,7 @@ Ou seja: com o repositório clonado, basta rodar.
 
 ### Parte 2 — Rodar os notebooks `.ipynb` no Google Colab
 
-O Colab é uma plataforma da Google que roda notebooks no navegador, sem instalação. **Existem duas formas** de rodar R no Colab — depende de como o notebook foi montado.
-
----
-
-#### Caso A — Notebook com **kernel R nativo** (recomendado)
-
-Aqui o notebook inteiro é R. No canto superior direito do Colab, aparece escrito **"R"** ao lado do botão "Conectar".
+O Colab é uma plataforma da Google que roda notebooks no navegador, sem instalação. Os notebooks deste projeto usam **kernel R nativo** — no canto superior direito do Colab, aparece escrito **"R"** ao lado do botão "Conectar".
 
 **Como rodar:**
 
@@ -237,52 +231,14 @@ Aqui o notebook inteiro é R. No canto superior direito do Colab, aparece escrit
 3. Se o kernel não estiver em R, troque: **Runtime → Change runtime type → Runtime type: R**.
 4. **Runtime → Run all** (ou `Ctrl+F9`).
 
-**Sobre os dados:** os notebooks podem buscar o CSV diretamente do GitHub ou exigir upload manual. Se houver célula com `read.csv(...)`, confira o caminho antes de rodar.
+**Sobre os dados:** os notebooks buscam o CSV automaticamente no repositório do GitHub. Não é preciso subir o arquivo manualmente.
 
 **Sobre pacotes:** o Colab já vem com a maioria dos pacotes base. Se algum faltar (ex.: `glmnet`), adicione uma célula no topo:
 ```r
 install.packages("glmnet")
 ```
 
----
-
-#### Caso B — Notebook **Python com mágica `%%R`**
-
-Aqui o notebook é Python, mas cada célula de R começa com `%%R`. No canto superior direito do Colab, aparece **"Python 3"**.
-
-**Como rodar:**
-
-1. Acesse [colab.research.google.com](https://colab.research.google.com).
-2. **File → Upload notebook** → selecione o `.ipynb`.
-3. **Antes de rodar o resto**, execute uma célula (no topo) com:
-   ```python
-   %load_ext rpy2.ipython
-   ```
-   Isso ativa o suporte a R dentro do Python.
-4. Se `rpy2` não estiver disponível, instale antes:
-   ```python
-   !pip install rpy2
-   ```
-5. **Runtime → Run all**.
-
-**Observações importantes do Caso B:**
-
-- Cada célula de R **precisa** começar com `%%R` na primeira linha. Sem isso, o Colab interpreta como Python e dá erro.
-- As variáveis **não persistem entre células** por padrão. Para manter o estado entre células R consecutivas, use a flag `-i` (input) e `-o` (output):
-   ```python
-   %%R -i dados
-   summary(dados)
-   ```
-- Gráficos gerados em células `%%R` aparecem direto no output. Se não aparecerem, adicione `-w 700 -h 700` para definir tamanho.
-
----
-
-#### Qual dos dois casos é o meu?
-
-Abra o `.ipynb` em um editor de texto (ou no próprio Colab, em modo "View raw"). Olhe as primeiras linhas:
-
-- Se aparecer `"kernelspec": { "name": "ir" ... }` → **Caso A** (kernel R).
-- Se aparecer `"kernelspec": { "name": "python3" ... }` → **Caso B** (Python com `%%R`).
+**Nenhuma configuração extra é necessária** — os notebooks rodam de ponta a ponta apenas com o upload do arquivo `.ipynb`.
 
 ---
 
