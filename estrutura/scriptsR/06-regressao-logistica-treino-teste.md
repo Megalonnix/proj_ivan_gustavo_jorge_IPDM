@@ -1,7 +1,7 @@
 # Relatório da Atividade 06 — Classificação
 
 **Gerado por:** `06-regressao-logistica-treino-teste.R`  
-**Data:** 2026-10-08 21:09:58  
+**Data:** 2026-10-09 03:44:54  
 **Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
 
 > **Alvo:** `mortalidade_alta` = 1 se mortalidade > mediana do TREINO.
