@@ -52,9 +52,9 @@ na Baixada Santista depende de onde (município) e de quando (ano)?}}
 \newcommand{\nomeprofessor}{Prof.\ Dr.\ João Paulo Ferreira de Mello}
 \newcommand{\repositorio}{proj\_ivan\_gustavo\_jorge\_IPDM}
 \newcommand{\integrantes}{%
-  Ivan -- RA 1999000 \\
-  Gustavo -- RA 2004000 \\
-  Jorge -- RA 2006000%
+  Ivan -- RA 0051352421038 \\
+  Gustavo -- RA 0051352511009 \\
+  Jorge -- RA 0051352511005%
 }
 
 \begin{document}

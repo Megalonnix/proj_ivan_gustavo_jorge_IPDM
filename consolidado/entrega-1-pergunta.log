@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.30)  9 OCT 2026 20:32
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (MiKTeX 25.12) (preloaded format=pdflatex 2026.5.30)  23 OCT 2026 09:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -647,7 +647,7 @@ Package rerunfilecheck Info: File `entrega-1-pergunta.out' has not changed.
 Here is how much of TeX's memory you used:
  12925 strings out of 467871
  202666 string characters out of 5418860
- 636808 words of memory out of 5000000
+ 636826 words of memory out of 5000000
  41564 multiletter control sequences out of 15000+600000
  703827 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -665,7 +665,7 @@ Ivan/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmsy10.pfb><C:/Users/I
 van/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt10.pfb><C:/Users/Iv
 an/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtt12.pfb><C:/Users/Iva
 n/AppData/Local/Programs/MiKTeX/fonts/type1/public/lm/lmtti10.pfb>
-Output written on entrega-1-pergunta.pdf (3 pages, 294383 bytes).
+Output written on entrega-1-pergunta.pdf (3 pages, 294394 bytes).
 PDF statistics:
  138 PDF objects out of 1000 (max. 8388607)
  15 named destinations out of 1000 (max. 500000)
