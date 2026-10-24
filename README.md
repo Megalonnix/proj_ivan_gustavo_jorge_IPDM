@@ -40,7 +40,7 @@ O curso é dividido em cinco blocos temáticos. Essa divisão **não é interpre
 |---|---|---|---|
 | **I** | Fundamentos do aprendizado estatístico | Aulas 01, 02, 03 | `01-dicionario-variaveis.R`, `02-analise-exploratoria.R` |
 | **II** | Supervisionado: avaliação e regularização | Aulas 04, 05, 06, 07, 08 | `03-regressao-linear.R`, `04-regressao-logistica.R`, `05-regressao-linear-treino-teste.R`, `06-regressao-logistica-treino-teste.R`, `07-reamostragem.R`, `08-regularizacao.R` |
-| **III** | Modelos flexíveis: suavização, árvores, ensembles | Aula 09 (início) | — |
+| **III** | Modelos flexíveis: suavização, árvores, ensembles | Aulas 09 e 10 | `09-metodos-suavizacao.R`, `10-splines-gam.R` |
 | **IV** | Redes neurais e SVM | ainda não cursadas | — |
 | **V** | Não supervisionado: agrupamento, EM, PCA/ICA | ainda não cursadas | — |
 
@@ -77,13 +77,17 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │   ├── 06-regressao-logistica-treino-teste.md
 │   ├── 07-reamostragem.md
 │   ├── 08-regularizacao.md
+│   ├── 09-metodos-suavizacao.md
+│   ├── 10-splines-gam.md
 │   ├── 09-escolha-da-pergunta.md
 │   ├── entrega-1-pergunta.Rnw
 │   ├── entrega-1-pergunta.pdf
 │   └── referencias.bib
 ├── estrutura/
 │   ├── codigo/
-│   │   └── 09-escolha-da-pergunta.R
+│   │   ├── 09-escolha-da-pergunta.R
+│   │   ├── 09-metodos-suavizacao.R
+│   │   └── 10-splines-gam.R
 │   ├── bancoDeDados/
 │   │   ├── 0_dicionario_ipdm_ORIGINAL.csv
 │   │   ├── dados_ipdm.csv
@@ -99,7 +103,9 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │   │   ├── 05-regressao-linear-treino-teste.ipynb
 │   │   ├── 06-regressao-logistica-treino-teste.ipynb
 │   │   ├── 07-reamostragem.ipynb
-│   │   └── 08-regularizacao.ipynb
+│   │   ├── 08-regularizacao.ipynb
+│   │   ├── 09-metodos_suavizacao.ipynb
+│   │   └── 10-splines-gam.ipynb
 │   └── scriptsR/
 │       ├── 01-dicionario-variaveis.R
 │       ├── 01-dicionario-variaveis.md
@@ -117,6 +123,10 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │       ├── 07-reamostragem.md
 │       ├── 08-regularizacao.R
 │       ├── 08-regularizacao.md
+│       ├── 09-metodos-suavizacao.R
+│       ├── 09-metodos-suavizacao.md
+│       ├── 10-splines-gam.R
+│       ├── 10-splines-gam.md
 │       └── figuras/
 │           ├── 02-analise-exploratoria_img1.png
 │           ├── 02-analise-exploratoria_img2.png
@@ -180,7 +190,9 @@ Os números de página referem-se aos marcadores `===== Page X =====` do PDF das
 | 06 | [06-regressao-logistica-treino-teste.md](consolidado/06-regressao-logistica-treino-teste.md) | `estrutura/scriptsR/06-regressao-logistica-treino-teste.R` | Aula 06 | pág. 27 | Mesmo exercício da pág. 27, estendido à classificação por analogia. O enunciado não especifica `glm`, mas diz "dois modelos das aulas passadas" |
 | 07 | [07-reamostragem.md](consolidado/07-reamostragem.md) | `estrutura/scriptsR/07-reamostragem.R` | Aula 07 | pág. 23 | Exercício "Traque a divisão única da Aula 6 por validação cruzada, e qualifique um coeficiente por bootstrap: 1) CV(5) comparando dois candidatos; 2) bootstrap do coeficiente" |
 | 08 | [08-regularizacao.md](consolidado/08-regularizacao.md) | `estrutura/scriptsR/08-regularizacao.R` | Aula 08 | pág. 29 | Exercício "library(glmnet)... cv.glmnet(X, yv, alpha = 1); cv.glmnet(X, yv, alpha = 0)" — Lasso e Ridge com curva em U |
-| 09 | [09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md) e [entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf) | `estrutura/codigo/09-escolha-da-pergunta.R` e `consolidado/entrega-1-pergunta.Rnw` | Aula 09 | — | Compara duas perguntas candidatas e documenta a escolha da pergunta de pesquisa; a entrega formal em PDF aprofunda a pergunta escolhida |
+| 09 | [09-metodos-suavizacao.md](consolidado/09-metodos-suavizacao.md) | `estrutura/scriptsR/09-metodos-suavizacao.R` | Aula 09 | — | Compara reta, KNN e kernel para mapear não-linearidade em riqueza e mortalidade; diagnóstica a relação e escolhe o suavizador melhor ajustado |
+| 10 | [10-splines-gam.md](consolidado/10-splines-gam.md) | `estrutura/scriptsR/10-splines-gam.R` | Aula 10 | — | Compara spline natural e GAM para modelar relações não lineares em riqueza, escolaridade e distorção escolar |
+| 11 | [09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md) e [entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf) | `estrutura/codigo/09-escolha-da-pergunta.R` e `consolidado/entrega-1-pergunta.Rnw` | Aula 09 | — | Compara duas perguntas candidatas e documenta a escolha da pergunta de pesquisa; a entrega formal em PDF aprofunda a pergunta escolhida |
 
 ---
 
@@ -191,7 +203,18 @@ A Atividade 09 tem dois documentos com papéis diferentes; um não substitui o o
 - **[09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md):** relatório analítico da atividade. Compara as duas perguntas candidatas, registra os diagnósticos do banco e os resultados da validação cruzada que fundamentam a escolha da Pergunta 1. É gerado pelo script [09-escolha-da-pergunta.R](estrutura/codigo/09-escolha-da-pergunta.R).
 - **[entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf):** versão formal da entrega, voltada à apresentação da pergunta escolhida. Expõe o problema, os dados, a pergunta, os diagnósticos e a justificativa. Seu fonte editável é [entrega-1-pergunta.Rnw](consolidado/entrega-1-pergunta.Rnw), e as referências estão em [referencias.bib](consolidado/referencias.bib).
 
-### Como gerar os dois documentos
+### Como gerar os documentos de atividades recentes
+
+É necessário ter **R** instalado. Para gerar os relatórios e figuras de cada atividade, execute os scripts correspondentes na raiz do repositório.
+
+```bash
+Rscript estrutura/scriptsR/09-metodos-suavizacao.R
+Rscript estrutura/scriptsR/10-splines-gam.R
+```
+
+Os scripts leem o CSV em `estrutura/bancoDeDados/` (com fallback para URL no GitHub) e geram os relatórios em `consolidado/` e os artefatos em `estrutura/scriptsR/figuras/`.
+
+### Como gerar os dois documentos da atividade 09 (pergunta de pesquisa)
 
 É necessário ter **R** instalado. Para gerar o PDF, também é necessário o pacote R `knitr` e uma distribuição LaTeX (por exemplo, MiKTeX ou TeX Live).
 
