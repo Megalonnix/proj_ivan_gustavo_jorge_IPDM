@@ -149,6 +149,7 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │           ├── 08-regularizacao_img1.png
 │           ├── 08-regularizacao_img2.png
 │           └── 08-regularizacao_img3.png
+|           └── ... outras imagens (.png) ...
 ├── slides_aulas/
 │   ├── TAE_aula01.PDF
 │   ├── TAE_aula02.PDF
@@ -158,7 +159,8 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │   ├── TAE_aula06.PDF
 │   ├── TAE_aula07.PDF
 │   ├── TAE_aula08.PDF
-│   └── TEA_aula09.PDF
+│   └── TAE_aula09.PDF
+|   └── ... faltam os slides da aula 9 e 10!!! (bônus) ...
 └── to.delete/
 ```
 
@@ -279,6 +281,7 @@ Execute o comando do terminal a partir da raiz do repositório. O `.Rnw` usa o C
    Rscript estrutura/scriptsR/06-regressao-logistica-treino-teste.R
    Rscript estrutura/scriptsR/07-reamostragem.R
    Rscript estrutura/scriptsR/08-regularizacao.R
+   ... idem (adicionar scripts restantes depois) ...
    ```
 3. Cada script imprime o output no terminal, grava as figuras em `estrutura/scriptsR/figuras/` e gera um `.md` de output na mesma pasta.
 
