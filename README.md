@@ -306,13 +306,15 @@ Os notebooks podem ser abertos diretamente no **Google Colab**, sem instalar nad
 | 06 | [06-regressao-logistica-treino-teste.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/06-regressao-logistica-treino-teste.ipynb) |
 | 07 | [07-reamostragem.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/07-reamostragem.ipynb) |
 | 08 | [08-regularizacao.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/08-regularizacao.ipynb) |
+| 09 | [09-metodos_suavizacao.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/09-metodos_suavizacao.ipynb) |
+| 10 | [10-splines-gam.ipynb](https://colab.research.google.com/github/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/notebooks/10-splines-gam.ipynb) |
 
 **Como rodar depois que o notebook abrir:**
 
 1. Se o kernel não estiver em R, troque: **Runtime → Change runtime type → Runtime type: R**.
 2. **Runtime → Run all** (ou `Ctrl+F9`).
 
-**Sobre os dados:** os notebooks buscam o CSV automaticamente no repositório do GitHub. Não é preciso subir o arquivo manualmente.
+**Sobre os dados:** os notebooks buscam o CSV automaticamente no repositório do GitHub. Não é preciso subir o arquivo manualmente. As análises 09 e 10 também foram preparadas para exibir seus gráficos como saída das células no Colab.
 
 **Sobre pacotes:** o Colab já vem com a maioria dos pacotes base. Se algum faltar (ex.: `glmnet`), adicione uma célula no topo:
 ```r
