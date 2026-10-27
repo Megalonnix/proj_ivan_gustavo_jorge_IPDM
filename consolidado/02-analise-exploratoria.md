@@ -170,6 +170,44 @@ Próxima parada: uma primeira tentativa de regressão linear, para sentir na pel
 
 ---
 
+## Fundamentação Matemática e Resolução dos Exercícios (Aula 03)
+
+### 1. Medidas de Posição, Dispersão e Variáveis Aleatórias
+
+Para uma amostra quantitativa $x_1, \dots, x_n$, resumimos centro e espalhamento por:
+
+$$\bar{x} = \frac{1}{n}\sum_{i=1}^{n} x_i, \qquad s^2 = \frac{1}{n-1}\sum_{i=1}^{n}(x_i - \bar{x})^2, \qquad s = \sqrt{s^2}, \qquad \text{IQR} = Q_3 - Q_1.$$
+
+Para uma variável aleatória discreta com função de probabilidade $p(x) = P(X = x)$ ou contínua com densidade $f(x)$:
+
+$$\mathbb{E}[X] = \sum_x x\,p(x) \quad \text{ou} \quad \int_{-\infty}^{\infty} x\,f(x)\,dx, \qquad \text{Var}(X) = \mathbb{E}\bigl[(X - \mathbb{E}[X])^2\bigr] = \mathbb{E}[X^2] - (\mathbb{E}[X])^2.$$
+
+> **Frase de entrega da Aula 03 (forma da distribuição de `mortalidade_60_69`):**  
+> *"A taxa de mortalidade de 60 a 69 anos na Baixada Santista é **assimétrica à direita** (média $19,91$ maior que a mediana $19,53$, com cauda superior estendendo-se até $33,00$ mortes/mil hab. em Mongaguá/2022), afastando-se da simetria da Normal teórica e lembrando uma distribuição **Gama ou Lognormal** deslocada."*
+
+### 2. Resolução dos Exercícios de Cálculo da Aula 03 (Slide 16/19)
+
+1. **Amostra $\{4, 8, 8, 10, 20\}$ ($n = 5$):**
+   - **Média:** $\bar{x} = \frac{4 + 8 + 8 + 10 + 20}{5} = \frac{50}{5} = \mathbf{10,0}$.
+   - **Mediana:** Elemento central ($3^\text{a}$ posição ordenada) $= \mathbf{8,0}$.
+   - **Desvio-padrão amostral ($s$):**
+     $$s^2 = \frac{(4-10)^2 + (8-10)^2 + (8-10)^2 + (10-10)^2 + (20-10)^2}{5 - 1} = \frac{36 + 4 + 4 + 0 + 100}{4} = \frac{144}{4} = 36 \implies s = \mathbf{6,0}.$$
+   - *Interpretação:* Como $\bar{x} = 10 > \text{mediana} = 8$, a média é puxada pelo valor extremo $20$, indicando **assimetria positiva (cauda à direita)**.
+2. **Variável aleatória discreta com $p(0)=0,5$, $p(1)=0,3$, $p(2)=0,2$:**
+   - $\mathbb{E}[X] = 0(0,5) + 1(0,3) + 2(0,2) = 0 + 0,3 + 0,4 = \mathbf{0,70}$.
+   - $\mathbb{E}[X^2] = 0^2(0,5) + 1^2(0,3) + 2^2(0,2) = 0,3 + 0,8 = 1,10 \implies \text{Var}(X) = 1,10 - (0,70)^2 = 1,10 - 0,49 = \mathbf{0,61}$.
+3. **Poisson($\lambda = 2$) no R:**
+   - $P(X = 0)$: `dpois(0, lambda = 2)` ($= e^{-2} \approx 0,1353$).
+   - $P(X \ge 3) = 1 - P(X \le 2)$: `1 - ppois(2, lambda = 2)` ou `ppois(2, lambda = 2, lower.tail = FALSE)` ($\approx 0,3233$).
+
+### 3. Resolução dos Exercícios Conceituais da Aula 03 (Slide 17/19)
+
+- **Qual distribuição usar?** (a) Nº de peças defeituosas em um lote fixo de $n=100$: **Binomial$(100, p)$**; (b) Tempo contínuo até o próximo cliente entrar na loja: **Exponencial$(\lambda)$**; (c) Resultado único de cara ou coroa ($0/1$): **Bernoulli$(p)$**.
+- **Discreta ou contínua?** Nº de filhos: **discreta** (contagem); tempo de espera: **contínua** (medida); nº de e-mails/dia: **discreta** (contagem, modelo Poisson); temperatura: **contínua** (medida).
+- **Lendo um boxplot:** A **caixa** delimita o intervalo interquartil ($Q_1$, percentil $25\%$, até $Q_3$, percentil $75\%$, cobrindo os $50\%$ centrais dos dados); a **linha central** marca a **mediana** ($Q_2$); os **pontos além dos bigodes** ($Q_1 - 1,5\,\text{IQR}$ ou $Q_3 + 1,5\,\text{IQR}$) sinalizam **valores atípicos (*outliers*)**.
+
+---
+
 ## Documentos complementares
 
 **Script que gera este consolidado:**

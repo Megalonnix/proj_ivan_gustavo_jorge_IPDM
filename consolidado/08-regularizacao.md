@@ -1,230 +1,223 @@
-# Atividade 08 — Regularização: quando menos é mais
+# Atividade 08 — Expansão e Regularização: Quando Menos é Mais
 
 > **Este documento é o resultado do script**
 > [`estrutura/scriptsR/08-regularizacao.R`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/08-regularizacao.R).
-> O script produz os números; este consolidado é a leitura humana deles —
+> O script produz os números; este consolidado é a leitura analítica e matemática deles —
 > com o porquê das decisões e o que aprender com cada resultado.
 
-> **Alvo:** `mortalidade_60_69`. Predictores válidos (excluídos `ipdm` e `longevidade`).  
-> **Baseline herdado:** RMSE = 3,6782 (média do treino).
-
-## A resposta técnica a um problema antigo
-
-Chegamos à última atividade do ciclo. O diagnóstico que se acumulou nas anteriores é claro:
-
-- **n = 54** é pequeno.
-- **p = 7** preditores é razoável — mas n/p = 7,7 não é confortável.
-- **Sinal é fraco.** Correlações baixas, coeficientes não significativos, AUC perto de 0,5.
-- **Modelos complexos explodem.** O polinômio de grau 12 da atividade 07 é o retrato disso.
-
-Se você quer colocar muitos preditores num modelo, com sinal fraco e n pequeno, o MQO (Mínimos Quadrados Ordinários) simplesmente **não é a ferramenta certa**. Ele vai estimar coeficientes com variância alta — alguns vão parecer grandes, outros vão virar o sinal, e nada disso é confiável.
-
-A **regularização** é a resposta técnica a esse problema. A ideia central é: em vez de deixar o modelo livre para escolher qualquer coeficiente, **imponha um custo** para coeficientes grandes. Isso "encolhe" as estimativas na direção de zero, reduz a variância, e geralmente melhora o desempenho em dados novos — à custa de um pequeno viés.
-
-Existem três sabores:
-
-- **Ridge (L2):** penaliza a **soma dos quadrados** dos coeficientes. Encolhe todos na direção de zero, sem zerar nenhum.
-- **Lasso (L1):** penaliza a **soma dos valores absolutos**. Encolhe e **zera** alguns — faz seleção de variáveis.
-- **ElasticNet:** mistura de L1 e L2, com um parâmetro α entre 0 e 1.
-
-## Expansão: ainda mais preditores
-
-Antes de regularizar, o script **expande** o conjunto original:
-
-    escolaridade2       = escolaridade²
-    distorcao_x_esc     = distorcao_em × escolaridade
-
-Isso leva o modelo de 5 para **7 preditores**, adicionando um termo quadrático (para captar não-linearidade) e uma interação (para captar efeito conjunto). Não expandimos mais porque, com n = 54, mais termos = mais risco.
-
-## A referência: MQO de sempre
-
-Primeiro, o MQO nos 7 preditores, como régua:
-
-    R²      = 0,229
-    R² aj   = 0,1117
-
-O R² ajustado de 0,11 é o primeiro sinal de fumaça. R² ajustado penaliza por número de preditores — e ele cai de 0,229 para 0,112. Ou seja, dos 22,9% da variação explicada pelo modelo, boa parte vem apenas de ter **usado mais variáveis**, não de sinal real.
-
-## As três curvas em U
-
-A regularização se dá via um parâmetro **λ** (lambda):
-
-- **λ = 0:** nenhuma penalidade. Cai no MQO.
-- **λ → ∞:** penalidade infinita. Todos os coeficientes viram zero (só resta o intercepto).
-- **λ ótimo:** algum ponto no meio.
-
-O **gráfico de validação cruzada** (cv.glmnet) plota, para cada λ, o erro de CV. O resultado é uma **curva em U**: erro alto para λ pequeno (variância), erro alto para λ grande (viés), mínimo em algum lugar no meio.
-
-Existem duas escolhas de λ:
-
-- **λ.min:** o valor que minimiza o erro de CV. Mais agressivo, mas pode sobreajustar o próprio CV.
-- **λ.1se:** o maior λ cujo erro está a **1 erro-padrão** do mínimo. Mais conservador — a regra do 1 SE prefere modelos mais parcimoniosos quando a perda é compatível com ruído.
-
-O script adota **λ.1se** por princípio: em problemas com sinal fraco, prefira o modelo mais simples.
-
-### Resultados da CV
-
-| Modelo | λ.min | MSE.min | λ.1se |
-|---|---|---|---|
-| Ridge (α=0) | 5,6484 | 14,1445 | **1500,2667** |
-| ElasticNet (α=0,5) | 1,2989 | 14,5705 | 3,0005 |
-| Lasso (α=1) | 0,5392 | 14,1402 | 1,5003 |
-
-Observação crucial: o **λ.1se do Ridge é 1500**, contra 1,5 do Lasso. Por que essa diferença tão grande?
-
-Porque Ridge **nunca zera** coeficientes. Para levar o erro a 1 SE do mínimo, ele precisa encolher **muito** os coeficientes — daí um λ gigantesco. Lasso consegue o mesmo efeito zerando alguns coeficientes com λ pequeno. É uma diferença estrutural entre as duas penalidades.
-
-Compare com o **MSE do baseline** (média do treino): (3,6782)² ≈ 13,53. O MSE.min de todos os três regularizados está em torno de 14,1–14,6 — **acima do baseline**. Ou seja, a própria CV já está dizendo que nenhum deles bate a média.
-
-## Os coeficientes no λ.1se: uma pegadinha visual
-
-Aqui vale uma nota didática. Olhe os coeficientes do Ridge em λ.1se:
-
-```
---- Ridge ---
-                lambda.1se
-(Intercept)        19.9056
-escolaridade        0.0000
-escolaridade2       0.0000
-distorcao_em        0.0000
-distorcao_x_esc     0.0000
-pib_per_capita      0.0000
-riqueza             0.0000
-ano                 0.0000
-```
-
-Todos aparecem como 0,0000! Mas na linha seguinte o script diz:
-
-```
-Sobreviventes Ridge: (Intercept), escolaridade, escolaridade2, distorcao_em, distorcao_x_esc, pib_per_capita, riqueza, ano
-```
-
-**Contradição?** Não. É **arredondamento**. Os coeficientes não são exatamente zero — são valores minúsculos (tipo 0,00001) que, arredondados para 4 casas, viram 0,0000. A lista de sobreviventes testa `!= 0` **sem arredondar**, então pega esses valores minúsculos.
-
-Esse é um momento precioso para entender a diferença entre Ridge e Lasso:
-
-- **Ridge:** encolhe **todos** os coeficientes na direção de zero, mas **nenhum chega a zero**. Os coeficientes ficam vivos (na lista de sobreviventes), mas amordaçados.
-- **Lasso:** encolhe **e zera**. De fato, aqui zerou tudo: só `(Intercept)` sobreviveu. É seleção radical.
-
-O Lasso com λ.1se = 1,5 decidiu que **nenhum** preditor vale o custo. E isso é uma resposta — não um fracasso.
-
-## Curvas em U e trilhas: as três figuras
-
-### Figura 1 — Curva em U do Lasso
-
-![Curva de validação cruzada do Lasso: erro em função de log(λ), com marcações de λ.min e λ.1se](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img1.png)
-
-No eixo X está log(λ). No eixo Y, o erro de CV (deviance). Os pontos vermelhos são as médias; as barras de erro verticais, o erro-padrão.
-
-O que observar:
-
-1. **A curva desce, atinge um mínimo e volta a subir.** Formato em U clássico.
-2. **As duas linhas verticais** marcam λ.min (mais à esquerda) e λ.1se (mais à direita). A escolha de λ.1se é deliberadamente mais conservadora.
-3. **A região plana no meio** indica que a perda em adotar um λ mais agressivo é pequena — o que justifica preferir o λ.1se pelo princípio da parcimônia.
-
-No caso do Lasso, a curva à esquerda (λ pequeno) tem mais variação — o modelo fica instável com muitos preditores vivos. É exatamente o problema que a regularização combate.
-
-### Figura 2 — Curva em U do Ridge
-
-![Curva de validação cruzada do Ridge: erro em função de log(λ), com marcações de λ.min e λ.1se](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img2.png)
-
-Mesma estrutura, mas agora para Ridge. A diferença visual mais marcante:
-
-1. **A curva do Ridge é mais suave** — porque sem zeramento, o efeito do λ é mais gradual.
-2. **λ.1se está muito à direita** (1500, contra 1,5 do Lasso). A curva à direita é quase plana; a 1 SE, não custa nada escolher um λ altíssimo.
-3. **O mínimo é próximo**, mas o λ que o atinge é bem menor que o λ.1se. A regra do 1 SE deu uma margem enorme ao Ridge.
-
-Comparar as duas figuras lado a lado é didático: mostra como a forma de cada penalidade se reflete na curva.
-
-### Figura 3 — Trilhas de coeficientes
-
-![Trilhas de coeficientes do Ridge (esquerda) e do Lasso (direita), com λ no eixo X](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img3.png)
-
-Aqui está a figura mais reveladora. Duas trilhas, uma ao lado da outra.
-
-- **Eixo X:** λ (em escala log).
-- **Eixo Y:** valor do coeficiente.
-- **Cada linha colorida:** um preditor.
-
-**Ridge (esquerda):** as linhas descem suavemente em direção ao zero à medida que λ cresce, mas **nenhuma toca o zero**. Elas convergem assintoticamente. É o comportamento "encolher sem zerar".
-
-**Lasso (direita):** as linhas descem **e desaparecem** uma por uma. Quando um coeficiente bate em zero, ele fica lá — não volta. Isso é "encolher e zerar". No final, se λ for grande o suficiente, sobra apenas o intercepto.
-
-Essa figura, mais que qualquer outra, **explica visualmente a diferença entre L1 e L2**. É a peça que costuma ficar abstrata em livros.
-
-## O teste final: 70/30
-
-Depois de toda a análise de CV, um teste cego de verdade: separar 70% (treino), ajustar os três modelos, e medir RMSE nos 30% restantes.
-
-| Modelo | RMSE |
-|---|---|
-| Baseline (média treino) | 3,6782 |
-| **MQO** | **3,6363** |
-| Ridge (1se) | 3,6782 |
-| Lasso (1se) | 3,6782 |
-
-Leia com calma, porque o resultado é quase cômico.
-
-**MQO ganha.** Por uma margem minúscula (3,6363 vs 3,6782), mas ganha. Ou seja, o modelo não-regularizado teve o melhor desempenho no teste. Ironicamente, a regularização — que era para ajudar — atrapalhou ligeiramente.
-
-**Ridge e Lasso empataram com o baseline.** Ambos deram RMSE 3,6782, idêntico ao "prever sempre a média do treino". Isso acontece porque, com λ.1se tão agressivo, ambos os modelos essencialmente **zeraram tudo** e passaram a prever a média. Um modelo que prevê a média dá exatamente o RMSE do baseline.
-
-Ou seja: a escolha de λ.1se, que era para ser conservadora e preferir simplicidade, foi **tão** conservadora que os modelos regularizados viraram o baseline. Não aprenderam nada.
-
-Esse é um resultado honesto e importante. A regularização é uma técnica poderosa — **quando há sinal a ser regularizado**. Aqui, não há. Com sinal fraco e n pequeno, a penalidade atrapalha mais que ajuda.
-
-## Síntese: o fecho do ciclo
-
-Cinco conclusões.
-
-**Primeira: regularização não é mágica.** Ela controla variância, não cria sinal. Se o sinal é fraco, ela encolhe o pouco que existe na direção de zero — podendo zerar tudo.
-
-**Segunda: λ.1se é conservador por princípio, mas pode ser conservador demais.** No Ridge, com λ = 1500, foi. O modelo virou baseline. Se adotássemos λ.min, talvez houvesse mais sinal — mas também mais variância. É o trade-off clássico.
-
-**Terceira: Ridge encolhe; Lasso zera.** A figura 3 mostra isso com clareza. Os coeficientes do Ridge são minúsculos mas não nulos. Os do Lasso desaparecem.
-
-**Quarta: MQO venceu — mas por muito pouco.** RMSE 3,6363 vs 3,6782 do baseline. Uma diferença de 1,1%. Isso não é "MQO é bom"; é "todos os modelos são equivalentes ao baseline".
-
-**Quinta: o ciclo terminou com uma resposta honesta, não com um troféu.** As oito atividades convergiram para a mesma conclusão: **neste recorte (Baixada Santista, 9 municípios, 6 anos), mortalidade 60–69 é praticamente imprevisível a partir das variáveis disponíveis.** Isso não é fracasso — é a descoberta.
-
-O que fica desta atividade:
-
-1. **MQO referência:** R² = 0,229; R² aj = 0,1117.
-2. **λ.1se:** Ridge 1500,2667; ENet 3,0005; Lasso 1,5003.
-3. **Ridge sobreviventes:** todos os 7 preditores (minúsculos, mas não zero). **Lasso sobreviventes:** só o intercepto.
-4. **Teste RMSE:** Baseline 3,6782; MQO 3,6363; Ridge 3,6782; Lasso 3,6782.
-5. **Regularização não melhorou** — virou baseline por agressividade de λ.
-6. **Três figuras didáticas:** duas curvas em U, uma trilha comparativa.
-
-## Balanço final do projeto (01–08)
-
-Depois de oito atividades, um resumo do que aprendemos sobre o problema:
-
-- **O alvo é `mortalidade_60_69`**, não o IPDM (que é circular).
-- **n = 54 é pequeno.** Parcimônia e regularização são obrigatórias.
-- **Sinal é fraco.** Correlações baixas, coeficientes não significativos.
-- **Modelos simples (MQO) e complexos (polinômios grau 12) ficam perto ou pior que o baseline.**
-- **Regressão logística** também fica próxima do chute, embora o modelo B (com `distorcao_em`) tenha dado AUC 0,68 na CV — o melhor resultado do projeto.
-- **Regularização** não salvou — encolheu tudo.
-- **A conclusão honesta:** com este recorte, não há sinal preditivo forte. Outra modelagem, outro recorte geográfico ou temporal, ou variáveis adicionais seriam necessários para uma previsão útil.
-
-Isso não é um resultado empolgante. Mas é um resultado **rigoroso** — e a postura correta em um projeto científico é justamente resistir à tentação de maquiar um "não" em um "sim" com casas decimais.
+> **Alvo ($Y$):** `mortalidade_60_69`. Preditores válidos (excluídos `ipdm` e `longevidade`).  
+> **Baseline herdado:** RMSE = 3,6782 (média do treino no split 70/30) e RMSE = 3,8425 (em CV(5)).
 
 ---
 
-## Documentos complementares
+## O Funil até a Aula 08
 
-**Script que gera este consolidado:**
-- 🧮 [`08-regularizacao.R`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/08-regularizacao.R) — **a fonte** deste documento.
+| # | Etapa | O que fizemos | O problema que restou |
+|---|---|---|---|
+| **03 / 04** | MQO e Logística | Ajuste na amostra cheia ($n=54$) | Risco de autoengano; sinais instáveis |
+| **05 / 06** | Treino / Teste | Divisão 70/30 e métricas honestas | Alta volatilidade entre divisões |
+| **07** | Reamostragem | CV(5) + Bootstrap + Polinômios (grau 12) | Medimos o sobreajuste ($\text{RMSE} = 240$), mas medir não é consertar |
+| **08** | **Expansão e Regularização** | **Acelerador (`model.matrix`) + Freio (Ridge, Lasso, Elastic Net)** | **Controlar a variância penalizando coeficientes grandes ($\lambda$ por CV)** |
 
-**Demais documentos relacionados:**
-- 📋 [Relatório técnico do script (`08-regularizacao.md`)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/08-regularizacao.md) — output bruto, sem a camada didática.
-- 📎 [Consolidado 01 — Dicionário de variáveis](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/01-dicionario-variaveis.md).
-- 📎 [Consolidado 02 — Análise exploratória](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/02-analise-exploratoria.md).
-- 📎 [Consolidado 03 — Regressão linear](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/03-regressao-linear.md).
-- 📎 [Consolidado 04 — Regressão logística](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/04-regressao-logistica.md).
-- 📎 [Consolidado 05 — Treino/teste (regressão)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/05-regressao-linear-treino-teste.md).
-- 📎 [Consolidado 06 — Classificação honesta](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/06-regressao-logistica-treino-teste.md).
-- 📎 [Consolidado 07 — Reamostragem](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/07-reamostragem.md).
-- 📊 [Banco de dados (CSV)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv).
-- 📄 [Dicionário de dados (PDF)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/dicionario/dicionario_ipdm_baixada.pdf).
+---
+
+## 1. Fundamentação Teórica e Matemática: O Acelerador e o Freio
+
+Chegamos à última atividade do Bloco II. O diagnóstico acumulado nas etapas anteriores é claro:
+- **$n = 54$ é pequeno** para muitos preditores.
+- **Modelos complexos sem restrição explodem** (como o polinômio de grau 12 da Atividade 07) ou sofrem de **colinearidade** (preditores dizendo quase a mesma coisa inflam os erros-padrão).
+
+Na **Aula 08**, combinamos dois movimentos opostos:
+1. **O acelerador (Expansão de Atributos):** fabricar colunas novas (potências $x^2$, interações $x_1 \times x_2$ e *dummies* $0/1$ para variáveis categóricas via `model.matrix`) para reduzir o viés.
+2. **O freio (Regularização):** substituir o estimador de Mínimos Quadrados Ordinários (MQO), que minimiza apenas a soma dos quadrados dos resíduos ($\text{RSS}$):
+   $$\hat{\boldsymbol{\beta}}^{\text{MQO}} = \arg\min_{\boldsymbol{\beta}} \sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}\right)^2 = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y},$$
+   por uma função objetivo que **cobra um pedágio (multa)** pelo tamanho dos coeficientes $\beta_j$ (sem penalizar o intercepto $\beta_0$). Padronizar as colunas de $\mathbf{X}$ antes de penalizar é obrigatório (`standardize = TRUE` no `glmnet`), pois a multa compara a magnitude dos $\beta_j$ entre si.
+
+### Os Três Sabores de Penalidade
+
+1. **Ridge ($L_2$, $\alpha = 0$):** penaliza a **soma dos quadrados** dos coeficientes:
+   $$\hat{\boldsymbol{\beta}}^{\text{Ridge}} = \arg\min_{\boldsymbol{\beta}} \left\{ \text{RSS} + \lambda \sum_{j=1}^{p} \beta_j^2 \right\} = (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top \mathbf{y}.$$
+   - Somar $\lambda \mathbf{I}$ na diagonal de $\mathbf{X}^\top \mathbf{X}$ estabiliza a inversão matricial sob colinearidade.
+   - Como a derivada de $\beta_j^2$ vai a zero quando $\beta_j \to 0$ (região de restrição redonda), o Ridge **encolhe todos os coeficientes juntos, mas não zera nenhum**.
+
+2. **Lasso ($L_1$, $\alpha = 1$):** penaliza a **soma dos módulos (valores absolutos)**:
+   $$\hat{\boldsymbol{\beta}}^{\text{Lasso}} = \arg\min_{\boldsymbol{\beta}} \left\{ \text{RSS} + \lambda \sum_{j=1}^{p} |\beta_j| \right\}.$$
+   - Como o módulo $|\beta_j|$ mantém taxa de cobrança constante até a origem (região de restrição em forma de losango com quinas sobre os eixos), o Lasso **zera coeficientes exatamente**, fazendo **seleção automática de variáveis**.
+
+3. **Elastic Net ($0 < \alpha < 1$):** combina os dois pedágios:
+   $$\hat{\boldsymbol{\beta}}^{\text{ENet}} = \arg\min_{\boldsymbol{\beta}} \left\{ \text{RSS} + \lambda \left[ (1 - \alpha)\sum_{j=1}^{p} \beta_j^2 + \alpha \sum_{j=1}^{p} |\beta_j| \right] \right\}.$$
+   - Faz seleção esparsa como o Lasso, mas agrupa variáveis fortemente correlacionadas como o Ridge.
+
+---
+
+## 2. Parte A: Expansão no Bloco Socioeconômico ($p = 7$)
+
+Primeiro, testamos a expansão estritamente nos indicadores contínuos (como nas Atividades 03 a 07), adicionando um termo quadrático e uma interação:
+
+```r
+escolaridade2   = escolaridade^2
+distorcao_x_esc = distorcao_em * escolaridade
+```
+
+Note que `escolaridade` e `escolaridade2` possuem **correlação de $0,9969$** — são "variáveis gêmeas" por construção polinomial, exatamente o cenário em que o MQO sofre de colinearidade severa! No MQO de referência com esses $p = 7$ preditores:
+
+$$\text{R}^2 = 0,2290 \qquad \text{vs.} \qquad \text{R}^2_{\text{ajustado}} = 0,1117.$$
+
+A queda brusca para $0,1117$ alerta que boa parte do ajuste no treino vem do excesso de graus de liberdade, não de sinal genuíno.
+
+### Resultados da Validação Cruzada (`cv.glmnet`, $p = 7$)
+
+| Modelo | $\lambda_{\min}$ | $\text{MSE}_{\min}$ | $\lambda_{1se}$ | $\text{MSE}_{1se}$ |
+|---|---:|---:|---:|---:|
+| **Ridge ($\alpha=0$)** | $5,6484$ | $14,1445$ | **$1500,2667$** | $15,5290$ |
+| **Elastic Net ($\alpha=0,5$)** | $1,2989$ | $14,5705$ | $3,0005$ | $15,5278$ |
+| **Lasso ($\alpha=1$)** | $0,5392$ | $14,1402$ | $1,5003$ | $15,5278$ |
+
+#### A Conta da Regra de 1 Erro-Padrão ($\lambda_{1se}$) no Lasso:
+Conforme ensinado na Aula 08 (slide 17/24), o candidato $\lambda_{1se}$ é o maior $\lambda$ (modelo mais simples) cujo erro de validação cruzada permanece dentro de $1$ erro-padrão do mínimo:
+
+$$\text{Limiar}_{1\text{SE}} = \text{CV}_{\min} + \text{EP}_{\min} = 14,1402 + 3,0340 = \mathbf{17,1742}.$$
+
+Como $\text{CV}(\lambda_{1se}) = 15,5278 \le 17,1742$, a perda estatística é indistinguível do ruído das dobras! Por isso, no bloco socioeconômico isolado (onde o sinal é fraco), a regra de 1 SE encolhe tudo até restar apenas o intercepto ($\hat{y} = 19,9056$).
+
+### Os Coeficientes em $\lambda_{1se}$ ($p = 7$): A Diferença entre Encolher e Zerar
+
+```
+Sobreviventes Ridge (p=7): (Intercept), escolaridade, escolaridade2, distorcao_em, distorcao_x_esc, pib_per_capita, riqueza, ano
+Sobreviventes Lasso (p=7): (Intercept)
+```
+
+No Ridge com $\lambda_{1se} = 1500,27$, todos os 7 coeficientes aparecem como `0,0000` quando arredondados em 4 casas decimais, mas **nenhum é matematicamente zero** ($\approx 10^{-5}$). Já no Lasso com $\lambda_{1se} = 1,50$, todos os 7 preditores foram **exatamente zerados**. No teste cego 70/30 desse bloco ($p=7$), tanto Ridge quanto Lasso empatam exatamente com o baseline da média ($\text{RMSE} = 3,6782$), enquanto o MQO marca $3,6363$.
+
+---
+
+## 3. Parte B: Expansão Completa com `model.matrix` ($p = 19$) — Onde o Sinal Mora!
+
+Nas Atividades 03 a 07, havíamos omitido `municipio` (qualitativa com 9 níveis) e tratado `ano` apenas como reta contínua. Seguindo literalmente a receita do laboratório da Aula 08 (slide 23/24):
+
+```r
+X_full <- model.matrix(mortalidade_60_69 ~ municipio + factor(ano) + riqueza +
+                         escolaridade + escolaridade2 + distorcao_em +
+                         distorcao_x_esc + pib_per_capita, data = dados)[, -1]
+```
+
+Temos agora **$p = 19$ preditores para apenas $n = 54$ observações** ($n/p = 2,84$)! Aqui, um MQO sem freio sofre com excesso de parâmetros e colinearidade entre indicadores sociais e *dummies* de município. Veja o que acontece quando acionamos o freio da regularização:
+
+| Método ($p = 19$) | $\lambda_{\min}$ | $\text{MSE}_{\text{CV}}(\lambda_{\min})$ | $\text{RMSE}_{\text{CV}}(\lambda_{\min})$ | $\lambda_{1se}$ | $\text{MSE}_{\text{CV}}(\lambda_{1se})$ | Preditores $\neq 0$ ($\lambda_{1se}$) |
+|---|---:|---:|---:|---:|---:|---:|
+| **Linha de Base (Média)** | — | $14,7647$ | $3,8425$ | — | $14,7647$ | $0$ |
+| **MQO Completo ($p=19$)** | $0$ | $\approx 6,45$ | $\approx 2,54$ | — | — | $19$ |
+| **Ridge ($\alpha=0$)** | $0,9417$ | $5,1278$ | $2,2645$ | $3,8017$ | $6,5572$ | $19$ |
+| **Elastic Net ($\alpha=0,5$)** | $0,2608$ | **$4,7591$** | **$2,1815$** | $0,7258$ | **$5,7344$** | $10$ |
+| **Lasso ($\alpha=1$)** | $0,1431$ | $5,4230$ | $2,3287$ | $0,3629$ | $6,1450$ | **$8$** |
+
+### Quem o Lasso Guardou na Expansão Completa ($\lambda_{1se} = 0,3629$)?
+
+Dos **19 preditores candidatos**, o Lasso zerou **11 colunas de ruído/redundância** (incluindo `escolaridade`, `escolaridade2`, `distorcao_em`, `distorcao_x_esc` e `pib_per_capita`) e **reteve exatamente os 8 preditores que carregam o sinal real**:
+
+| Preditor Sobrevivente ($\lambda_{1se}$) | Coeficiente Encolhido ($\hat{\beta}$) | Leitura Substantiva para a Saúde Pública |
+|---|---:|---|
+| `(Intercept)` | $+22,1529$ | Patamar basal de referência |
+| `municipioMongaguá` | **$+2,5484$** | Município com maior excesso estrutural de mortalidade idosa |
+| `municipioItanhaém` | **$+1,1318$** | Segundo maior foco de vulnerabilidade estrutural no Litoral Sul |
+| `municipioSantos` | **$-3,1161$** | Maior efeito protetor estrutural (rede hospitalar densa) |
+| `municipioSão Vicente` | $-0,0772$ | Leve ajuste estrutural negativo |
+| `ano_f2020` | **$+1,1428$** | Início do choque pandêmico da COVID-19 |
+| `ano_f2022` | **$+4,4663$** | Pico agudo de mortalidade no biênio crítico da pandemia |
+| `ano_f2024` | **$-2,2226$** | Queda expressiva pós-vacinação / retorno abaixo da média |
+| `riqueza` | **$-6,6260$** | **Único indicador socioeconômico retido:** maior riqueza reduz a mortalidade |
+
+> **Frase do laboratório (o que o Lasso disse sobre o nosso problema):**  
+> *"Quando confrontado com todos os 19 preditores candidatos (efeitos espaciais, temporais e expansões socioeconômicas), o Lasso ($\lambda_{1se} = 0,3629$) revela que o sinal da mortalidade de 60 a 69 anos na Baixada Santista é governado pelo **contraste territorial extremo** (Mongaguá $+2,55$ e Itanhaém $+1,13$ contra Santos $-3,12$), pelo **choque pandêmico temporal** (2020 $+1,14$, 2022 $+4,47$ e recuo em 2024 $-2,22$) e pelo **índice de riqueza municipal** ($-6,63$), descartando completamente escolaridade, distorção escolar e PIB per capita isolado como redundantes."*
+
+---
+
+## 4. Análise das Figuras
+
+### Figura 1 — Curva em U do Lasso
+![Curva de validação cruzada do Lasso](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img1.png)
+*(Arquivo local: `estrutura/scriptsR/figuras/08-regularizacao_img1.png`)*
+
+- **Os três eixos:** embaixo, $\log(\lambda)$; à esquerda, o MSE de validação cruzada com barras de $\pm 1\text{ EP}$; em cima, o número de preditores sobreviventes ($\neq 0$) em cada nível de penalidade. As duas linhas tracejadas verticais marcam $\log(\lambda_{\min})$ e $\log(\lambda_{1se})$.
+
+### Figura 2 — Curva em U do Ridge
+![Curva de validação cruzada do Ridge](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img2.png)
+*(Arquivo local: `estrutura/scriptsR/figuras/08-regularizacao_img2.png`)*
+
+- Note no eixo superior que o número de preditores é constante do início ao fim: o Ridge suaviza a variância encolhendo as estimativas de forma contínua, sem jamais descartar variáveis.
+
+### Figura 3 — Trilhas de Coeficientes: Ridge ($L_2$) vs. Lasso ($L_1$)
+![Trilhas de coeficientes do Ridge e do Lasso](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img3.png)
+*(Arquivo local: `estrutura/scriptsR/figuras/08-regularizacao_img3.png`)*
+
+- **Esquerda (Ridge):** as curvas se aproximam assintoticamente do eixo horizontal zero à medida que $\log(\lambda)$ cresce, mas nunca tocam o zero.
+- **Direita (Lasso):** as trajetórias batem no eixo zero uma a uma e permanecem coladas nele — ilustrando visualmente o efeito das quinas do losango $L_1$.
+
+---
+
+## 5. Resolução Completa dos Exercícios da Aula 08
+
+Para fundamentação teórica completa, apresentamos a resolução dos exercícios dos slides 21 e 22 da Aula 08 ([TAE_aula08.PDF](file:///c:/Users/Ivan/Documents/Pasta-Documentos-PC-antigo/GITHUB-Meus-Repositorios/PesquisaTeoAprendiEstati_2026_v2/proj_ivan_gustavo_jorge_(IPDM)/slides_aulas/TAE_aula08.PDF)).
+
+### Parte A: Exercícios de Cálculo (Slide 21/24)
+
+#### Exercício 1: Cálculo das Penalidades $L_2$ e $L_1$
+*Enunciado:* Um modelo tem $\boldsymbol{\beta} = (3, -4, 0,5)$ (sem contar $\beta_0$). Calcule a penalidade $L_2$ e a penalidade $L_1$. Se $\lambda = 2$, quanto cada uma acrescenta ao $\text{RSS}$?
+
+*Resolução:*
+1. **Penalidade $L_2$ (Ridge):**
+   $$\sum_{j=1}^{3} \beta_j^2 = 3^2 + (-4)^2 + (0,5)^2 = 9 + 16 + 0,25 = \mathbf{25,25}.$$
+   Com $\lambda = 2$, acréscimo ao $\text{RSS}$: $\lambda \sum \beta_j^2 = 2 \times 25,25 = \mathbf{50,50}$.
+2. **Penalidade $L_1$ (Lasso):**
+   $$\sum_{j=1}^{3} |\beta_j| = |3| + |-4| + |0,5| = 3 + 4 + 0,5 = \mathbf{7,50}.$$
+   Com $\lambda = 2$, acréscimo ao $\text{RSS}$: $\lambda \sum |\beta_j| = 2 \times 7,50 = \mathbf{15,00}$.
+
+---
+
+#### Exercício 2: Comportamento Assintótico quando $\lambda$ Cresce de $0$ a $\infty$
+*Enunciado:* Com $\lambda$ crescendo de $0$ a $\infty$, diga para onde vão: (a) os coeficientes; (b) o erro de treino; (c) o viés; (d) a variância.
+
+*Resolução:*
+- **(a) Coeficientes ($\hat{\beta}_j$, $j \ge 1$):** Vão monotonicamente em direção a **zero** ($\hat{\boldsymbol{\beta}} \to \mathbf{0}$; no Lasso atingem zero exato para $\lambda$ finito, no Ridge convergem a zero no limite $\lambda \to \infty$, restando apenas $\hat{\beta}_0 = \bar{y}$).
+- **(b) Erro de treino ($\text{MSE}_{\text{treino}}$):** **Sobe monotonicamente** (pois $\lambda = 0$ é o MQO, que por definição minimiza o erro de treino sem restrições; qualquer restrição $\lambda > 0$ afasta a solução do mínimo do $\text{RSS}$).
+- **(c) Viés:** **Sobe** (o modelo fica cada vez mais rígido e encolhido em direção à constante $\bar{y}$).
+- **(d) Variância:** **Cai para zero** (com coeficientes travados perto de zero, o modelo deixa de oscilar entre diferentes amostras de treino).
+
+---
+
+#### Exercício 3: Regra de 1 Erro-Padrão na Seleção de $\lambda$
+*Enunciado:* Uma validação cruzada deu, para o Lasso: $\lambda = 0,5 \implies \text{CV} = 2.700$ (14 preditores); $\lambda = 2 \implies \text{CV} = 2.050$ (9); $\lambda = 6 \implies \text{CV} = 2.120$ (5); $\lambda = 20 \implies \text{CV} = 3.400$ (1). Qual é o `lambda.min`? Se o erro-padrão no fundo do U é $120$, qual $\lambda$ a regra de *um erro-padrão* escolheria, e com quantos preditores?
+
+*Resolução:*
+1. **`lambda.min`:** É o valor que minimiza o erro de CV: **$\lambda = 2$** ($\text{CV}_{\min} = 2.050$, com $9$ preditores).
+2. **Teto da regra de 1 erro-padrão:**
+   $$\text{Limiar} = \text{CV}_{\min} + \text{EP}_{\min} = 2.050 + 120 = \mathbf{2.170}.$$
+3. **Escolha de `lambda.1se`:** Buscamos o **maior $\lambda$** (modelo mais parcimonioso) cujo erro não ultrapasse $2.170$. Em $\lambda = 6$, temos $\text{CV} = 2.120 \le 2.170$. Logo, a regra escolhe **$\lambda = 6$, com apenas $5$ preditores** (economizando $4$ variáveis a custo estatisticamente indistinguível de ruído).
+
+---
+
+### Parte B: Exercícios Conceituais (Slide 22/24)
+
+#### 1. Por que Padronizar?
+- **Explicação:** Se `area` está em $\text{m}^2$ (ex.: $100\text{ m}^2$) e `dist_centro` em $\text{km}$, trocar `area` para hectares ($0,01\text{ ha}$) multiplica a escala de $X_1$ por $10^{-4}$ e, portanto, multiplica seu coeficiente $\beta_1$ por $10^4$ para manter a mesma predição $\beta_1 X_1$. No **MQO**, como não há multa sobre $\beta_1$, a escala se compensa exatamente e as predições não mudam. Já no **Ridge/Lasso**, a penalidade $\lambda \sum \beta_j^2$ ou $\lambda \sum |\beta_j|$ puniria brutalmente o coeficiente em hectares apenas pela unidade escolhida! Padronizar ($z$-score) coloca todas as variáveis na mesma régua (desvio-padrão $1$).
+
+#### 2. Zera ou Não Zera?
+- **Custo marginal perto de zero:** Reduzir um coeficiente pequeno de $0,02$ para $0,00$ economiza no Ridge apenas $0,02^2 - 0^2 = 0,0004$ de penalidade (um ganho quadrático ínfimo que não compensa a piora no $\text{RSS}$). No Lasso, a economia é linear: $|0,02| - 0 = 0,02$, mantendo força suficiente para empurrar o coeficiente exatamente até zero.
+- **Geometria:** Na formulação restrita, as curvas de nível elípticas do $\text{RSS}$ expandem até tocar a região de restrição: no Ridge é uma **esfera/círculo** ($\beta_1^2 + \beta_2^2 \le t$, sem quinas, toque fora dos eixos); no Lasso é um **politopo/losango** ($|\beta_1| + |\beta_2| \le t$, cujas quinas ficam exatamente sobre os eixos coordenados, onde $\beta_j = 0$).
+
+#### 3. Seleção Não é Causa
+- **Como `ruido` pode sobreviver no Lasso?** Em amostras finitas ($n$ pequeno), uma variável de ruído puro pode apresentar correlação amostral espúria com os resíduos de $Y$, ou o $\lambda$ escolhido por CV (focado em minimizar erro preditivo) pode ser brando o bastante para permitir a entrada de falso-positivos.
+- **O que reportar:** Declarar explicitamente que o Lasso seleciona um subconjunto preditivo útil para reduzir variância, mas **sobreviver na regularização indica associação preditiva na amostra, jamais efeito causal**.
+
+#### 4. Qual Método Usar em Cada Cenário?
+- **(a) $p = 500$ preditores, suspeita de que apenas uns $10$ importam (cenário esparso):** **Lasso ($\alpha = 1$)**, pois zera os $\approx 490$ irrelevantes e entrega um modelo curto e interpretável.
+- **(b) $p = 30$ preditores, todos plausíveis e vários correlacionados entre si:** **Ridge ($\alpha = 0$)** ou **Elastic Net ($\alpha = 0,5$)**, pois estabilizam grupos colineares dividindo o peso entre eles sem descartar arbitrariamente informações difusas.
+- **(c) $p = 3$ preditores e $n = 5.000$ ($n/p \approx 1.667$):** **MQO tradicional (`lm`)**, pois com razão $n/p$ imensa a variância dos estimadores de mínimos quadrados já é mínima e não há necessidade de introduzir viés de encolhimento.
+
+---
+
+## Documentos Complementares
+
+- 🧮 **Script gerador:** [`08-regularizacao.R`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/08-regularizacao.R)
+- 📋 **Relatório técnico bruto:** [`estrutura/scriptsR/08-regularizacao.md`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/08-regularizacao.md)
+- 📎 **Consolidados anteriores:** [`01`](01-dicionario-variaveis.md) · [`02`](02-analise-exploratoria.md) · [`03`](03-regressao-linear.md) · [`04`](04-regressao-logistica.md) · [`05`](05-regressao-linear-treino-teste.md) · [`06`](06-regressao-logistica-treino-teste.md) · [`07`](07-reamostragem.md)

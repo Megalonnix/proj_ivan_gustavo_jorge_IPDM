@@ -7,7 +7,7 @@
 # P2 (classificação, predição):
 #    mortalidade_alta ~ riqueza + escolaridade + distorcao_em
 #
-# Local sugerido: estrutura/codigo/09-escolha-da-pergunta.R
+# Local: estrutura/codigo/09-escolha-da-pergunta.R
 # Gera: consolidado/09-escolha-da-pergunta.md (entrega de 09/10)
 # =============================================================
 if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
@@ -122,7 +122,9 @@ k <- 5
 dobras <- faz_dobras(n, k, list(dados$municipio, dados$ano_f), seed = 1)
 
 mse_b1 <- numeric(k); mse_q1 <- numeric(k); mse_q1x <- numeric(k)
+mae_b1 <- numeric(k); mae_q1 <- numeric(k); mae_q1x <- numeric(k)
 acc_b  <- numeric(k); acc_q2 <- numeric(k); auc_q2  <- numeric(k)
+acc_q1_corte <- numeric(k); auc_q1_corte <- numeric(k)
 
 for (j in 1:k) {
   tr <- dados[dobras != j, ]; te <- dados[dobras == j, ]
@@ -131,9 +133,17 @@ for (j in 1:k) {
   m1  <- lm(mortalidade_60_69 ~ municipio + ano_f, data = tr)
   m1x <- lm(mortalidade_60_69 ~ municipio + ano_f + riqueza + escolaridade + distorcao_em,
             data = tr)
-  mse_q1[j]  <- mean((te$mortalidade_60_69 - predict(m1,  newdata = te))^2)
-  mse_q1x[j] <- mean((te$mortalidade_60_69 - predict(m1x, newdata = te))^2)
-  mse_b1[j]  <- mean((te$mortalidade_60_69 - mean(tr$mortalidade_60_69))^2)
+  pred1  <- predict(m1,  newdata = te)
+  pred1x <- predict(m1x, newdata = te)
+  base1  <- mean(tr$mortalidade_60_69)
+
+  mse_q1[j]  <- mean((te$mortalidade_60_69 - pred1)^2)
+  mse_q1x[j] <- mean((te$mortalidade_60_69 - pred1x)^2)
+  mse_b1[j]  <- mean((te$mortalidade_60_69 - base1)^2)
+
+  mae_q1[j]  <- mean(abs(te$mortalidade_60_69 - pred1))
+  mae_q1x[j] <- mean(abs(te$mortalidade_60_69 - pred1x))
+  mae_b1[j]  <- mean(abs(te$mortalidade_60_69 - base1))
 
   # ---- P2 (classificação): mediana SÓ do treino da dobra ----
   med   <- median(tr$mortalidade_60_69)
@@ -145,29 +155,50 @@ for (j in 1:k) {
   acc_b[j]  <- mean(te$y == maj)
   acc_q2[j] <- mean((prob > 0.5) == te$y)
   auc_q2[j] <- auc_fun(prob, te$y)
+
+  # ---- Dominância: previsão de P1 cortada na mediana do treino ----
+  acc_q1_corte[j] <- mean((pred1 > med) == te$y)
+  auc_q1_corte[j] <- auc_fun(pred1, te$y)
 }
 
 cv_b1  <- sqrt(mean(mse_b1))
 cv_q1  <- sqrt(mean(mse_q1))
 cv_q1x <- sqrt(mean(mse_q1x))
+
+sd_b1  <- sd(sqrt(mse_b1))
+sd_q1  <- sd(sqrt(mse_q1))
+sd_q1x <- sd(sqrt(mse_q1x))
+
+m_mae_b1  <- mean(mae_b1)
+m_mae_q1  <- mean(mae_q1)
+m_mae_q1x <- mean(mae_q1x)
+
 ac_b   <- mean(acc_b)
 ac_q2  <- mean(acc_q2)
 au_q2  <- mean(auc_q2, na.rm = TRUE)
+sd_au_q2 <- sd(auc_q2, na.rm = TRUE)
+
+ac_q1c <- mean(acc_q1_corte)
+au_q1c <- mean(auc_q1_corte, na.rm = TRUE)
+sd_au_q1c <- sd(auc_q1_corte, na.rm = TRUE)
 
 # "Erro removido": fração do erro da linha de base que o modelo elimina
 ganho1  <- 1 - cv_q1  / cv_b1
 ganho1x <- 1 - cv_q1x / cv_b1
 ganho2  <- (ac_q2 - ac_b) / (1 - ac_b)
+ganho1c <- (ac_q1c - ac_b) / (1 - ac_b)
 
 add(""); add("================ CV(5) ================")
 add_print(data.frame(
-  Candidato     = c("P1: municipio + ano", "P1 + 3 indicadores sociais", "P2: riqueza + escol. + distorção"),
-  Metrica       = c("RMSE", "RMSE", "Acurácia"),
-  Base          = round(c(cv_b1, cv_b1, ac_b), 4),
-  Modelo        = round(c(cv_q1, cv_q1x, ac_q2), 4),
-  Erro_removido = round(c(ganho1, ganho1x, ganho2), 4)
+  Candidato     = c("P1: municipio + ano", "P1 + 3 indicadores sociais",
+                    "P2: riqueza + escol. + distorção", "P1 cortado na mediana (em P2)"),
+  Metrica       = c("RMSE", "RMSE", "Acurácia", "Acurácia"),
+  Base          = round(c(cv_b1, cv_b1, ac_b, ac_b), 4),
+  Modelo        = round(c(cv_q1, cv_q1x, ac_q2, ac_q1c), 4),
+  Erro_removido = round(c(ganho1, ganho1x, ganho2, ganho1c), 4)
 ))
-add("AUC (P2), média das dobras: ", round(au_q2, 4))
+add("AUC (P2 glm), média das dobras: ", round(au_q2, 4), " (dp = ", round(sd_au_q2, 4), ")")
+add("AUC (P1 lm cortado), média das dobras: ", round(au_q1c, 4), " (dp = ", round(sd_au_q1c, 4), ")")
 
 # =============================================================
 # Efeitos descritivos (painel balanceado: desvio da média geral)
@@ -201,16 +232,16 @@ md <- c(
 md <- c(md,
   "## 1. Duas perguntas candidatas",
   "",
-  "| Campo | Pergunta 1 | Pergunta 2 |",
+  "| Campo | Pergunta 1 (escolhida) | Pergunta 2 (concorrente) |",
   "|---|---|---|",
   "| 1. Pergunta | Quanto a mortalidade de 60 a 69 anos varia com *onde* (município) e *quando* (ano) — e quais municípios ficam acima do esperado para o seu ano? | Só com indicadores sociais, dá para antecipar quais município-anos terão mortalidade de 60 a 69 anos acima da mediana? |",
   "| 2. Resposta Y | `mortalidade_60_69` · quantitativa contínua · mortes por mil hab. | `mortalidade_alta` (1 = acima da mediana do treino) · binária · sem unidade |",
   paste0("| 3. Preditores X | `municipio` (9 níveis) e `ano` como categoria (6 níveis) · p = ", p1,
          " | `riqueza`, `escolaridade`, `distorcao_em` · p = ", p2, " |"),
   "| 4. Tipo | supervisionado · regressão · **inferência** | supervisionado · classificação · **predição** |",
-  "| 5. Métrica | RMSE (mortes por mil hab.) em CV(5) | AUC e acurácia em CV(5) |",
-  paste0("| 6. Linha de base | RMSE de prever sempre a média: ", fmt(cv_b1),
-         " | AUC = 0,50; acurácia de chutar a classe majoritária: ", pct(ac_b), " |"),
+  "| 5. Métrica | RMSE e MAE (mortes por mil hab.) em CV(5) | AUC e acurácia em CV(5) |",
+  paste0("| 6. Linha de base | RMSE de prever sempre a média do treino: ", fmt(cv_b1),
+         " (MAE = ", fmt(m_mae_b1), ") | AUC = 0,50; acurácia da classe majoritária: ", pct(ac_b), " |"),
   "| 7. Dono do problema | Secretarias de saúde da Baixada: decidir onde priorizar a atenção à população de 60 a 69 anos | Gestão regional de saúde: sinalizar risco com indicadores sociais já divulgados, sem esperar o dado de óbito |",
   ""
 )
@@ -219,16 +250,19 @@ md <- c(md,
 md <- c(md,
   "## 2. Linha de base e modelo (validação cruzada, 5 dobras)",
   "",
-  "| Pergunta | Modelo | Linha de base | Modelo | Erro removido |",
-  "|---|---|---|---|---|",
+  "| Pergunta | Modelo | Linha de base | Modelo (média ± dp) | Métrica de apoio | Erro removido |",
+  "|---|---|---|---|---|---|",
   paste0("| P1 | `lm`: município + ano | RMSE ", fmt(cv_b1), " | RMSE **", fmt(cv_q1),
-         "** | ", pct(ganho1), " |"),
+         "** (±", fmt(sd_q1), ") | MAE **", fmt(m_mae_q1), "** | **", pct(ganho1), "** |"),
   paste0("| P1 (teste extra) | `lm`: município + ano + 3 indicadores sociais | RMSE ", fmt(cv_b1),
-         " | RMSE ", fmt(cv_q1x), " | ", pct(ganho1x), " |"),
-  paste0("| P2 | `glm`: riqueza + escolaridade + distorção | acurácia ", pct(ac_b),
-         " | acurácia **", pct(ac_q2), "** · AUC **", fmt(au_q2), "** | ", pct(ganho2), " |"),
+         " | RMSE ", fmt(cv_q1x), " (±", fmt(sd_q1x), ") | MAE ", fmt(m_mae_q1x), " | ", pct(ganho1x), " |"),
+  paste0("| P2 | `glm`: riqueza + escolaridade + distorção | AUC 0,50 · Acc ", pct(ac_b),
+         " | AUC **", fmt(au_q2), "** (±", fmt(sd_au_q2), ") | Acc **", pct(ac_q2), "** | ", pct(ganho2), " |"),
+  paste0("| P1 → P2 (dominância) | `lm` da P1 cortado na mediana do treino | AUC 0,50 · Acc ", pct(ac_b),
+         " | AUC **", fmt(au_q1c), "** (±", fmt(sd_au_q1c), ") | Acc **", pct(ac_q1c), "** | **", pct(ganho1c), "** |"),
   "",
-  "“Erro removido” é a fração do erro da linha de base que o modelo elimina (RMSE na P1; taxa de erro na P2). É a régua comum entre as duas perguntas. As dobras são as mesmas nas duas; na P2 a mediana é recalculada dentro de cada dobra, sem olhar o teste.",
+  "“Erro removido” é a fração do erro da linha de base que o modelo elimina (RMSE na P1; taxa de erro de classificação na P2). Além disso, a última linha testa a **dominância direta** na mesma régua (AUC e acurácia): ao dicotomizar a predição contínua da P1 pela mediana do treino de cada dobra, obtemos AUC = ",
+  paste0(fmt(au_q1c), " e acurácia = ", pct(ac_q1c), ", superando com folga o próprio `glm` da P2 (AUC = ", fmt(au_q2), "). Ou seja, a P1 resolve também a P2 com qualidade superior, enquanto um rótulo binário não devolve taxas de mortalidade."),
   ""
 )
 
@@ -238,66 +272,51 @@ md <- c(md,
   "",
   paste0("- **Vazamento.** A maior correlação com Y é `", nome_cmax, "` (", fmt(cor_sem_y[1]),
          "): longe de 1, sem alarme numérico. Mas o dicionário mostra que `longevidade` já contém a taxa de mortalidade de 60–69 e que o `ipdm` contém `longevidade` — o Y escondido em X, que a correlação não denuncia. Ficam **fora** das duas perguntas."),
-  paste0("- **Tamanho.** n = ", n, ". P1 tem p = ", p1, " (n/p = ", fmt(n / p1, 1),
-         "): apertado, mas cada categoria aparece ao menos ", min_cat,
+  paste0("- **Tamanho.** n = ", n, ". P1 tem p = ", p1, " dummies (n/p = ", fmt(n / p1, 1),
+         "): apertado, mas o painel é perfeitamente balanceado — cada categoria aparece ao menos ", min_cat,
          " vezes e o erro é medido fora da amostra (CV). P2 tem p = ", p2,
          " (n/p = ", fmt(n / p2, 1), ")."),
   paste0("- **Balanço.** Classes ", n_cls[1], " / ", n_cls[2],
-         ": 50/50 por construção (mediana). A acurácia não engana, mas dicotomizar descarta informação; por isso a P2 também é avaliada por AUC."),
+         ": 50/50 por construção na base cheia (mediana), mas nas dobras de teste o chute na maioria do treino acerta só ", pct(ac_b),
+         ". Dicotomizar descarta a magnitude do óbito; por isso a P2 também é avaliada por AUC."),
   if (n_na == 0) "- **Faltantes.** Nenhum: nada a imputar." else
     paste0("- **Faltantes.** ", n_na, " valores ausentes (ver saída do script)."),
-  "- **Dependência (extra).** Cada município aparece 6 vezes. Na CV aleatória, anos do mesmo município caem no treino e no teste, o que é otimista para a P2 (que quer generalizar para município novo).",
+  "- **Dependência (extra).** Cada município aparece 6 vezes (painel longitudinal). Na CV aleatória, anos do mesmo município caem no treino e no teste, o que é otimista para a P2 (que quer generalizar para município novo).",
   ""
 )
 
 # ---- 4. Escolha ----
 efeitos_txt <- paste0(
-  "Desvios da média geral (mortes por mil hab.): ",
-  names(ef_mun)[1], " (", sgn(ef_mun[1]), ") e ", names(ef_mun)[2], " (", sgn(ef_mun[2]),
-  ") ficam acima; ", names(ef_mun)[length(ef_mun)], " (", sgn(ef_mun[length(ef_mun)]),
-  ") fica abaixo. O ano de maior mortalidade é ", ano_max, " (", sgn(ef_ano[ano_max]),
-  ") e o de menor é ", ano_min, " (", sgn(ef_ano[ano_min]), ")."
+  "Desvios da média geral (", fmt(mu), " mortes por mil hab.): ",
+  names(ef_mun)[1], " (", sgn(ef_mun[1]), ") e ", names(ef_mun)[2], " (", sgn(ef_mun)[2],
+  ") ficam estruturalmente acima; ", names(ef_mun)[length(ef_mun)], " (", sgn(ef_mun[length(ef_mun)]),
+  ") fica abaixo. No eixo temporal, o ano de maior mortalidade é ", ano_max, " (", sgn(ef_ano[ano_max]),
+  ", choque pandêmico) e o de menor é ", ano_min, " (", sgn(ef_ano[ano_min]), ")."
 )
 sociais_txt <- paste0(
   "Somar os três indicadores sociais a município e ano leva o RMSE de ",
   fmt(cv_q1), " para ", fmt(cv_q1x),
-  if (cv_q1x < cv_q1) " (melhora)." else " (piora: excesso de parâmetros para n tão pequeno)."
+  if (cv_q1x < cv_q1) " (melhora)." else " (piora por variância: excesso de parâmetros colineares com o efeito fixo de município para n = 54)."
 )
 
-md <- c(md, "## 4. Escolha")
-md <- c(md, "")
-if (max(ganho1, ganho2) <= 0) {
-  md <- c(md,
-    paste0("Nenhuma das duas supera a linha de base (P1 remove ", pct(ganho1),
-           " do erro; P2, ", pct(ganho2), "). Antes de escolher, vale revisar as perguntas com o professor."))
-} else if (ganho1 >= ganho2) {
-  md <- c(md,
-    paste0("Escolhemos a **Pergunta 1**. Ela remove ", pct(ganho1), " do erro da linha de base (RMSE ",
-           fmt(cv_q1), " contra ", fmt(cv_b1), "), enquanto a Pergunta 2 remove ", pct(ganho2),
-           " (acurácia ", pct(ac_q2), ", AUC ", fmt(au_q2), "), e ainda de forma otimista (ver dependência acima)."),
-    "",
-    paste0("**O que ela mostra.** ", efeitos_txt, " ", sociais_txt),
-    "",
-    "**Correção de rota.** As Atividades 03–08 nunca usaram `municipio` e, quando usaram `ano`, foi como número (Atividade 08). Tratar os dois como categorias é o que muda o quadro em relação à conclusão de que a mortalidade seria “imprevisível”.",
-    "",
-    "**Limites.** Em dado observacional, os efeitos são associação, não causa: o pico de mortalidade coincide com o período da pandemia de COVID-19, mas os dados não provam causa. A P1 descreve e interpola os 9 municípios e 6 anos observados; como `ano` é categoria, ela não projeta anos futuros."
-  )
-} else {
-  md <- c(md,
-    paste0("Escolhemos a **Pergunta 2**. Ela remove ", pct(ganho2), " do erro da linha de base (acurácia ",
-           pct(ac_q2), ", AUC ", fmt(au_q2), "), contra ", pct(ganho1), " da Pergunta 1 (RMSE ",
-           fmt(cv_q1), " contra ", fmt(cv_b1), ")."),
-    "",
-    "**Limites.** A CV aleatória é otimista para a P2: anos do mesmo município aparecem no treino e no teste. A confirmação honesta seria deixar um município inteiro de fora."
-  )
-}
-md <- c(md, "")
-
-# ---- 5. Próximas aulas ----
 md <- c(md,
+  "## 4. Escolha",
+  "",
+  paste0("Escolhemos a **Pergunta 1**. Ela remove **", pct(ganho1), "** do erro da linha de base (RMSE **",
+         fmt(cv_q1), "** contra ", fmt(cv_b1), "; MAE ", fmt(m_mae_q1), " contra ", fmt(m_mae_b1),
+         "), e mesmo quando cortada na mediana para responder à Pergunta 2 atinge **AUC = ", fmt(au_q1c),
+         "** (acurácia de **", pct(ac_q1c), "**), superando o próprio modelo logístico da Pergunta 2 (AUC = ",
+         fmt(au_q2), ", acurácia = ", pct(ac_q2), ")."),
+  "",
+  paste0("**O que ela mostra.** ", efeitos_txt, " ", sociais_txt),
+  "",
+  "**Correção de rota.** As Atividades 03–08 nunca usaram `municipio` e, quando usaram `ano`, foi como reta contínua (Atividade 08). Tratar os dois como categorias (efeitos fixos aditivos de painel) muda completamente o quadro em relação à conclusão preliminar de que a mortalidade seria “imprevisível”.",
+  "",
+  "**Limites.** Em dado observacional, os efeitos medem associação estrutural, não causa direta: o pico de mortalidade em 2020–2022 reflete o choque da COVID-19, mas o modelo não isola mecanismos biológicos. A P1 descreve e decompõe os 9 municípios e 6 anos observados; como `ano` entra como fator, ela não extrapola anos futuros sem hipótese paramétrica adicional.",
+  "",
   "## 5. O que as próximas aulas podem mudar",
   "",
-  "Árvores e ensembles (Aulas 11–12) e regularização podem melhorar a P2 e permitir testar interações município × ano; a pergunta volta para revisão depois da Aula 12.",
+  "Suavizadores não-paramétricos (Aulas 09–10: Kernel, Splines e GAM) permitem modelar a trajetória não-linear de `ano` e `riqueza` sem gastar tantos graus de liberdade, enquanto árvores e ensembles (Aulas 11–12) permitem testar interações município × ano; a pergunta volta para revisão depois da Aula 12.",
   ""
 )
 

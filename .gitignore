@@ -1,2 +1,22 @@
+# Diretórios e arquivos auxiliares internos
 assets/
-scriptsR/figuras/.Rhistory
+to.delete/
+
+# Histórico e sessão do R
+.Rhistory
+.RData
+.Rproj.user/
+**/.Rhistory
+**/.RData
+
+# Artefatos temporários de compilação LaTeX / knitr
+*.aux
+*.log
+*.bbl
+*.blg
+*.out
+*.toc
+*.synctex.gz
+*-concordance.tex
+consolidado/entrega-1-pergunta.tex
+consolidado/figure/

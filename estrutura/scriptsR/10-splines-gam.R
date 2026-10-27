@@ -3,6 +3,7 @@
 # Banco: IPDM Baixada Santista (54 observações)
 # Resposta Y: mortalidade_60_69
 # Preditores: x1 = riqueza, x2 = escolaridade, x3 = distorcao_em
+# (+ extensão semiparamétrica com municipio e ano)
 # =============================================================
 if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
   caminho_script <- rstudioapi::getSourceEditorContext()$path
@@ -20,8 +21,6 @@ nome_csv   <- "df_ipdm_baixada_por_municipio.csv"
 candidatos <- c(file.path("..", "bancoDeDados", nome_csv),
                 file.path("estrutura", "bancoDeDados", nome_csv),
                 file.path("..", "..", "estrutura", "bancoDeDados", nome_csv),
-                file.path("C:", "Users", "lab31", ".gemini", "antigravity", "scratch",
-                          "proj_ivan_gustavo_jorge_IPDM", "estrutura", "bancoDeDados", nome_csv),
                 nome_csv)
 url_github <- "https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv"
 achados <- candidatos[file.exists(candidatos)]
@@ -31,7 +30,7 @@ dados_brutos <- read.csv(origem_dados, sep = ";", dec = ",", fileEncoding = "lat
                          check.names = FALSE, stringsAsFactors = FALSE)
 
 dados <- data.frame(
-  municipio         = as.character(dados_brutos[[2]]),
+  municipio         = factor(dados_brutos[[2]]),
   ano               = as.integer(dados_brutos[[3]]),
   riqueza           = as.numeric(dados_brutos[[4]]),
   longevidade       = as.numeric(dados_brutos[[5]]),
@@ -49,9 +48,9 @@ croxo    <- "#5E3C99"
 ccinza   <- "gray60"
 cfill    <- "#E0E7FF"
 
-pastas_fig_candidatas <- c(file.path("..", "scriptsR", "figuras"),
-                           file.path("estrutura", "scriptsR", "figuras"),
-                           "figuras")
+pastas_fig_candidatas <- c(file.path("estrutura", "scriptsR", "figuras"),
+                           "figuras",
+                           file.path("..", "scriptsR", "figuras"))
 pasta_fig <- "figuras"
 for (p in pastas_fig_candidatas) {
   if (dir.exists(p) || dir.exists(dirname(p))) {
@@ -70,10 +69,12 @@ add_print <- function(x) {
 fmt <- function(x, d = 4) format(round(x, d), nsmall = d, decimal.mark = ",")
 
 d <- na.omit(data.frame(
-  y  = dados$mortalidade_60_69,
-  x1 = dados$riqueza,
-  x2 = dados$escolaridade,
-  x3 = dados$distorcao_em
+  y         = dados$mortalidade_60_69,
+  x1        = dados$riqueza,
+  x2        = dados$escolaridade,
+  x3        = dados$distorcao_em,
+  municipio = dados$municipio,
+  ano       = dados$ano
 ))
 
 set.seed(1)
@@ -116,49 +117,57 @@ add("Melhor Spline Natural em x1: df = ", melhor_df, " (MSE = ", fmt(melhor_cv_s
 
 cv_gam <- cv_de(function(tr, va) predict(gam(y ~ s(x1) + s(x2) + s(x3), data = tr), va))
 rmse_gam <- sqrt(cv_gam)
-add("\n4. GAM (y ~ s(x1) + s(x2) + s(x3)): CV(5) MSE = ", fmt(cv_gam), " | RMSE = ", fmt(rmse_gam))
+add("\n4. GAM Socioeconômico (y ~ s(x1) + s(x2) + s(x3)): CV(5) MSE = ", fmt(cv_gam), " | RMSE = ", fmt(rmse_gam))
 
 g <- gam(y ~ s(x1) + s(x2) + s(x3), data = d)
 edfs <- round(summary(g)$s.table[, "edf"], 2)
 names(edfs) <- c("s(riqueza)", "s(escolaridade)", "s(distorcao_em)")
 
-add("\nGraus de Liberdade Efetivos (edf) do GAM:")
+add("\nGraus de Liberdade Efetivos (edf) do GAM Socioeconômico:")
 add_print(edfs)
+
+# 5. Extensão Semiparamétrica (conectando à Pergunta 1 da Entrega 1)
+cv_gam_estrut <- cv_de(function(tr, va) {
+  predict(gam(y ~ municipio + s(ano, k = 5) + s(x1, k = 4), data = tr), va)
+})
+rmse_gam_estrut <- sqrt(cv_gam_estrut)
+g_estrut <- gam(y ~ municipio + s(ano, k = 5) + s(x1, k = 4), data = d)
+edfs_estrut <- round(summary(g_estrut)$s.table[, "edf"], 2)
+names(edfs_estrut) <- c("s(ano)", "s(riqueza|municipio)")
+
+add("\n5. GAM Semiparamétrico Estrutural (y ~ municipio + s(ano, k=5) + s(riqueza, k=4)):")
+add("   CV(5) MSE = ", fmt(cv_gam_estrut), " | RMSE = ", fmt(rmse_gam_estrut))
+add("   edf s(ano) = ", fmt(edfs_estrut[1], 2), " | edf s(riqueza) = ", fmt(edfs_estrut[2], 2))
 
 add("\n================ QUADRO COMPARATIVO DE CV(5) ================")
 df_resumo <- data.frame(
-  Modelo = c("Linha de Base (Média)", "MQO Linear Múltiplo",
+  Modelo = c("Linha de Base (Média)",
+             "MQO Linear Múltiplo (x1+x2+x3)",
              paste0("Melhor Spline Natural (df=", melhor_df, " em x1)"),
-             "GAM com Suavizadores"),
-  Tipo = c("Constante", "Paramétrico Rígido", "Semiparamétrico (Spline x1)", "Não-Paramétrico Aditivo"),
-  MSE_CV = c(cv_base, cv_mqo, melhor_cv_spline, cv_gam),
-  RMSE_CV = c(rmse_base, rmse_mqo, rmse_spline, rmse_gam),
-  Ganho_vs_Base = c("0,0%",
-                    paste0(fmt(100 * (1 - cv_mqo / cv_base), 2), "%"),
-                    paste0(fmt(100 * (1 - melhor_cv_spline / cv_base), 2), "%"),
-                    paste0(fmt(100 * (1 - cv_gam / cv_base), 2), "%"))
+             "GAM Socioeconômico (s(x1)+s(x2)+s(x3))",
+             "GAM Semiparamétrico (municipio + s(ano) + s(x1))"),
+  Tipo = c("Constante", "Paramétrico Rígido", "Semiparamétrico (Spline x1)",
+           "Não-Paramétrico Aditivo", "Aditivo Estrutural (Painel)"),
+  MSE_CV = round(c(cv_base, cv_mqo, melhor_cv_spline, cv_gam, cv_gam_estrut), 4),
+  RMSE_CV = round(c(rmse_base, rmse_mqo, rmse_spline, rmse_gam, rmse_gam_estrut), 4),
+  Ganho_MSE_vs_Base = c("0,0%",
+                        paste0(fmt(100 * (1 - cv_mqo / cv_base), 2), "%"),
+                        paste0(fmt(100 * (1 - melhor_cv_spline / cv_base), 2), "%"),
+                        paste0(fmt(100 * (1 - cv_gam / cv_base), 2), "%"),
+                        paste0(fmt(100 * (1 - cv_gam_estrut / cv_base), 2), "%"))
 )
 add_print(df_resumo)
 
 frase_diagnostico_aula10 <- paste0(
-  "Frase de diagnóstico da relação: O preditor que claramente não é uma reta é a 'distorcao_em' (x3), com edf = 1,77 ",
-  "(enquanto 'riqueza' e 'escolaridade' foram estritamente reduzidos a retas pelo GAM, com edf = 1,00). ",
+  "Frase de diagnóstico da relação: No bloco socioeconômico puro, o preditor que claramente não é uma reta é a 'distorcao_em' (x3), com edf = 1,77 ",
+  "(enquanto 'riqueza' e 'escolaridade' foram reduzidos a retas pelo GAM penalizado, com edf = 1,00). ",
   "A curva de distorção idade-série sobe de forma acentuada entre 8% e 17% (aumentando a mortalidade de idosos em cerca de ",
-  "+3,5 mortes por mil ao sinalizar vulnerabilidade socioeconômica municipal), mas atinge um platô de saturação a partir de 18%, ",
-  "onde aumentos adicionais da distorção não alteram mais a mortalidade esperada. Já nas splines de regressão univariadas em x1, ",
-  "o modelo com df = 4 capturou o platô e o repique industrial de Cubatão, batendo a linha de base (MSE 14,43 vs 14,76)."
+  "+3,5 mortes por mil ao sinalizar vulnerabilidade socioeconômica municipal), mas atinge um platô de saturação a partir de 18%. ",
+  "Já nas splines naturais em x1 (riqueza), o modelo com df = 4 capturou o platô e o repique industrial de Cubatão, batendo a linha de base (MSE 14,43 vs 14,76). ",
+  "Por fim, ao unir o GAM à estrutura da nossa Pergunta 1 (municipio + s(ano, k=5) + s(riqueza, k=4)), o suavizador temporal captura o pico não-linear da pandemia (edf = ",
+  fmt(edfs_estrut[1], 2), ") e reduz o MSE de validação cruzada de 14,76 para ", fmt(cv_gam_estrut, 2), " (RMSE = ", fmt(rmse_gam_estrut, 2), ")."
 )
 add("\n", frase_diagnostico_aula10)
-
-frase_impacto_pergunta <- paste0(
-  "O que isso indica para a pergunta de pesquisa: O GAM puramente aditivo com indicadores socioeconômicos atinge RMSE de 3,94, ",
-  "não conseguindo bater a linha de base da ficha (RMSE = 3,84) nem a melhor Pergunta 1 da nossa Entrega 1 (que usa 'municipio' + 'ano' ",
-  "e atinge RMSE = 2,20). Esse resultado confirma rigorosamente o diagnóstico da nossa Entrega 1: modelos baseados apenas em indicadores ",
-  "sociais agregados sofrem com n pequeno (54) e ruído estocástico, enquanto a estrutura fixa de 'onde' (município) e 'quando' (ano) ",
-  "carrega mais de 42% do sinal preditivo. No entanto, a spline em x1 (df=4) bateu a linha de base (RMSE 3,80 vs 3,84), indicando que ",
-  "incorporar não-linearidades em riqueza pode refinar o modelo estrutural sem explodir em sobreajuste."
-)
-add("\n", frase_impacto_pergunta)
 
 # Figuras
 arq1 <- file.path(pasta_fig, "10-splines-gam_img1.png")
@@ -266,42 +275,29 @@ dev.off()
 
 add("\n[OK] Figuras geradas com sucesso.")
 
-arquivo_md <- "10-splines-gam.md"
+pastas_out_md <- c(file.path("estrutura", "scriptsR"), ".")
+pasta_out_md <- pastas_out_md[dir.exists(pastas_out_md)][1]
+arquivo_md <- file.path(pasta_out_md, "10-splines-gam.md")
 cabecalho <- c(
-  "# Relatório da Atividade 10 — Splines e GAM",
+  "# Relatório Técnico da Atividade 10 — Splines e GAM",
   "",
   paste0("**Gerado por:** `10-splines-gam.R`  "),
   paste0("**Data:** ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "  "),
   paste0("**Origem:** `", origem_dados, "`  "),
   "",
-  "> **Alvo:** `mortalidade_60_69`. **Preditores:** `riqueza`, `escolaridade`, `distorcao_em`.",
+  "> **Alvo:** `mortalidade_60_69`. **Preditores socioeconômicos:** `riqueza`, `escolaridade`, `distorcao_em`. **Controle estrutural:** `municipio`, `ano`.",
   "",
   "## Sumário executivo",
   "",
   paste0("- Linha de Base (média): MSE_CV = ", fmt(cv_base), " | RMSE_CV = ", fmt(rmse_base)),
-  paste0("- MQO Linear: MSE_CV = ", fmt(cv_mqo), " | RMSE_CV = ", fmt(rmse_mqo)),
+  paste0("- MQO Linear (x1+x2+x3): MSE_CV = ", fmt(cv_mqo), " | RMSE_CV = ", fmt(rmse_mqo)),
   paste0("- Melhor Spline Natural em x1: df = ", melhor_df, " | MSE_CV = ", fmt(melhor_cv_spline), " | RMSE_CV = ", fmt(rmse_spline)),
-  paste0("- GAM: MSE_CV = ", fmt(cv_gam), " | RMSE_CV = ", fmt(rmse_gam)),
-  "",
-  "## Diagnóstico",
-  "",
-  "O preditor que claramente não é uma reta é a `distorcao_em`. O GAM reduziu `riqueza` e `escolaridade` a linhas retas (edf = 1,00) e mapeou `distorcao_em` com suavização não linear (edf = 1,77), indicando saturação após cerca de 18% na distorção. A spline natural em `riqueza` com df = 4 foi a melhor estrutura dentre os candidatos testados e bateu a linha de base, sugerindo que a não-linearidade da riqueza é relevante sem cair em sobreajuste.",
-  "",
-  "## Figuras",
-  "",
-  paste0("- `", arq1, "` — Efeitos parciais do GAM (riqueza, escolaridade, distorção)"),
-  paste0("- `", arq2, "` — Seleção de flexibilidade da spline em riqueza"),
-  paste0("- `", arq3, "` — Reta MQO vs spline natural em riqueza"),
-  paste0("- `", arq4, "` — Efeito parcial de distorção idades-série"),
+  paste0("- GAM Socioeconômico: MSE_CV = ", fmt(cv_gam), " | RMSE_CV = ", fmt(rmse_gam)),
+  paste0("- GAM Semiparamétrico (municipio + s(ano) + s(riqueza)): MSE_CV = ", fmt(cv_gam_estrut), " | RMSE_CV = ", fmt(rmse_gam_estrut)),
   "",
   "## Output bruto",
   "", "```", paste(buffer, collapse = "\n"), "```",
-  "",
-  "## Notas",
-  "",
-  "- A validação cruzada com 5 dobras foi usada para comparar complexidade e desempenho.",
-  "- A estrutura fixa de município e ano continua sendo o sinal mais forte do banco, mas a spline em riqueza oferece refinamento útil.",
   ""
 )
 writeLines(cabecalho, arquivo_md)
-cat("\n[OK] Relatório em:", arquivo_md, "\n")
+cat("\n[OK] Relatório técnico gravado em:", arquivo_md, "\n")

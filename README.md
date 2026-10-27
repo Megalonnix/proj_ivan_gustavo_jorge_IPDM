@@ -2,7 +2,7 @@
 
 **Ciência de Dados · Fatec Rubens Lara - Baixada Santista**
 
-Estimar e avaliar modelos de aprendizado a partir de dados — da análise exploratória e regressão linear/logística à validação treino/teste, reamostragem e regularização — com implementação em **R**.
+Estimar e avaliar modelos de aprendizado a partir de dados — da análise exploratória e regressão linear/logística à validação treino/teste, reamostragem, regularização ($L_1$/$L_2$/Elastic Net), métodos não-paramétricos de suavização (KNN e Nadaraya–Watson), *splines* e Modelos Aditivos Generalizados (GAM) — com implementação reprodutível em **R** e **LaTeX/knitr**.
 
 ![Equipe](https://img.shields.io/badge/equipe-Ivan%2C%20Gustavo%20e%20Jorge-0B3954)
 ![Banco](https://img.shields.io/badge/banco-IPDM%20Seade-lightgrey)
@@ -25,36 +25,30 @@ Prof. Dr. João Paulo Ferreira de Mello
 Ivan, Gustavo e Jorge
 
 **Linguagem das entregas:**  
-Sempre **R**.
+Sempre **R** (com relatórios técnicos em Markdown e entregas formais em LaTeX/`knitr`).
 
 **Banco de trabalho:**  
-Fundação Seade — IPDM (Índice Paulista de Desenvolvimento Municipal), recorte dos 9 municípios da Região Metropolitana da Baixada Santista em 6 anos (2014, 2016, 2018, 2020, 2022, 2024), totalizando 54 observações. O banco vive em `estrutura/bancoDeDados/` do próprio repositório, com cópia local usada como fallback pelos scripts em R.
+Fundação Seade — IPDM (Índice Paulista de Desenvolvimento Municipal), recorte em painel balanceado dos 9 municípios da Região Metropolitana da Baixada Santista em 6 edições bienais (2014, 2016, 2018, 2020, 2022, 2024), totalizando $n = 54$ observações e $p = 9$ variáveis documentadas. O banco vive em `estrutura/bancoDeDados/` do próprio repositório, com cópia local usada prioritariamente pelos scripts em R.
 
 ---
 
 ## Cinco blocos do curso
 
-O curso é dividido em cinco blocos temáticos. Essa divisão **não é interpretação nossa** — está literalmente na **Aula 01 (slide 2, "Os cinco blocos do curso")** e é reforçada pela tabela de datas de prova no **slide 3 da mesma aula** (P1 cobre Blocos I–II; P2 cobre Blocos III–IV).
+O curso é dividido em cinco blocos temáticos, conforme apresentado na **Aula 01 (slide 2, "Os cinco blocos do curso")** e no cronograma de avaliações (**slide 3 da Aula 01**):
 
-| Bloco | Conteúdo (texto literal do slide) | Aulas que cobrem | Atividades do projeto |
+| Bloco | Conteúdo (texto literal do slide) | Aulas que cobrem | Atividades e Entregas do Projeto |
 |---|---|---|---|
-| **I** | Fundamentos do aprendizado estatístico | Aulas 01, 02, 03 | `01-dicionario-variaveis.R`, `02-analise-exploratoria.R` |
+| **I** | Fundamentos do aprendizado estatístico | Aulas 01, 02, 03 | `01-dicionario-variaveis.R`, `02-analise-exploratoria.R`, `dicionario_ipdm_baixada.pdf` |
 | **II** | Supervisionado: avaliação e regularização | Aulas 04, 05, 06, 07, 08 | `03-regressao-linear.R`, `04-regressao-logistica.R`, `05-regressao-linear-treino-teste.R`, `06-regressao-logistica-treino-teste.R`, `07-reamostragem.R`, `08-regularizacao.R` |
-| **III** | Modelos flexíveis: suavização, árvores, ensembles | Aulas 09 e 10 | `09-metodos-suavizacao.R`, `10-splines-gam.R` |
-| **IV** | Redes neurais e SVM | ainda não cursadas | — |
-| **V** | Não supervisionado: agrupamento, EM, PCA/ICA | ainda não cursadas | — |
+| **III** | Modelos flexíveis: suavização, árvores, ensembles | Aulas 09 e 10 | `09-metodos-suavizacao.R`, `10-splines-gam.R`, `09-escolha-da-pergunta.R`, `entrega-1-pergunta.pdf` |
+| **IV** | Redes neurais e SVM | Próximas aulas | *Em andamento conforme avanço do semestre* |
+| **V** | Não supervisionado: agrupamento, EM, PCA/ICA | Próximas aulas | *Em andamento conforme avanço do semestre* |
 
-**Como montamos este mapeamento (para o leitor do futuro):**
+**Síntese da progressão metodológica nos Blocos I a III:**
 
-- **Blocos I a V (nomes e conteúdo):** transcrição literal do slide 2 da Aula 01.
-- **Datas de prova por bloco:** tabela do slide 3 da Aula 01 — P1 (29/09) cobre Blocos I–II; P2 (13/11) cobre Blocos III–IV.
-- **Quais aulas pertencem a cada bloco:** deduzido da ordem cronológica dos slides disponíveis (`slides_aulas/`). As Aulas 01–08 vão de 04/08 a 18/09 e caem inteiramente antes da P1, logo são Blocos I–II. A Aula 09 (`TEA_aula09.PDF`) é a primeira do Bloco III.
-- **Blocos III, IV e V sem atividade no projeto:** **inferência nossa**, não afirmação de slide. Evidências:
-  1. As entregas do projeto param na Atividade 08, que cobre temas do Bloco II (regularização).
-  2. A Aula 08 fecha com o aviso: *"Próxima aula: ... viramos a chave: modelos que não supõem forma fixa — suavização, splines e GAM"* — abertura do Bloco III, concretizada na Aula 09.
-- **Atividades por bloco:** associação direta entre o tema da atividade e o tema da aula correspondente (ex.: `01-dicionario-variaveis.R` ↔ Aula 02, que é sobre dicionário e tipagem).
-
-Quando surgirem entregas para os Blocos III–V, esta tabela precisa ser revisada nas linhas III–V.
+- **Bloco I (Aulas 01–03):** Estruturação do dicionário de variáveis (separando tipo estatístico e representação em R), verificação de integridade (zero dados faltantes) e análise exploratória da resposta `mortalidade_60_69` ($\bar{y} = 19{,}90$, $s_y = 3{,}8504$, assimetria positiva puxada pelo choque pandêmico de 2020–2022).
+- **Bloco II (Aulas 04–08):** Modelagem paramétrica supervisionada (MQO e Logística), validação honesta fora da amostra (divisão 70/30 e CV 5-fold), quantificação de incerteza via *Bootstrap* ($B=2.000$) e regularização penalizada ($L_2$ Ridge, $L_1$ Lasso e Elastic Net). Na Parte B da Atividade 08 ($p = 19$ com efeitos fixos municipais e de ano), o Elastic Net reduz o erro fora da amostra para $\text{RMSE}_{CV} = 2{,}1815$ ($-43{,}3\%$ vs. baseline).
+- **Bloco III (Aulas 09–10 e Entrega Formal 1):** Comparação formal de perguntas candidatas (regressão vs. classificação, demonstrando que prever a taxa contínua e cortar na mediana atinge $\text{AUC} = 0{,}890$ contra $0{,}679$ da logística direta), suavizadores locais (KNN e Nadaraya–Watson) e modelos semiparamétricos com *splines* e GAM (`mgcv::gam`, atingindo $\text{RMSE}_{CV} = 2{,}3519$ ao capturar a onda não-linear temporal $\text{edf}_{\text{ano}} = 3{,}91$).
 
 ---
 
@@ -64,10 +58,6 @@ Quando surgirem entregas para os Blocos III–V, esta tabela precisa ser revisad
 proj_ivan_gustavo_jorge_(IPDM)/
 ├── README.md
 ├── .gitignore
-├── assets/
-│   ├── instrucoes_arquivos_ipynb.txt
-│   ├── instrucoes_consolidados.txt
-│   └── instrucoes_conversa_LLM.txt
 ├── consolidado/
 │   ├── 01-dicionario-variaveis.md
 │   ├── 02-analise-exploratoria.md
@@ -128,114 +118,84 @@ proj_ivan_gustavo_jorge_(IPDM)/
 │       ├── 10-splines-gam.R
 │       ├── 10-splines-gam.md
 │       └── figuras/
-│           ├── 02-analise-exploratoria_img1.png
-│           ├── 02-analise-exploratoria_img2.png
-│           ├── 02-analise-exploratoria_img3.png
-│           ├── 03-regressao-linear_img1.png
-│           ├── 03-regressao-linear_img2.png
-│           ├── 03-regressao-linear_img3.png
-│           ├── 03-regressao-linear_img4.png
-│           ├── 03-regressao-linear_img5.png
-│           ├── 03-regressao-linear_img6.png
-│           ├── 04-regressao-logistica_img1.png
-│           ├── 04-regressao-logistica_img2.png
-│           ├── 05-regressao-linear-treino-teste_img1.png
-│           ├── 05-regressao-linear-treino-teste_img2.png
-│           ├── 05-regressao-linear-treino-teste_img3.png
-│           ├── 06-regressao-logistica-treino-teste_img1.png
-│           ├── 06-regressao-logistica-treino-teste_img2.png
-│           ├── 07-reamostragem_img1.png
-│           ├── 07-reamostragem_img2.png
-│           ├── 08-regularizacao_img1.png
-│           ├── 08-regularizacao_img2.png
-│           └── 08-regularizacao_img3.png
-|           └── ... outras imagens (.png) ...
-├── slides_aulas/
-│   ├── TAE_aula01.PDF
-│   ├── TAE_aula02.PDF
-│   ├── TAE_aula03.PDF
-│   ├── TAE_aula04.PDF
-│   ├── TAE_aula05.PDF
-│   ├── TAE_aula06.PDF
-│   ├── TAE_aula07.PDF
-│   ├── TAE_aula08.PDF
-│   └── TAE_aula09.PDF
-|   └── ... faltam os slides da aula 9 e 10!!! (bônus) ...
-└── to.delete/
+│           ├── 02-analise-exploratoria_img1..3.png
+│           ├── 03-regressao-linear_img1..6.png
+│           ├── 04-regressao-logistica_img1..2.png
+│           ├── 05-regressao-linear-treino-teste_img1..3.png
+│           ├── 06-regressao-logistica-treino-teste_img1..2.png
+│           ├── 07-reamostragem_img1..2.png
+│           ├── 08-regularizacao_img1..3.png
+│           ├── 09-metodos-suavizacao_img1..4.png
+│           └── 10-splines-gam_img1..4.png
+└── slides_aulas/
+    ├── TAE_aula01.PDF
+    ├── TAE_aula02.PDF
+    ├── TAE_aula03.PDF
+    ├── TAE_aula04.PDF
+    ├── TAE_aula05.PDF
+    ├── TAE_aula06.PDF
+    ├── TAE_aula07.PDF
+    ├── TAE_aula08.PDF
+    └── TEA_aula09.PDF
 ```
 
 | Pasta | O que é |
 |---|---|
-| `assets/` | Instruções auxiliares do projeto (arquivos `.txt` de orientação interna) |
-| `consolidado/` | Relatórios didáticos das atividades; inclui a análise comparativa da Atividade 09 (`09-escolha-da-pergunta.md`) e a entrega formal em PDF, cujo fonte é `entrega-1-pergunta.Rnw` |
-| `estrutura/codigo/` | Scripts auxiliares de análise e geração de entregas, incluindo a Atividade 09 |
-| `estrutura/bancoDeDados/` | Arquivos `.csv` utilizados nas análises (principalmente o da Baixada Santista) |
-| `estrutura/dicionario/` | Dicionário de variáveis em LaTeX (`.tex`) e PDF |
-| `estrutura/notebooks/` | Cópias das análises `.R`, feitas para rodar em nuvem via Colab |
-| `estrutura/scriptsR/` | Análises pedidas nos slides do professor — scripts `.R`, outputs técnicos `.md` e `figuras/` |
-| `slides_aulas/` | Slides das aulas do professor (PDFs), base para o mapeamento aulas × blocos × atividades |
-| `to.delete/` | Pasta temporária, a ser removida |
+| `consolidado/` | Relatórios didáticos e matemáticos das atividades (com equações em LaTeX e resolução dos exercícios dos slides); inclui a análise comparativa da Atividade 09 (`09-escolha-da-pergunta.md`) e a entrega formal compilada em PDF (`entrega-1-pergunta.pdf`) a partir de `entrega-1-pergunta.Rnw` |
+| `estrutura/codigo/` | Scripts de geração da Entrega 1 (`09-escolha-da-pergunta.R`) e espelhos das análises do Bloco III |
+| `estrutura/bancoDeDados/` | Arquivos `.csv` utilizados nas análises (`df_ipdm_baixada_por_municipio.csv` e base original Seade) |
+| `estrutura/dicionario/` | Dicionário formal de variáveis em LaTeX (`dicionario_ipdm_baixada.tex`) e documento compilado (`dicionario_ipdm_baixada.pdf`) |
+| `estrutura/notebooks/` | Notebooks `.ipynb` com kernel R para execução direta em nuvem via Google Colab |
+| `estrutura/scriptsR/` | Scripts reprodutíveis `.R` de todas as 10 atividades, outputs técnicos `.md` e diretório `figuras/` |
+| `slides_aulas/` | Slides das aulas do Prof. Dr. João Paulo Ferreira de Mello (PDFs) |
 
 ---
 
 ## Atividades × aulas
 
-Os números de página referem-se aos marcadores `===== Page X =====` do PDF das aulas (extração do arquivo original em `slides_aulas/`). A numeração interna dos slides do professor é diferente (ex.: a pág. 18 da Aula 04 corresponde ao slide "12/15").
+Os números de página referem-se aos marcadores do PDF das aulas em `slides_aulas/`. Todos os relatórios em `consolidado/` incluem, além da análise aplicada ao IPDM, a fundamentação matemática e a resolução completa dos exercícios de cálculo e conceituais dos slides correspondentes.
 
-| # | Entrega | Script | Aula | Slide (PDF) | Por que |
+| # | Entrega Consolidada | Script Fonte | Aula | Slide (PDF) | Foco Técnico e Teórico |
 |---|---|---|---|---|---|
-| 01 | [01-dicionario-variaveis.md](consolidado/01-dicionario-variaveis.md) | `estrutura/scriptsR/01-dicionario-variaveis.R` | Aula 02 | pág. 20 | Exercício "Sobre um data.frame (o seu, ou iris): inspecione, corrija os tipos e comece o dicionário" |
-| 02 | [02-analise-exploratoria.md](consolidado/02-analise-exploratoria.md) | `estrutura/scriptsR/02-analise-exploratoria.R` | Aula 03 | pág. 23 | Exercício "Aplique ao banco que você escolheu: 1) EDA de variável quantitativa; 2) relação entre duas variáveis; 3) densidade Normal sobreposta; 4) faltantes" |
-| 03 | [03-regressao-linear.md](consolidado/03-regressao-linear.md) | `estrutura/scriptsR/03-regressao-linear.R` | Aula 04 | pág. 18 | Exercício "Escolha uma resposta quantitativa e um ou mais preditores: 1) regressão simples; 2) gráfico quadrado com reta; 3) múltipla; 4) resíduos vs ajustado" |
-| 04 | [04-regressao-logistica.md](consolidado/04-regressao-logistica.md) | `estrutura/scriptsR/04-regressao-logistica.R` | Aula 05 | pág. 29 | Exercício "Escolha uma resposta binária y (0/1): 1) logística + razões de chance; 2) matriz de confusão; 3) limiares 0,3/0,5/0,7; 4) AUC" |
-| 05 | [05-regressao-linear-treino-teste.md](consolidado/05-regressao-linear-treino-teste.md) | `estrutura/scriptsR/05-regressao-linear-treino-teste.R` | Aula 06 | pág. 27 | Exercício "Aplique o protocolo ao seu banco, com dois modelos das aulas passadas: 1) dividir 70/30; 2) ajustar dois candidatos só no treino; 3) comparar no teste" |
-| 06 | [06-regressao-logistica-treino-teste.md](consolidado/06-regressao-logistica-treino-teste.md) | `estrutura/scriptsR/06-regressao-logistica-treino-teste.R` | Aula 06 | pág. 27 | Mesmo exercício da pág. 27, estendido à classificação por analogia. O enunciado não especifica `glm`, mas diz "dois modelos das aulas passadas" |
-| 07 | [07-reamostragem.md](consolidado/07-reamostragem.md) | `estrutura/scriptsR/07-reamostragem.R` | Aula 07 | pág. 23 | Exercício "Traque a divisão única da Aula 6 por validação cruzada, e qualifique um coeficiente por bootstrap: 1) CV(5) comparando dois candidatos; 2) bootstrap do coeficiente" |
-| 08 | [08-regularizacao.md](consolidado/08-regularizacao.md) | `estrutura/scriptsR/08-regularizacao.R` | Aula 08 | pág. 29 | Exercício "library(glmnet)... cv.glmnet(X, yv, alpha = 1); cv.glmnet(X, yv, alpha = 0)" — Lasso e Ridge com curva em U |
-| 09 | [09-metodos-suavizacao.md](consolidado/09-metodos-suavizacao.md) | `estrutura/scriptsR/09-metodos-suavizacao.R` | Aula 09 | — | Compara reta, KNN e kernel para mapear não-linearidade em riqueza e mortalidade; diagnóstica a relação e escolhe o suavizador melhor ajustado |
-| 10 | [10-splines-gam.md](consolidado/10-splines-gam.md) | `estrutura/scriptsR/10-splines-gam.R` | Aula 10 | — | Compara spline natural e GAM para modelar relações não lineares em riqueza, escolaridade e distorção escolar |
-| 11 | [09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md) e [entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf) | `estrutura/codigo/09-escolha-da-pergunta.R` e `consolidado/entrega-1-pergunta.Rnw` | Aula 09 | — | Compara duas perguntas candidatas e documenta a escolha da pergunta de pesquisa; a entrega formal em PDF aprofunda a pergunta escolhida |
+| 01 | [01-dicionario-variaveis.md](consolidado/01-dicionario-variaveis.md) | `estrutura/scriptsR/01-dicionario-variaveis.R` | Aulas 01 e 02 | pág. 20 | Dicionário de variáveis, separação entre Tipo Estatístico e Tipo no R (`cod_ibge` como identificador nominal) e decomposição $\mathbb{E}[(y_0-\hat{f}(x_0))^2]$ |
+| 02 | [02-analise-exploratoria.md](consolidado/02-analise-exploratoria.md) | `estrutura/scriptsR/02-analise-exploratoria.R` | Aula 03 | pág. 23 | EDA univariada e bivariada, comparação média vs. mediana, sobreposição de densidade Normal $\mathcal{N}(\bar{y}, s^2)$ e auditoria de dados faltantes |
+| 03 | [03-regressao-linear.md](consolidado/03-regressao-linear.md) | `estrutura/scriptsR/03-regressao-linear.R` | Aula 04 | pág. 18 | Estimação MQO ($\hat{\boldsymbol{\beta}} = (\mathbf{X}^\top\mathbf{X})^{-1}\mathbf{X}^\top\mathbf{y}$), decomposição $\text{SQT}=\text{SQE}+\text{SQR}$, regressão simples vs. múltipla e diagnóstico de resíduos |
+| 04 | [04-regressao-logistica.md](consolidado/04-regressao-logistica.md) | `estrutura/scriptsR/04-regressao-logistica.R` | Aula 05 | pág. 29 | Função logística $\sigma(\eta)$, log-chances (*logit*), Razão de Chances ($\text{OR}=e^{\beta_j}$), matrizes de confusão em limiares $0{,}3/0{,}5/0{,}7$ e curva ROC/AUC |
+| 05 | [05-regressao-linear-treino-teste.md](consolidado/05-regressao-linear-treino-teste.md) | `estrutura/scriptsR/05-regressao-linear-treino-teste.R` | Aula 06 | pág. 27 | Protocolo 70/30 treino/teste, compromisso viés–variância, $\text{RMSE}_{\text{teste}}$ vs. baseline e simulação de volatilidade em 200 *splits* |
+| 06 | [06-regressao-logistica-treino-teste.md](consolidado/06-regressao-logistica-treino-teste.md) | `estrutura/scriptsR/06-regressao-logistica-treino-teste.R` | Aula 06 | pág. 27 | Classificação honesta fora da amostra com binarização estrita pela mediana do treino (prevenção de *data leakage*) em split 70/30 e CV 5-fold |
+| 07 | [07-reamostragem.md](consolidado/07-reamostragem.md) | `estrutura/scriptsR/07-reamostragem.R` | Aula 07 | pág. 23 | Validação cruzada $k$-fold para seleção de grau polinomial ($d \in \{1, 3, 12\}$) e *Bootstrap* não-paramétrico ($B=2.000$) para $\text{EP}_{\text{boot}}$ e $\text{IC}_{95\%}$ |
+| 08 | [08-regularizacao.md](consolidado/08-regularizacao.md) | `estrutura/scriptsR/08-regularizacao.R` | Aula 08 | pág. 29 | Regularização Ridge ($\alpha=0$), Lasso ($\alpha=1$) e Elastic Net ($\alpha=0{,}5$), regra de 1 erro-padrão ($\lambda_{1se}$) e seleção esparsa em espaço expandido ($p=19$) |
+| 09 | [09-metodos-suavizacao.md](consolidado/09-metodos-suavizacao.md) | `estrutura/scriptsR/09-metodos-suavizacao.R` | Aula 09 | pág. 17 | Suavizadores lineares locais $\hat{\mathbf{y}}=\mathbf{S}\mathbf{y}$: KNN regressão e Nadaraya–Watson com kernel Gaussiano, calibrados por CV 5-fold |
+| 10 | [10-splines-gam.md](consolidado/10-splines-gam.md) | `estrutura/scriptsR/10-splines-gam.R` | Aula 10 | — | *Splines* cúbicos naturais (`splines::ns`), *smoothing splines* ($\lambda\int[f''(t)]^2dt$, $\text{edf}=\text{tr}(\mathbf{S}_\lambda)$) e GAM semiparamétrico (`mgcv::gam`) |
+| 11 | [09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md) e [entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf) | `estrutura/codigo/09-escolha-da-pergunta.R` e `consolidado/entrega-1-pergunta.Rnw` | Entrega 1 | — | Comparação empírica e teórica entre duas perguntas candidatas (regressão vs. classificação) e artigo técnico compilado via `knitr::knit2pdf` |
 
 ---
 
-## Atividade 09 — dois documentos complementares
+## Entrega 1 — Escolha da Pergunta de Pesquisa (dois documentos complementares)
 
-A Atividade 09 tem dois documentos com papéis diferentes; um não substitui o outro:
+A entrega de definição da pergunta de pesquisa possui dois documentos complementares em `consolidado/`:
 
-- **[09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md):** relatório analítico da atividade. Compara as duas perguntas candidatas, registra os diagnósticos do banco e os resultados da validação cruzada que fundamentam a escolha da Pergunta 1. É gerado pelo script [09-escolha-da-pergunta.R](estrutura/codigo/09-escolha-da-pergunta.R).
-- **[entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf):** versão formal da entrega, voltada à apresentação da pergunta escolhida. Expõe o problema, os dados, a pergunta, os diagnósticos e a justificativa. Seu fonte editável é [entrega-1-pergunta.Rnw](consolidado/entrega-1-pergunta.Rnw), e as referências estão em [referencias.bib](consolidado/referencias.bib).
+- **[09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md):** relatório analítico gerado por [09-escolha-da-pergunta.R](estrutura/codigo/09-escolha-da-pergunta.R). Compara a Pergunta 1 (regressão contínua) e a Pergunta 2 (classificação pela mediana) sob as mesmas 5 dobras de validação cruzada, incluindo o teste de dominância em que o modelo linear contínuo, binarizado *a posteriori* na mediana do treino, atinge $\text{AUC} = 0{,}890$ ($\text{Acc} = 86{,}7\%$) contra $\text{AUC} = 0{,}679$ ($\text{Acc} = 64{,}4\%$) da regressão logística direta.
+- **[entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf):** artigo técnico formal em duas colunas (padrão `knitr` + LaTeX + BibTeX), gerado a partir de [entrega-1-pergunta.Rnw](consolidado/entrega-1-pergunta.Rnw) e [referencias.bib](consolidado/referencias.bib), onde 100% das métricas de texto e tabelas são interpoladas dinamicamente via `\Sexpr{}`.
 
-### Como gerar os documentos de atividades recentes
+### Como compilar os documentos em PDF (Entrega 1 e Dicionário)
 
-É necessário ter **R** instalado. Para gerar os relatórios e figuras de cada atividade, execute os scripts correspondentes na raiz do repositório.
-
-```bash
-Rscript estrutura/scriptsR/09-metodos-suavizacao.R
-Rscript estrutura/scriptsR/10-splines-gam.R
-```
-
-Os scripts leem o CSV em `estrutura/bancoDeDados/` (com fallback para URL no GitHub) e geram os relatórios em `consolidado/` e os artefatos em `estrutura/scriptsR/figuras/`.
-
-### Como gerar os dois documentos da atividade 09 (pergunta de pesquisa)
-
-É necessário ter **R** instalado. Para gerar o PDF, também é necessário o pacote R `knitr` e uma distribuição LaTeX (por exemplo, MiKTeX ou TeX Live).
-
-Na raiz do repositório, gere primeiro o relatório Markdown:
+A partir da raiz do repositório, com **R** (pacote `knitr`) e uma distribuição **LaTeX** (MiKTeX ou TeX Live) instalados:
 
 ```bash
+# 1. Atualizar o relatório Markdown da escolha da pergunta
 Rscript estrutura/codigo/09-escolha-da-pergunta.R
-```
 
-O script lê o CSV em `estrutura/bancoDeDados/` (com alternativa de download do repositório) e grava `consolidado/09-escolha-da-pergunta.md`.
-
-Em seguida, gere o PDF. No RStudio, abra `consolidado/entrega-1-pergunta.Rnw`, confirme que o mecanismo de Sweave é **knitr** e clique em **Compile PDF**. Alternativamente, no terminal:
-
-```bash
+# 2. Compilar o artigo formal entrega-1-pergunta.pdf via knitr
 cd consolidado
 Rscript -e "knitr::knit2pdf('entrega-1-pergunta.Rnw')"
-```
+cd ..
 
-Execute o comando do terminal a partir da raiz do repositório. O `.Rnw` usa o CSV local em `estrutura/bancoDeDados/` (ou o baixa como alternativa), e o processo de compilação usa `referencias.bib`. O PDF é gravado em `consolidado/entrega-1-pergunta.pdf`.
+# 3. Compilar o dicionário de variáveis em LaTeX
+cd estrutura/dicionario
+pdflatex -interaction=nonstopmode dicionario_ipdm_baixada.tex
+cd ../..
+```
 
 ---
 
@@ -259,9 +219,9 @@ Execute o comando do terminal a partir da raiz do repositório. O `.Rnw` usa o C
 
 1. **R instalado** ([cran.r-project.org](https://cran.r-project.org/)).
 2. **RStudio** (opcional, mas recomendado) — [posit.co/download/rstudio-desktop](https://posit.co/download/rstudio-desktop/).
-3. **Pacotes usados:** `glmnet` (apenas para a Atividade 08). Para instalar:
+3. **Pacotes usados:** `glmnet` (Atividade 08), `splines` e `mgcv` (Atividade 10, já inclusos na instalação padrão do R *recommended*) e `knitr` (para compilar o `.Rnw`). Para instalar:
    ```r
-   install.packages("glmnet")
+   install.packages(c("glmnet", "mgcv", "knitr"))
    ```
 4. **Clone o repositório** (ou baixe o `.zip` e extraia):
    ```bash
@@ -281,13 +241,15 @@ Execute o comando do terminal a partir da raiz do repositório. O `.Rnw` usa o C
    Rscript estrutura/scriptsR/06-regressao-logistica-treino-teste.R
    Rscript estrutura/scriptsR/07-reamostragem.R
    Rscript estrutura/scriptsR/08-regularizacao.R
-   ... idem (adicionar scripts restantes depois) ...
+   Rscript estrutura/scriptsR/09-metodos-suavizacao.R
+   Rscript estrutura/scriptsR/10-splines-gam.R
+   Rscript estrutura/codigo/09-escolha-da-pergunta.R
    ```
 3. Cada script imprime o output no terminal, grava as figuras em `estrutura/scriptsR/figuras/` e gera um `.md` de output na mesma pasta.
 
 **Não é preciso configurar caminhos manualmente.** Os scripts:
 
-- Detectam a própria pasta via `rstudioapi` (quando rodados pelo RStudio);
+- Detectam a própria pasta via `rstudioapi` ou `--file=` (quando rodados via `Rscript`);
 - Buscam o CSV primeiro localmente em `estrutura/bancoDeDados/`;
 - Se não encontrarem, baixam do GitHub como fallback.
 

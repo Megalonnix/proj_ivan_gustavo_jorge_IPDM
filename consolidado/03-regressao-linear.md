@@ -249,6 +249,37 @@ Próxima parada: e se o problema não for linear? A regressão logística muda a
 
 ---
 
+## Fundamentação Matemática e Resolução dos Exercícios (Aula 04)
+
+### 1. Formulação de Mínimos Quadrados Ordinários (MQO) e Métricas de Ajuste
+
+No modelo linear múltiplo $Y = \beta_0 + \beta_1 X_1 + \dots + \beta_p X_p + \varepsilon$, os estimadores $\hat{\boldsymbol{\beta}}$ minimizam a Soma dos Quadrados dos Resíduos ($\text{RSS}$):
+
+$$\text{RSS} = \sum_{i=1}^{n} e_i^2 = \sum_{i=1}^{n} (y_i - \hat{y}_i)^2, \qquad \text{TSS} = \sum_{i=1}^{n} (y_i - \bar{y})^2.$$
+
+A qualidade do ajuste na amostra é resumida pelo coeficiente de determinação ($R^2$) e pelo Erro-Padrão Residual ($\text{RSE}$):
+
+$$R^2 = 1 - \frac{\text{RSS}}{\text{TSS}} \in [0, 1], \qquad \text{RSE} = \sqrt{\frac{\text{RSS}}{n - p - 1}}.$$
+
+### 2. Resolução dos Exercícios de Cálculo da Aula 04 (Slide 12/15)
+
+1. **Predição e Interpretação ($\hat{y} = 3 + 0,05x$, vendas em mil unidades, $x$ em mil R\$):**
+   - Para $x = 40$: $\hat{y} = 3 + 0,05(40) = 3 + 2 = \mathbf{5\text{ mil unidades}}$.
+   - *Interpretação da inclinação $0,05$:* A cada $+1\text{ mil R\$}$ investidos em verba de TV, as vendas aumentam, em média, em $0,05\text{ mil unidades}$ ($50\text{ unidades}$).
+2. **Cálculo de $R^2$ ($\text{RSS} = 120$ e $\text{TSS} = 400$):**
+   $$R^2 = 1 - \frac{120}{400} = 1 - 0,30 = \mathbf{0,70} \quad (70\% \text{ da variância explicada}).$$
+   Ficaram **sem explicação** $\frac{\text{RSS}}{\text{TSS}} = \mathbf{30\%}$ ($0,30$) da variância total de $Y$.
+3. **Interpretação de Coeficiente Múltiplo (`vendas ~ tv + radio`, $\hat{\beta}_{\text{radio}} = 0,19$):**
+   - *Em uma frase:* Mantendo a verba de **TV fixa (constante)**, cada $+1$ unidade de verba investida em rádio está associada a um aumento médio de $0,19$ na variável de vendas.
+
+### 3. Resolução dos Exercícios Conceituais da Aula 04 (Slide 13/15)
+
+- **Por que minimizar a soma dos quadrados dos resíduos ($\sum e_i^2$), e não a soma simples ($\sum e_i$)?** Porque os resíduos têm sinais positivos (pontos acima da reta) e negativos (pontos abaixo) que se cancelam na soma simples ($\sum e_i = 0$ para qualquer reta que passe pelo ponto médio $(\bar{x}, \bar{y})$!). Elevar ao quadrado torna todos os desvios não-negativos, penaliza mais severamente erros grandes e torna a função objetivo diferenciável com solução analítica única.
+- **O que um "funil" no gráfico de resíduos vs. ajustados indica?** Indica violação da suposição de **homocedasticidade** (variância constante do erro, $\text{Var}(\varepsilon_i) = \sigma^2$), caracterizando **heterocedasticidade** (o espalhamento do erro cresce com o nível da resposta).
+- **Dois modelos com $R^2 = 0,90$, mas um tem forte padrão de curva nos resíduos:** Confiamos mais no modelo **com nuvem de resíduos aleatória em torno de zero**, pois o padrão em curva denuncia que a forma funcional linear está incorreta (viés de especificação: falta um termo não-linear), mesmo que o $R^2$ pareça alto.
+
+---
+
 ## Documentos complementares
 
 **Script que gera este consolidado:**
