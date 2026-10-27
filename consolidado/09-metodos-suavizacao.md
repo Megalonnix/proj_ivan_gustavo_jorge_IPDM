@@ -136,7 +136,7 @@ O slide 26 alerta:
 A fórmula de Nadaraya-Watson calcula a predição como uma razão ponderada, onde $K_h(x_0, x_i) = \exp\left(-\frac{1}{2}\left(\frac{x_i - x_0}{h}\right)^2\right)$:
 
 $$
-\hat{f}(x_0) = \frac{\sum_{i=1}^n K_h(x_0, x_i) \, y_i}{\sum_{i=1}^n K_h(x_0, x_i)}
+\hat{f}(x_0) = \frac{\sum_{i=1}^n K_h(x_0, x_i) y_i}{\sum_{i=1}^n K_h(x_0, x_i)}
 $$
 
 Se a largura de banda $h$ for pequena demais e tentarmos prever em um ponto $x_0$ situado em uma região esparsa (por exemplo, na transição entre $0,45$ e $0,50$ onde há poucos municípios, ou além de $0,58$ na borda superior):
@@ -159,7 +159,7 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 ### Parte A: Exercícios de Cálculo (Slide 24)
 
 #### Exercício 1: KNN com Vários $k$
-*Enunciado:* Sete imóveis: áreas $(50, 55, 62, 70, 80, 96, 110)$ e preços $(150, 170, 160, 210, 230, 300, 320)$. Preveja o preço de um imóvel de $74\,\mathrm{m}^2$ por KNN com $k = 1, 3, 5, 7$. Para onde a predição caminha quando $k$ cresce?
+*Enunciado:* Sete imóveis: áreas $(50, 55, 62, 70, 80, 96, 110)$ e preços $(150, 170, 160, 210, 230, 300, 320)$. Preveja o preço de um imóvel de $74\ \mathrm{m}^2$ por KNN com $k = 1, 3, 5, 7$. Para onde a predição caminha quando $k$ cresce?
 
 *Resolução:*
 1. Distâncias até $x_0 = 74$:
@@ -233,8 +233,8 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 - **O que resolveria?** Trocar a média local por uma **regressão linear local** ajustada em cada vizinhança (como o estimador **LOESS** / `geom_smooth()` / `lowess`) ou modelos de **Splines de regressão** (Aula 10), que conseguem extrapolar a inclinação até os limites do domínio.
 
 #### 3. Qual Modelo Responde? (Interpretabilidade vs Extrapolação)
-- **"O efeito marginal de $+1\,\mathrm{m}^2$ no preço":** O método adequado é a **reta linear paramétrica (MQO da Aula 04)**. O coeficiente $\beta_1$ resume exatamente a taxa marginal constante em um único parâmetro com intervalo de confiança e teste de hipótese. Modelos de Kernel produzem derivadas locais variáveis a cada ponto, sem um único número de resumo executivo.
-- **"O preço de um imóvel de $300\,\mathrm{m}^2$, maior que todos da base":** O Kernel é completamente inadequado para extrapolação fora do suporte dos dados: longe de todos os pontos conhecidos, os pesos gaussianos chegam a zero e o modelo devolve `NaN` ou achata artificialmente. A reta paramétrica consegue extrapolar matematicamente ao longo de sua fórmula (embora com risco de extrapolação conceitual).
+- **"O efeito marginal de $+1\ \mathrm{m}^2$ no preço":** O método adequado é a **reta linear paramétrica (MQO da Aula 04)**. O coeficiente $\beta_1$ resume exatamente a taxa marginal constante em um único parâmetro com intervalo de confiança e teste de hipótese. Modelos de Kernel produzem derivadas locais variáveis a cada ponto, sem um único número de resumo executivo.
+- **"O preço de um imóvel de $300\ \mathrm{m}^2$, maior que todos da base":** O Kernel é completamente inadequado para extrapolação fora do suporte dos dados: longe de todos os pontos conhecidos, os pesos gaussianos chegam a zero e o modelo devolve `NaN` ou achata artificialmente. A reta paramétrica consegue extrapolar matematicamente ao longo de sua fórmula (embora com risco de extrapolação conceitual).
 
 #### 4. Muitos Preditores (A Maldição na Prática)
 - **Por que o colega com 40 preditores falhou no KNN?** Em 40 dimensões, o espaço hiperdimensional é incomensuravelmente vasto e vazio. Conforme vimos na conta da maldição ($l = 0,1^{1/40} \approx 0,944$), para encontrar qualquer vizinho é necessário cobrir praticamente $95\%$ de cada variável. Os pontos tornam-se todos equidistantes entre si, perdendo o conceito de vizinhança local; o KNN degenera em uma média global ruidosa.

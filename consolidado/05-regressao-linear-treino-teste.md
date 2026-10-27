@@ -246,7 +246,7 @@ $$
 Avaliado apenas no conjunto de treino $D_{\mathrm{tr}}$, o erro quadrático médio $\mathrm{MSE}_{\mathrm{tr}}$ é monotonicamente não-crescente com $d$. Porém, para um ponto novo $(x_0, y_0) \notin D_{\mathrm{tr}}$ gerado por $y_0 = f(x_0) + \varepsilon$ (com $\mathbb{E}[\varepsilon]=0$ e $\mathrm{Var}(\varepsilon)=\sigma^2$), o **erro quadrático esperado de teste** decompõe-se em três termos não-negativos (**Variância** + **Quadrado do Viés** + **Erro Irredutível**):
 
 $$
-\mathbb{E}\!\left[\left(y_0 - \hat{f}(x_0)\right)^2\right] = \mathrm{Var}\!\left(\hat{f}(x_0)\right) + \left[\mathrm{Bias}\!\left(\hat{f}(x_0)\right)\right]^2 + \mathrm{Var}(\varepsilon)
+\mathbb{E}\left[\left(y_0 - \hat{f}(x_0)\right)^2\right] = \mathrm{Var}\left(\hat{f}(x_0)\right) + \left[\mathrm{Bias}\left(\hat{f}(x_0)\right)\right]^2 + \mathrm{Var}(\varepsilon)
 $$
 
 onde $\mathrm{Bias}(\hat{f}(x_0)) = \mathbb{E}[\hat{f}(x_0)] - f(x_0)$. Aumentar a flexibilidade reduz o viés (aproxima a forma funcional verdadeira), mas infla a variância (o ajuste passa a oscilar conforme o ruído específico da amostra de treino), produzindo a clássica **curva em U** no erro de teste.
@@ -263,7 +263,7 @@ onde $\mathrm{Bias}(\hat{f}(x_0)) = \mathbb{E}[\hat{f}(x_0)] - f(x_0)$. Aumentar
 
 2. **Decomposição Viés–Variância em $x_0$:**  
    Dados $\mathrm{Var}(\hat{f}(x_0)) = 0{,}05$, $\mathrm{Bias}(\hat{f}(x_0)) = 0{,}2$ e $\mathrm{Var}(\varepsilon) = 0{,}03$:  
-   - Cálculo do erro esperado: $\mathbb{E}\!\left[(y_0 - \hat{f}(x_0))^2\right] = 0{,}05 + (0{,}2)^2 + 0{,}03 = 0{,}05 + 0{,}04 + 0{,}03 = \mathbf{0{,}12}$.
+   - Cálculo do erro esperado: $\mathbb{E}\left[(y_0 - \hat{f}(x_0))^2\right] = 0{,}05 + (0{,}2)^2 + 0{,}03 = 0{,}05 + 0{,}04 + 0{,}03 = \mathbf{0{,}12}$.
    - **Quem domina?** A variância ($0{,}05$) é ligeiramente superior ao quadrado do viés ($\mathrm{Bias}^2 = 0{,}04$), embora ambos estejam quase em equilíbrio perto do fundo da curva em U. Para reduzir o erro esperado total, deve-se **reduzir ligeiramente (ou manter) a flexibilidade** do modelo para conter a variância sem inflar excessivamente o viés.
 
 3. **Leitura de $\mathrm{RMSE}_{\mathrm{te}}$ na unidade do problema:**  

@@ -234,10 +234,10 @@ Esta atividade articula a **Aula 05** (*Regressão Logística e Avaliação de C
 Seja $y_i \in \mathbb{R}_+$ a mortalidade contínua (60–69 anos) da observação $i$. Na validação cruzada em $k$ dobras ($D = \bigcup_{j=1}^k D_j$), o limiar de binarização da dobra $j$ é definido **exclusivamente sobre o subconjunto de treinamento** $D^{(-j)} = D \setminus D_j$:
 
 $$
-m^{(-j)} = \mathrm{mediana}\!\left(\lbrace y_i : i \in D^{(-j)} \rbrace\right), \qquad z_i^{(j)} = \mathbb{I}\!\left(y_i > m^{(-j)}\right) \in \lbrace 0, 1 \rbrace
+m^{(-j)} = \mathrm{mediana}\left(\lbrace y_i : i \in D^{(-j)} \rbrace\right), \qquad z_i^{(j)} = \mathbb{I}\left(y_i > m^{(-j)}\right) \in \lbrace 0, 1 \rbrace
 $$
 
-O modelo logístico $\hat{p}^{(-j)}(\mathbf{x}) = \sigma\!\left(\hat{\beta}_0^{(-j)} + \mathbf{x}^\top\hat{\beta}^{(-j)}\right)$ é estimado maximizando a log-verossimilhança apenas em $D^{(-j)}$, e suas probabilidades preditas $\hat{p}_i = \hat{p}^{(-j)}(\mathbf{x}_i)$ são confrontadas com os rótulos $z_i^{(j)}$ na dobra de teste $D_j$.
+O modelo logístico $\hat{p}^{(-j)}(\mathbf{x}) = \sigma\left(\hat{\beta}_0^{(-j)} + \mathbf{x}^\top\hat{\beta}^{(-j)}\right)$ é estimado maximizando a log-verossimilhança apenas em $D^{(-j)}$, e suas probabilidades preditas $\hat{p}_i = \hat{p}^{(-j)}(\mathbf{x}_i)$ são confrontadas com os rótulos $z_i^{(j)}$ na dobra de teste $D_j$.
 
 - **Por que calcular a mediana global $\mathrm{mediana}(y_{1:n})$ seria vazamento?** Porque o valor mediano global depende da ordenação das observações de teste $D_j$; assim, o próprio rótulo $z_i$ e o corte da classe majoritária no treino já carregariam informação sobre a distribuição empírica do conjunto de teste antes mesmo do ajuste.
 

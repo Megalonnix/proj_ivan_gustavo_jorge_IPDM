@@ -55,7 +55,7 @@ Uma spline cúbica comum ainda se comporta como um polinômio de grau 3 fora dos
 Em vez de escolher manualmente quantos nós colocar e onde posicioná-los, a **Spline de Suavização** busca a função $f$ que minimiza o compromisso entre fidelidade aos dados (RSS) e penalidade de curvatura (rugosidade):
 
 $$
-\hat{f}_\lambda = \operatorname{arg\,min}_{f} \left[ \sum_{i=1}^{n} \bigl(y_i - f(x_i)\bigr)^2 + \lambda \int \bigl(f''(t)\bigr)^2 \, dt \right]
+\hat{f}_\lambda = \arg\min_{f} \left[ \sum_{i=1}^{n} \bigl(y_i - f(x_i)\bigr)^2 + \lambda \int \bigl(f''(t)\bigr)^2 dt \right]
 $$
 
 - **Teorema de Reinsch:** a solução exata desse problema variacional é uma **spline cúbica natural com nós em todos os pontos únicos $x_i$**, mas com coeficientes encolhidos pelo parâmetro $\lambda \ge 0$ (análogo ao Ridge da Aula 08!).
@@ -136,7 +136,7 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 ![Efeitos parciais do GAM](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/10-splines-gam_img1.png)
 *(Arquivo local: `estrutura/scriptsR/figuras/10-splines-gam_img1.png`)*
 
-- **Leitura dos três painéis:** Cada gráfico mostra a contribuição isolada $\hat{f}_j(x_j)$ centrada em zero, mantendo os demais preditores fixos, acompanhada das bandas de confiança de $\pm 2\,\mathrm{EP}$ (sombreado azul) e do tapete de observações (*rug plot*) no eixo horizontal.
+- **Leitura dos três painéis:** Cada gráfico mostra a contribuição isolada $\hat{f}_j(x_j)$ centrada em zero, mantendo os demais preditores fixos, acompanhada das bandas de confiança de $\pm 2$ EP (sombreado azul) e do tapete de observações (*rug plot*) no eixo horizontal.
 - **Autocontrole da penalidade:** Note como o GAM não força curvas onde não há evidência suficiente: `s(riqueza)` ($\mathrm{edf}=1,00$, inclinação negativa) e `s(escolaridade)` ($\mathrm{edf}=1,00$, quase plana) foram automaticamente encolhidas para retas pela penalidade $\lambda \int [f''(t)]^2 dt$. Apenas `s(distorcao_em)` ($\mathrm{edf}=1,77$) conservou curvatura côncava.
 
 ---
@@ -207,9 +207,9 @@ Para fundamentação teórica completa do grupo, resolvemos passo a passo todos 
 
 *Resolução:*
 1. **Cálculo dos pedágios de rugosidade em $[0, 1]$:**
-   - Para $g_1(x) = 3 + 2x$ (reta): $g_1'(x) = 2 \implies g_1''(x) = 0 \implies \int_0^1 0^2\,dt = \mathbf{0}$.
-   - Para $g_2(x) = x^2$ (parábola): $g_2'(x) = 2x \implies g_2''(x) = 2 \implies \int_0^1 2^2\,dt = \int_0^1 4\,dt = \mathbf{4}$.
-   - Para $g_3(x) = x^3$ (cúbica): $g_3'(x) = 3x^2 \implies g_3''(x) = 6x \implies \int_0^1 (6t)^2\,dt = 36\left[\frac{t^3}{3}\right]_0^1 = \mathbf{12}$.
+   - Para $g_1(x) = 3 + 2x$ (reta): $g_1'(x) = 2 \implies g_1''(x) = 0 \implies \int_0^1 0^2 dt = \mathbf{0}$.
+   - Para $g_2(x) = x^2$ (parábola): $g_2'(x) = 2x \implies g_2''(x) = 2 \implies \int_0^1 2^2 dt = \int_0^1 4 dt = \mathbf{4}$.
+   - Para $g_3(x) = x^3$ (cúbica): $g_3'(x) = 3x^2 \implies g_3''(x) = 6x \implies \int_0^1 (6t)^2 dt = 36\left[\frac{t^3}{3}\right]_0^1 = \mathbf{12}$.
 2. **Comparação das três curvas candidatas pelo critério $\mathrm{Custo}(\lambda) = \mathrm{RSS} + \lambda \cdot \mathrm{Ped}$:**
    - Candidata 1: $\mathrm{RSS}_1 = 52$, $\mathrm{Ped}_1 = 0 \implies \mathrm{Custo}_1(\lambda) = 52 + 0\lambda = 52$.
    - Candidata 2: $\mathrm{RSS}_2 = 30$, $\mathrm{Ped}_2 = 4 \implies \mathrm{Custo}_2(\lambda) = 30 + 4\lambda$.
@@ -250,11 +250,11 @@ Para fundamentação teórica completa do grupo, resolvemos passo a passo todos 
 - **O que o GAM supõe sobre os preditores?**  
   Supõe **aditividade**: o efeito de cada preditor $X_j$ sobre a resposta $Y$ é uma curva $f_j(X_j)$ que se soma às demais sem depender do valor dos outros preditores (ausência de interações sinergéticas).
 - **Exemplo imobiliário onde a hipótese falha:**  
-  No mercado imobiliário da Baixada Santista, o valor adicional de $+1\,\mathrm{m}^2$ de área útil na avenida da praia (orla de Santos) é muito maior do que $+1\,\mathrm{m}^2$ a 5 km da praia (há uma **interação positiva entre área e distância**). O GAM aditivo puro aplicaria a mesma curva média de área tanto na orla quanto no interior, **subestimando o preço de apartamentos grandes na beira-mar** e **superestimando o de apartamentos grandes longe da praia** (para corrigir, seria necessário incluir uma superfície de interação `ti(area, dist)` ou usar árvores de decisão na Aula 11).
+  No mercado imobiliário da Baixada Santista, o valor adicional de $+1\ \mathrm{m}^2$ de área útil na avenida da praia (orla de Santos) é muito maior do que $+1\ \mathrm{m}^2$ a 5 km da praia (há uma **interação positiva entre área e distância**). O GAM aditivo puro aplicaria a mesma curva média de área tanto na orla quanto no interior, **subestimando o preço de apartamentos grandes na beira-mar** e **superestimando o de apartamentos grandes longe da praia** (para corrigir, seria necessário incluir uma superfície de interação `ti(area, dist)` ou usar árvores de decisão na Aula 11).
 
-#### 4. O efeito de $1\,\mathrm{m}^2$ vs. o efeito de 1 ano de idade no GAM da aula
-- **A diretoria quer "o efeito de $1\,\mathrm{m}^2$ a mais no preço". O GAM da aula responde?**  
-  **Não com um único número fixo.** Como a área recebeu uma curva não-linear ($\mathrm{edf} = 8{,}27$, com dois degraus), o efeito marginal de $+1\,\mathrm{m}^2$ é a derivada local $\hat{f}'_{\mathrm{area}}(x)$, que muda conforme o tamanho do imóvel (vale cerca de 0,3 mil reais por $\mathrm{m}^2$ no patamar plano de 120–170 $\mathrm{m}^2$, mas salta para 3 a 4 mil reais por $\mathrm{m}^2$ nas rampas dos degraus).
+#### 4. O efeito de $1\ \mathrm{m}^2$ vs. o efeito de 1 ano de idade no GAM da aula
+- **A diretoria quer "o efeito de $1\ \mathrm{m}^2$ a mais no preço". O GAM da aula responde?**  
+  **Não com um único número fixo.** Como a área recebeu uma curva não-linear ($\mathrm{edf} = 8{,}27$, com dois degraus), o efeito marginal de $+1\ \mathrm{m}^2$ é a derivada local $\hat{f}'_{\mathrm{area}}(x)$, que muda conforme o tamanho do imóvel (vale cerca de 0,3 mil reais por $\mathrm{m}^2$ no patamar plano de 120–170 $\mathrm{m}^2$, mas salta para 3 a 4 mil reais por $\mathrm{m}^2$ nas rampas dos degraus).
 - **E "o efeito de 1 ano a mais de idade"?**  
   **Sim!** Como a penalidade do GAM encolheu a curva da idade automaticamente para uma reta ($\mathrm{edf} = 1{,}00$), sua inclinação é constante em todo o domínio: cada ano a mais de idade reduz o preço em um valor fixo (cerca de $-1{,}68$ mil reais por ano, mantendo área e distância constantes).
 

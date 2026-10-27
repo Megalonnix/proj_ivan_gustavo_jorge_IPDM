@@ -32,7 +32,7 @@ Na **Aula 08**, combinamos dois movimentos opostos:
 2. **O freio (Regularização):** substituir o estimador de Mínimos Quadrados Ordinários (MQO), que minimiza apenas a soma dos quadrados dos resíduos ($\mathrm{RSS}$), por uma função objetivo que **cobra um pedágio (multa)** pelo tamanho dos coeficientes $\beta_j$ (sem penalizar o intercepto $\beta_0$). Padronizar as colunas de $\mathbf{X}$ antes de penalizar é obrigatório (`standardize = TRUE` no `glmnet`), pois a multa compara a magnitude dos $\beta_j$ entre si:
 
 $$
-\hat{\beta}^{\mathrm{MQO}} = \operatorname{arg\,min}_{\beta} \sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}\right)^2 = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}
+\hat{\beta}^{\mathrm{MQO}} = \arg\min_{\beta} \sum_{i=1}^{n} \left(y_i - \beta_0 - \sum_{j=1}^{p} \beta_j x_{ij}\right)^2 = (\mathbf{X}^\top \mathbf{X})^{-1}\mathbf{X}^\top \mathbf{y}
 $$
 
 ### Os Três Sabores de Penalidade
@@ -40,7 +40,7 @@ $$
 **1. Ridge ($L_2$, $\alpha = 0$):** penaliza a **soma dos quadrados** dos coeficientes:
 
 $$
-\hat{\beta}^{\mathrm{Ridge}} = \operatorname{arg\,min}_{\beta} \left[ \mathrm{RSS} + \lambda \sum_{j=1}^{p} \beta_j^2 \right] = (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top \mathbf{y}
+\hat{\beta}^{\mathrm{Ridge}} = \arg\min_{\beta} \left[ \mathrm{RSS} + \lambda \sum_{j=1}^{p} \beta_j^2 \right] = (\mathbf{X}^\top \mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^\top \mathbf{y}
 $$
 
 - Somar $\lambda \mathbf{I}$ na diagonal de $\mathbf{X}^\top \mathbf{X}$ estabiliza a inversão matricial sob colinearidade.
@@ -49,7 +49,7 @@ $$
 **2. Lasso ($L_1$, $\alpha = 1$):** penaliza a **soma dos módulos (valores absolutos)**:
 
 $$
-\hat{\beta}^{\mathrm{Lasso}} = \operatorname{arg\,min}_{\beta} \left[ \mathrm{RSS} + \lambda \sum_{j=1}^{p} \lvert\beta_j\rvert \right]
+\hat{\beta}^{\mathrm{Lasso}} = \arg\min_{\beta} \left[ \mathrm{RSS} + \lambda \sum_{j=1}^{p} \lvert\beta_j\rvert \right]
 $$
 
 - Como o módulo $\lvert\beta_j\rvert$ mantém taxa de cobrança constante até a origem (região de restrição em forma de losango com quinas sobre os eixos), o Lasso **zera coeficientes exatamente**, fazendo **seleção automática de variáveis**.
@@ -57,7 +57,7 @@ $$
 **3. Elastic Net ($0 < \alpha < 1$):** combina os dois pedágios:
 
 $$
-\hat{\beta}^{\mathrm{ENet}} = \operatorname{arg\,min}_{\beta} \left[ \mathrm{RSS} + \lambda \left( (1 - \alpha)\sum_{j=1}^{p} \beta_j^2 + \alpha \sum_{j=1}^{p} \lvert\beta_j\rvert \right) \right]
+\hat{\beta}^{\mathrm{ENet}} = \arg\min_{\beta} \left[ \mathrm{RSS} + \lambda \left( (1 - \alpha)\sum_{j=1}^{p} \beta_j^2 + \alpha \sum_{j=1}^{p} \lvert\beta_j\rvert \right) \right]
 $$
 
 - Faz seleção esparsa como o Lasso, mas agrupa variáveis fortemente correlacionadas como o Ridge.
@@ -156,7 +156,7 @@ Dos **19 preditores candidatos**, o Lasso zerou **11 colunas de ruído/redundân
 ![Curva de validação cruzada do Lasso](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img1.png)
 *(Arquivo local: `estrutura/scriptsR/figuras/08-regularizacao_img1.png`)*
 
-- **Os três eixos:** embaixo, $\log(\lambda)$; à esquerda, o MSE de validação cruzada com barras de $\pm 1\,\mathrm{EP}$; em cima, o número de preditores sobreviventes ($\neq 0$) em cada nível de penalidade. As duas linhas tracejadas verticais marcam $\log(\lambda_{\mathrm{min}})$ e $\log(\lambda_{\mathrm{1se}})$.
+- **Os três eixos:** embaixo, $\log(\lambda)$; à esquerda, o MSE de validação cruzada com barras de $\pm 1$ EP; em cima, o número de preditores sobreviventes ($\neq 0$) em cada nível de penalidade. As duas linhas tracejadas verticais marcam $\log(\lambda_{\mathrm{min}})$ e $\log(\lambda_{\mathrm{1se}})$.
 
 ### Figura 2 — Curva em U do Ridge
 ![Curva de validação cruzada do Ridge](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/08-regularizacao_img2.png)
@@ -216,7 +216,7 @@ Para fundamentação teórica completa, apresentamos a resolução dos exercíci
 ### Parte B: Exercícios Conceituais (Slide 22/24)
 
 #### 1. Por que Padronizar?
-- **Explicação:** Se `area` está em $\mathrm{m}^2$ (ex.: $100\,\mathrm{m}^2$) e `dist_centro` em $\mathrm{km}$, trocar `area` para hectares ($0,01\,\mathrm{ha}$) multiplica a escala de $X_1$ por $10^{-4}$ e, portanto, multiplica seu coeficiente $\beta_1$ por $10^4$ para manter a mesma predição $\beta_1 X_1$. No **MQO**, como não há multa sobre $\beta_1$, a escala se compensa exatamente e as predições não mudam. Já no **Ridge/Lasso**, a penalidade $\lambda \sum \beta_j^2$ ou $\lambda \sum \lvert\beta_j\rvert$ puniria brutalmente o coeficiente em hectares apenas pela unidade escolhida! Padronizar ($z$-score) coloca todas as variáveis na mesma régua (desvio-padrão $1$).
+- **Explicação:** Se `area` está em $\mathrm{m}^2$ (ex.: $100\ \mathrm{m}^2$) e `dist_centro` em $\mathrm{km}$, trocar `area` para hectares ($0,01\ \mathrm{ha}$) multiplica a escala de $X_1$ por $10^{-4}$ e, portanto, multiplica seu coeficiente $\beta_1$ por $10^4$ para manter a mesma predição $\beta_1 X_1$. No **MQO**, como não há multa sobre $\beta_1$, a escala se compensa exatamente e as predições não mudam. Já no **Ridge/Lasso**, a penalidade $\lambda \sum \beta_j^2$ ou $\lambda \sum \lvert\beta_j\rvert$ puniria brutalmente o coeficiente em hectares apenas pela unidade escolhida! Padronizar ($z$-score) coloca todas as variáveis na mesma régua (desvio-padrão $1$).
 
 #### 2. Zera ou Não Zera?
 - **Custo marginal perto de zero:** Reduzir um coeficiente pequeno de $0,02$ para $0,00$ economiza no Ridge apenas $0,02^2 - 0^2 = 0,0004$ de penalidade (um ganho quadrático ínfimo que não compensa a piora no $\mathrm{RSS}$). No Lasso, a economia é linear: $\lvert 0,02\rvert - 0 = 0,02$, mantendo força suficiente para empurrar o coeficiente exatamente até zero.
