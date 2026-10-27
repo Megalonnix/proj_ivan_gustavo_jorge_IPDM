@@ -29,13 +29,13 @@ Seguindo a régua da **Aula 02 (slides 10 e 11)**, separamos rigorosamente o **t
 | `cod_ibge` | Identificador oficial do município (IBGE) | Identificador (qualitativa nominal) | `factor` / `character` | 9 códigos de 7 dígitos (rótulo, não número) |
 | `municipio` | Nome do município da Baixada Santista | Qualitativa nominal | `factor` (9 níveis) | Bertioga, Cubatão, ..., São Vicente |
 | `ano` | Ano da edição bienal do IPDM | Quantitativa discreta / ordinal | `integer` ou `factor` | 2014, 2016, 2018, 2020, 2022, 2024 |
-| `riqueza` | Indicador sintético de Riqueza | Quantitativa contínua | `numeric` (`double`) | $[0,321;\; 0,575]$ (índice $[0, 1]$) |
-| `longevidade` | Indicador sintético de Longevidade | Quantitativa contínua | `numeric` (`double`) | $[0,560;\; 0,756]$ (índice $[0, 1]$, **excluído**) |
-| `escolaridade` | Indicador sintético de Escolaridade | Quantitativa contínua | `numeric` (`double`) | $[0,334;\; 0,602]$ (índice $[0, 1]$) |
-| `ipdm` | Índice Paulista de Desenv. Municipal | Quantitativa contínua | `numeric` (`double`) | $[0,442;\; 0,604]$ (composto, **excluído**) |
-| `mortalidade_60_69` | **NOSSO ALVO ($Y$)** | Quantitativa contínua | `numeric` (`double`) | $[13,94;\; 33,00]$ (óbitos por mil hab.) |
-| `distorcao_em` | Atraso idade-série no Ensino Médio | Quantitativa contínua | `numeric` (`double`) | $[8,20;\; 26,80]$ (%) |
-| `pib_per_capita` | PIB municipal per capita | Quantitativa contínua | `numeric` (`double`) | $[20.064;\; 270.119]$ (reais de 2024) |
+| `riqueza` | Indicador sintético de Riqueza | Quantitativa contínua | `numeric` (`double`) | $[0,321; 0,575]$ (índice $[0, 1]$) |
+| `longevidade` | Indicador sintético de Longevidade | Quantitativa contínua | `numeric` (`double`) | $[0,560; 0,756]$ (índice $[0, 1]$, **excluído**) |
+| `escolaridade` | Indicador sintético de Escolaridade | Quantitativa contínua | `numeric` (`double`) | $[0,334; 0,602]$ (índice $[0, 1]$) |
+| `ipdm` | Índice Paulista de Desenv. Municipal | Quantitativa contínua | `numeric` (`double`) | $[0,442; 0,604]$ (composto, **excluído**) |
+| `mortalidade_60_69` | **NOSSO ALVO ($Y$)** | Quantitativa contínua | `numeric` (`double`) | $[13,94; 33,00]$ (óbitos por mil hab.) |
+| `distorcao_em` | Atraso idade-série no Ensino Médio | Quantitativa contínua | `numeric` (`double`) | $[8,20; 26,80]$ (%) |
+| `pib_per_capita` | PIB municipal per capita | Quantitativa contínua | `numeric` (`double`) | $[20.064; 270.119]$ (reais de 2024) |
 
 **Não há valores faltantes.** Zero NAs em todas as colunas. Isso é sorte — significa que
 não vamos precisar decidir entre imputar, descartar ou modelar os buracos. Uma preocupação

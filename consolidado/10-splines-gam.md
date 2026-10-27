@@ -17,8 +17,8 @@
 |---|---|---|---|
 | **03 / 05 / 07** | Polinômios Globais | Graus 1, 3 e 12 em `escolaridade` | Polinômio de grau alto (12) oscila violentamente nas bordas ($\mathrm{RMSE}_{\mathrm{CV}} = 240$) |
 | **08** | Regularização ($L_1/L_2$) | Ridge, Lasso e Elastic Net | O Lasso descarta ruído socioeconômico e retém `municipio`, `ano` e `riqueza` |
-| **09 (Oficina)** | Escolha da Pergunta | Efeitos fixos (`municipio + ano`) vs Logística | `municipio + ano` reduz $42,6\%$ do RMSE ($\mathrm{RMSE} = 2,20$) e domina a classificação ($\mathrm{AUC} = 0,89$) |
-| **09 (Suavização)** | KNN e Kernel | Médias locais em `riqueza` e `ano` | Kernel ($h=0,0070$) bate a reta em `riqueza` ($-7,2\%$ MSE), mas sofre com viés nas bordas e maldição da dimensionalidade para $p > 2$ |
+| **09 (Oficina)** | Escolha da Pergunta | Efeitos fixos (`municipio + ano`) vs Logística | `municipio + ano` reduz 42,6% do RMSE ($\mathrm{RMSE} = 2,20$) e domina a classificação ($\mathrm{AUC} = 0,89$) |
+| **09 (Suavização)** | KNN e Kernel | Médias locais em `riqueza` e `ano` | Kernel ($h=0,0070$) bate a reta em `riqueza` (-7,2% MSE), mas sofre com viés nas bordas e maldição da dimensionalidade para $p > 2$ |
 | **10** | **Splines e GAM** | **Polinômios por partes + modelos aditivos** | **Corrigimos a oscilação de borda (Spline Natural) e combinamos múltiplos preditores sem maldição da dimensionalidade (GAM)** |
 
 ---
@@ -105,7 +105,7 @@ Quando ajustamos o GAM com splines penalizadas (`mgcv::gam`), a validação cruz
 |---|---:|---|
 | `s(riqueza)` | **$1,00$** | Penalidade alta ($\lambda_1 \to \infty$): encolhido estritamente para uma **reta linear** ($1$ grau de liberdade) quando controlado pelos demais indicadores sociais |
 | `s(escolaridade)` | **$1,00$** | Penalidade alta ($\lambda_2 \to \infty$): reduzido a uma **reta horizontal** sem efeito significativo |
-| `s(distorcao_em)` | **$1,77$** | **Curva não-linear suave:** sobe acentuadamente entre $8\%$ e $17\%$ de distorção idade-série e **satura num platô** a partir de $18\%$ |
+| `s(distorcao_em)` | **$1,77$** | **Curva não-linear suave:** sobe acentuadamente entre 8% e 17% de distorção idade-série e **satura num platô** a partir de 18% |
 
 Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riqueza, k=4)`):
 - O suavizador temporal `s(ano)` recebe **$\mathrm{edf} = 3,91$**, desenhando com precisão a onda não-linear da pandemia de COVID-19 (estabilidade 2014–2018, explosão 2020–2022 e queda em 2024);
@@ -115,18 +115,18 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 
 | # | Modelo | Estrutura Funcional | CV(5) MSE | CV(5) RMSE | Ganho de MSE vs Base |
 |---|---|---|---|---:|---:|
-| 1 | **Linha de Base (Média)** | Constante ($\hat{y} = \bar{y}_{\mathrm{tr}}$) | $14,7647$ | $3,8425$ | $0,00\%$ |
-| 2 | **MQO Linear Múltiplo** | Rígido ($x_1 + x_2 + x_3$) | $15,0907$ | $3,8847$ | $-2,21\%$ |
-| 3 | **Melhor Spline Natural ($\mathrm{df}=4$)** | Semiparamétrico (`ns(x1, 4) + x2 + x3`) | **$14,4319$** | **$3,7989$** | **$+2,25\%$** |
-| 4 | **GAM Socioeconômico** | Aditivo ($s(x_1) + s(x_2) + s(x_3)$) | $15,5234$ | $3,9400$ | $-5,14\%$ |
-| 5 | **GAM Semiparamétrico Estrutural** | Painel (`municipio + s(ano) + s(x1)`) | **$5,5315$** | **$2,3519$** | **$+62,54\%$** |
+| 1 | **Linha de Base (Média)** | Constante ($\hat{y} = \bar{y}_{\mathrm{tr}}$) | $14,7647$ | $3,8425$ | 0,00% |
+| 2 | **MQO Linear Múltiplo** | Rígido ($x_1 + x_2 + x_3$) | $15,0907$ | $3,8847$ | -2,21% |
+| 3 | **Melhor Spline Natural ($\mathrm{df}=4$)** | Semiparamétrico (`ns(x1, 4) + x2 + x3`) | **$14,4319$** | **$3,7989$** | **+2,25%** |
+| 4 | **GAM Socioeconômico** | Aditivo ($s(x_1) + s(x_2) + s(x_3)$) | $15,5234$ | $3,9400$ | -5,14% |
+| 5 | **GAM Semiparamétrico Estrutural** | Painel (`municipio + s(ano) + s(x1)`) | **$5,5315$** | **$2,3519$** | **+62,54%** |
 
 ---
 
 ## 3. Frase de Diagnóstico da Relação (Requisito da Entrega)
 
 > **Frase para o dono do problema (Secretarias de Saúde da Baixada Santista):**  
-> *"Dentre os três indicadores socioeconômicos contínuos, o preditor que claramente não é uma reta no GAM é a **distorção idade-série no Ensino Médio (`distorcao_em`, $\mathrm{edf} = 1,77$)**: seu efeito parcial sobe fortemente entre $8\%$ e $17\%$ (+3,5 mortes por mil hab., funcionando como termômetro de vulnerabilidade social urbana), mas **satura num platô horizontal a partir de $18\%$**, onde novos aumentos da distorção escolar deixam de agravar a mortalidade de idosos. Já na análise marginal de `riqueza`, a **Spline Natural com $\mathrm{df} = 4$** supera a reta de MQO e a linha de base ($\mathrm{MSE}_{\mathrm{CV}} = 14,43$ vs $14,76$) ao capturar o desnível entre o litoral sul (Mongaguá/Itanhaém), Santos e o repique industrial de Cubatão sem oscilar nas bordas. Contudo, o salto preditivo decisivo ocorre quando integramos o GAM à estrutura da nossa Pergunta 1 (`municipio + s(ano) + s(riqueza)`), onde a spline temporal ($\mathrm{edf} = 3,91$) modela o choque pandêmico de 2020–2022 e reduz o erro quadrático médio em $62,5\%$ ($\mathrm{RMSE}_{\mathrm{CV}} = 2,35$ mortes por mil hab.)."*
+> *"Dentre os três indicadores socioeconômicos contínuos, o preditor que claramente não é uma reta no GAM é a **distorção idade-série no Ensino Médio (`distorcao_em`, $\mathrm{edf} = 1,77$)**: seu efeito parcial sobe fortemente entre 8% e 17% (+3,5 mortes por mil hab., funcionando como termômetro de vulnerabilidade social urbana), mas **satura num platô horizontal a partir de 18%**, onde novos aumentos da distorção escolar deixam de agravar a mortalidade de idosos. Já na análise marginal de `riqueza`, a **Spline Natural com $\mathrm{df} = 4$** supera a reta de MQO e a linha de base ($\mathrm{MSE}_{\mathrm{CV}} = 14,43$ vs $14,76$) ao capturar o desnível entre o litoral sul (Mongaguá/Itanhaém), Santos e o repique industrial de Cubatão sem oscilar nas bordas. Contudo, o salto preditivo decisivo ocorre quando integramos o GAM à estrutura da nossa Pergunta 1 (`municipio + s(ano) + s(riqueza)`), onde a spline temporal ($\mathrm{edf} = 3,91$) modela o choque pandêmico de 2020–2022 e reduz o erro quadrático médio em 62,5% ($\mathrm{RMSE}_{\mathrm{CV}} = 2,35$ mortes por mil hab.)."*
 
 ---
 
@@ -164,7 +164,7 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 ![Efeito parcial de distorção idade-série](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/10-splines-gam_img4.png)
 *(Arquivo local: `estrutura/scriptsR/figuras/10-splines-gam_img4.png`)*
 
-- Esta figura isola a descoberta não-linear do GAM socioeconômico: municípios com baixa distorção escolar ($8\%$ a $12\%$, como Santos) têm efeito parcial negativo sobre a mortalidade (cerca de $-2$ a $-3$ mortes/mil hab.). Conforme a distorção avança até $17\%$, o efeito parcial sobe para $+1$ morte/mil hab., estabilizando num **platô de saturação** entre $18\%$ e $27\%$.
+- Esta figura isola a descoberta não-linear do GAM socioeconômico: municípios com baixa distorção escolar (8% a 12%, como Santos) têm efeito parcial negativo sobre a mortalidade (cerca de $-2$ a $-3$ mortes/mil hab.). Conforme a distorção avança até 17%, o efeito parcial sobe para $+1$ morte/mil hab., estabilizando num **platô de saturação** entre 18% e 27%.
 
 ---
 

@@ -185,13 +185,13 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 *Resolução:*
 - **Caso $h = 10$:**
   - $z_i = (x_i - 74)/10$: $z = (-1,2; -0,4; +0,6; +2,2)$
-  - Pesos gaussianos $w_i = \phi(z_i)$: $w = (0,19419; \, 0,36827; \, 0,33322; \, 0,03547)$; soma $= 0,93115$
-  - Pesos normalizados $\tilde{w}_i$: **$20,85\%$** (62), **$39,55\%$** (70), **$35,79\%$** (80), **$3,81\%$** (96)
+  - Pesos gaussianos $w_i = \phi(z_i)$: $w = (0,19419; 0,36827; 0,33322; 0,03547)$; soma $= 0,93115$
+  - Pesos normalizados $\tilde{w}_i$: **20,85%** (62), **39,55%** (70), **35,79%** (80), **3,81%** (96)
   - Predição: $\hat{f}(74) = 0,2085(160) + 0,3955(210) + 0,3579(230) + 0,0381(300) = \mathbf{210,16}$
 - **Caso $h = 3$:**
   - $z_i = (x_i - 74)/3$: $z = (-4,0; -1,333; +2,0; +7,333)$
-  - Pesos gaussianos: $w = (0,00013; \, 0,16401; \, 0,05399; \, 0,00000)$; soma $= 0,21813$
-  - Pesos normalizados: **$0,06\%$** (62), **$75,19\%$** (70), **$24,75\%$** (80), **$0,00\%$** (96)
+  - Pesos gaussianos: $w = (0,00013; 0,16401; 0,05399; 0,00000)$; soma $= 0,21813$
+  - Pesos normalizados: **0,06%** (62), **75,19%** (70), **24,75%** (80), **0,00%** (96)
   - Predição: $\hat{f}(74) = 0,7519(210) + 0,2475(230) = \mathbf{214,92}$
   - *Quem ainda pesa?* Praticamente **apenas os vizinhos imediatos 70 (75,2%) e 80 (24,8%)**. O ponto 62 está a 4 bandas de distância e seu peso colapsa para 0,06%; o ponto 96 está a mais de 7 bandas e seu peso é zero.
 
@@ -212,9 +212,9 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 *Enunciado:* Com $p = 3$ e $p = 8$ preditores, que lado precisa ter a vizinhança cúbica que captura 10% dos dados uniformes em $[0,1]^p$? E quantas observações mantêm 10 vizinhos numa caixa de lado 0,1 quando $p = 4$?
 
 *Resolução:*
-1. O volume de uma caixa de lado $l$ em $p$ dimensões é $V = l^p$. Para capturar $10\%$ do volume ($V = 0,10$), o lado deve ser $l = 0,10^{1/p}$:
-   - Para $p = 3$: $l = 0,10^{1/3} = \mathbf{0,4642}$ (a vizinhança precisa cobrir $46,4\%$ de cada dimensão).
-   - Para $p = 8$: $l = 0,10^{1/8} = \mathbf{0,7499}$ (precisa cobrir $75,0\%$ de cada dimensão — quase o domínio inteiro!).
+1. O volume de uma caixa de lado $l$ em $p$ dimensões é $V = l^p$. Para capturar 10% do volume ($V = 0,10$), o lado deve ser $l = 0,10^{1/p}$:
+   - Para $p = 3$: $l = 0,10^{1/3} = \mathbf{0,4642}$ (a vizinhança precisa cobrir 46,4% de cada dimensão).
+   - Para $p = 8$: $l = 0,10^{1/8} = \mathbf{0,7499}$ (precisa cobrir 75,0% de cada dimensão — quase o domínio inteiro!).
 2. Para uma caixa fixa de lado $l = 0,10$ em $p = 4$:
    - O volume da caixa é $V = 0,1^4 = 0,0001$ ($1/10.000$ do espaço total).
    - Para que essa fração minúscula contenha em média 10 observações uniformes, a base precisa ter $n \approx \frac{10}{0,1^4} = 10 \times 10.000 = \mathbf{100.000}$ **observações**.
@@ -237,7 +237,7 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 - **"O preço de um imóvel de $300\ \mathrm{m}^2$, maior que todos da base":** O Kernel é completamente inadequado para extrapolação fora do suporte dos dados: longe de todos os pontos conhecidos, os pesos gaussianos chegam a zero e o modelo devolve `NaN` ou achata artificialmente. A reta paramétrica consegue extrapolar matematicamente ao longo de sua fórmula (embora com risco de extrapolação conceitual).
 
 #### 4. Muitos Preditores (A Maldição na Prática)
-- **Por que o colega com 40 preditores falhou no KNN?** Em 40 dimensões, o espaço hiperdimensional é incomensuravelmente vasto e vazio. Conforme vimos na conta da maldição ($l = 0,1^{1/40} \approx 0,944$), para encontrar qualquer vizinho é necessário cobrir praticamente $95\%$ de cada variável. Os pontos tornam-se todos equidistantes entre si, perdendo o conceito de vizinhança local; o KNN degenera em uma média global ruidosa.
+- **Por que o colega com 40 preditores falhou no KNN?** Em 40 dimensões, o espaço hiperdimensional é incomensuravelmente vasto e vazio. Conforme vimos na conta da maldição ($l = 0,1^{1/40} \approx 0,944$), para encontrar qualquer vizinho é necessário cobrir praticamente 95% de cada variável. Os pontos tornam-se todos equidistantes entre si, perdendo o conceito de vizinhança local; o KNN degenera em uma média global ruidosa.
 - **Dois caminhos de solução:**
   1. **Seleção e Regularização (Aula 08):** Aplicar o **Lasso ($L_1$)** para zerar preditores redundantes/irrelevantes, reduzindo drasticamente a dimensionalidade efetiva de 40 para apenas 2 a 4 variáveis dominantes antes de suavizar.
   2. **Modelos Aditivos Generalizados - GAM (Aula 10):** Decompor o problema multidimensional na soma de suavizadores unidimensionais independentes: $y = \beta_0 + f_1(x_1) + f_2(x_2) + \dots + f_p(x_p)$, evitando a maldição do produto tensorial de vizinhanças.

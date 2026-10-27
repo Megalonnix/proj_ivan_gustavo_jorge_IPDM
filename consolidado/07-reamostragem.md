@@ -239,42 +239,42 @@ $$
 \mathrm{LOOCV} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}_i}{1 - h_{ii}}\right)^2
 $$
 
-- **Erro-Padrão e Intervalo Percentílico Bootstrap:** Dada uma estatística $\hat{\theta} = s(D)$, geram-se $B$ amostras bootstrap $D^{*(1)}, \dots, D^{*(B)}$ de tamanho $n$ sorteadas **com reposição** de $D$ (em média, cada amostra bootstrap contém $1 - (1 - 1/n)^n \approx 1 - e^{-1} \approx 63{,}2\%$ das observações originais distintas). Calcula-se $\hat{\theta}^{*(b)} = s(D^{*(b)})$ e estima-se o erro-padrão empírico (onde $\bar{\theta}^* = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*(b)}$):
+- **Erro-Padrão e Intervalo Percentílico Bootstrap:** Dada uma estatística $\hat{\theta} = s(D)$, geram-se $B$ amostras bootstrap $D^{\ast(1)}, \dots, D^{\ast(B)}$ de tamanho $n$ sorteadas **com reposição** de $D$ (em média, cada amostra bootstrap contém $1 - (1 - 1/n)^n \approx 1 - e^{-1} \approx 63{,}2$% das observações originais distintas). Calcula-se $\hat{\theta}^{\ast(b)} = s(D^{\ast(b)})$ e estima-se o erro-padrão empírico (onde $\bar{\theta}^{\ast} = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{\ast(b)}$):
 
 $$
-\mathrm{EP}_{\mathrm{boot}}(\hat{\theta}) = \sqrt{\frac{1}{B - 1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\theta}^*\right)^2}
+\mathrm{EP}_{\mathrm{boot}}(\hat{\theta}) = \sqrt{\frac{1}{B - 1}\sum_{b=1}^{B}\left(\hat{\theta}^{\ast(b)} - \bar{\theta}^{\ast}\right)^2}
 $$
 
-O intervalo de confiança percentílico de $95\%$ é dado pelos quantis empíricos de ordem $2{,}5\%$ e $97{,}5\%$ de $\lbrace\hat{\theta}^{*(b)}\rbrace_{b=1}^B$: $\mathrm{IC}_{95\%}^{\mathrm{boot}} = \left[q_{0,025}^*;\; q_{0,975}^*\right]$.
+O intervalo de confiança percentílico de 95% é dado pelos quantis empíricos de ordem 2,5% e 97,5% de $\lbrace\hat{\theta}^{\ast(b)}\rbrace_{b=1}^B$: $\mathrm{IC}_{0,95}^{\mathrm{boot}} = \left[q_{0,025}^{\ast}; q_{0,975}^{\ast}\right]$.
 
 - **Frase síntese de entrega do Laboratório (Slide 20/20):**  
-  > *"O coeficiente de escolaridade ($\hat{\beta}_1 = -2{,}10$) **não é estatisticamente distinguível de zero**, pois seu intervalo de confiança bootstrap de 95% ($[-18{,}87;\; +11{,}81]$, com $\mathrm{EP}_{\mathrm{boot}} = 7{,}92$) atravessa o zero com ampla folga."*
+  > *"O coeficiente de escolaridade ($\hat{\beta}_1 = -2{,}10$) **não é estatisticamente distinguível de zero**, pois seu intervalo de confiança bootstrap de 95% ($[-18{,}87; +11{,}81]$, com $\mathrm{EP}_{\mathrm{boot}} = 7{,}92$) atravessa o zero com ampla folga."*
 
 ### 2. Exercícios de Cálculo (Slide 17/20 — Aula 07)
 
 1. **Cálculo direto de $\mathrm{CV}_{(5)}$ e RMSE:**  
-   Dados os erros quadráticos médios nas $k = 5$ dobras: $\mathrm{MSE}_j = (940,\; 1120,\; 860,\; 1310,\; 1020)$ (com $y$ em milhares de reais):
+   Dados os erros quadráticos médios nas $k = 5$ dobras: $\mathrm{MSE}_j = (940, 1120, 860, 1310, 1020)$ (com $y$ em milhares de reais):
    - Média das dobras: $\mathrm{CV}_{(5)} = \frac{940 + 1120 + 860 + 1310 + 1020}{5} = \frac{5.250}{5} = \mathbf{1.050}$ (mil reais ao quadrado).
    - Raiz do erro quadrático médio: $\mathrm{RMSE}_{\mathrm{CV}} = \sqrt{1.050} \approx \mathbf{32{,}40}$ **mil reais**.
 
 2. **Comparação de dois candidatos por $\mathrm{CV}_{(5)}$ (média vs. estabilidade entre dobras):**  
-   - **Candidato A:** dobras $(1210,\; 980,\; 1150,\; 1040,\; 1120)$  
+   - **Candidato A:** dobras $(1210, 980, 1150, 1040, 1120)$  
      - $\mathrm{CV}_{(5)}(A) = \frac{5.500}{5} = 1.100$, com desvio-padrão entre dobras $s_A = \sqrt{\frac{(110)^2 + (-120)^2 + 50^2 + (-60)^2 + 20^2}{4}} = \sqrt{8.250} \approx \mathbf{90{,}83}$.
-   - **Candidato B:** dobras $(1020,\; 1310,\; 760,\; 1440,\; 890)$  
+   - **Candidato B:** dobras $(1020, 1310, 760, 1440, 890)$  
      - $\mathrm{CV}_{(5)}(B) = \frac{5.420}{5} = 1.084$, com desvio-padrão entre dobras $s_B = \sqrt{\frac{(-64)^2 + 226^2 + (-324)^2 + 356^2 + (-194)^2}{4}} = \sqrt{81.130} \approx \mathbf{284{,}83}$.
-   - **Quem vence e o que mais chama atenção?** O Candidato B vence por margem mínima na média ($1.084$ contra $1.100$, diferença de $1{,}5\%$), mas apresenta **dispersão entre dobras mais de três vezes maior** ($s_B \approx 284{,}8$ vs. $s_A \approx 90{,}8$). Portanto, A é substancialmente mais estável e previsível fora da amostra, enquanto B sofre de alta variância dependendo da partição.
+   - **Quem vence e o que mais chama atenção?** O Candidato B vence por margem mínima na média ($1.084$ contra $1.100$, diferença de 1,5%), mas apresenta **dispersão entre dobras mais de três vezes maior** ($s_B \approx 284{,}8$ vs. $s_A \approx 90{,}8$). Portanto, A é substancialmente mais estável e previsível fora da amostra, enquanto B sofre de alta variância dependendo da partição.
 
 3. **Leitura de saída de Bootstrap ($B = 1.000$):**  
-   Dados $\hat{\theta} = 2{,}4$, $\mathrm{EP}_{\mathrm{boot}} = 0{,}3$ e $\mathrm{IC}_{95\%}^{\mathrm{boot}} = [1{,}85;\; 3{,}02]$:  
-   - **Leitura:** Estimamos o parâmetro em $2{,}4$ com incerteza típica de reamostragem de $\pm 0{,}3$; em $95\%$ das amostras bootstrap o parâmetro situou-se entre $1{,}85$ e $3{,}02$.  
-   - **O valor $\theta = 0$ é plausível?** **Não.** Como o zero está completamente fora do intervalo $[1{,}85;\; 3{,}02]$ (a mais de $6$ erros-padrão de distância de $\hat{\theta}$), há forte evidência estatística de que $\theta > 0$.
+   Dados $\hat{\theta} = 2{,}4$, $\mathrm{EP}_{\mathrm{boot}} = 0{,}3$ e $\mathrm{IC}_{0,95}^{\mathrm{boot}} = [1{,}85; 3{,}02]$:  
+   - **Leitura:** Estimamos o parâmetro em $2{,}4$ com incerteza típica de reamostragem de $\pm 0{,}3$; em 95% das amostras bootstrap o parâmetro situou-se entre $1{,}85$ e $3{,}02$.  
+   - **O valor $\theta = 0$ é plausível?** **Não.** Como o zero está completamente fora do intervalo $[1{,}85; 3{,}02]$ (a mais de $6$ erros-padrão de distância de $\hat{\theta}$), há forte evidência estatística de que $\theta > 0$.
 
 ### 3. Exercícios Conceituais (Slide 18/20 — Aula 07)
 
 1. **As duas queixas da divisão única:**  
    A divisão única 70/30 sofre de (i) **alta variância da avaliação** (o MSE de teste muda drasticamente conforme a semente do sorteio, como demonstramos nos 200 splits da Atividade 05) e (ii) **viés pessimista / desperdício de dados** (apenas 70% das observações são usadas para treinar o modelo, o que em bases pequenas como $n = 54$ empobrece o ajuste). A validação cruzada $k$-fold reduz a variância ao promediar o erro sobre $k$ dobras onde cada ponto é testado exatamente uma vez, e reduz o viés pessimista ao treinar cada modelo com $(k-1)/k$ (80% ou 90%) da base.
 2. **Escolha do tamanho de $k$ na CV:**  
-   - **Se $k$ for muito pequeno (ex.: $k = 2$):** Cada modelo é treinado com apenas metade dos dados ($50\%$), o que superestima o erro de teste real (alto viés pessimista na estimativa do erro).  
+   - **Se $k$ for muito pequeno (ex.: $k = 2$):** Cada modelo é treinado com apenas metade dos dados (50%), o que superestima o erro de teste real (alto viés pessimista na estimativa do erro).  
    - **Se $k$ for muito grande (ex.: $k = n$, LOOCV):** Os $n$ conjuntos de treinamento compartilham $n - 2$ observações idênticas, tornando os modelos ajustados fortemente correlacionados entre si e exigindo alto custo computacional (além de maior variância na média das $n$ avaliações). Por isso $k = 5$ ou $k = 10$ são o ponto de equilíbrio padrão.
 3. **Padronização dentro do laço da CV:**  
    Padronizar as variáveis (subtrair a média e dividir pelo desvio-padrão da base inteira) **antes** de entrar no laço das $k$ dobras usa a média e a variância das observações da dobra de validação $D_j$ para escalar o treino $D^{(-j)}$, configurando **vazamento de dados (*data leakage*)**. A padronização correta deve calcular $\bar{x}^{(-j)}$ e $s_x^{(-j)}$ exclusivamente dentro das $k-1$ dobras de treino e aplicar essa mesma transformação linear à dobra $j$ de validação.

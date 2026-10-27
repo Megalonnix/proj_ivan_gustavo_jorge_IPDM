@@ -207,7 +207,7 @@ $$
 
 - **Qual distribuição usar?** (a) Nº de peças defeituosas em um lote fixo de $n=100$: **Binomial$(100, p)$**; (b) Tempo contínuo até o próximo cliente entrar na loja: **Exponencial$(\lambda)$**; (c) Resultado único de cara ou coroa ($0/1$): **Bernoulli$(p)$**.
 - **Discreta ou contínua?** Nº de filhos: **discreta** (contagem); tempo de espera: **contínua** (medida); nº de e-mails/dia: **discreta** (contagem, modelo Poisson); temperatura: **contínua** (medida).
-- **Lendo um boxplot:** A **caixa** delimita o intervalo interquartil ($Q_1$, percentil $25\%$, até $Q_3$, percentil $75\%$, cobrindo os $50\%$ centrais dos dados); a **linha central** marca a **mediana** ($Q_2$); os **pontos além dos bigodes** ($Q_1 - 1,5\ \mathrm{IQR}$ ou $Q_3 + 1,5\ \mathrm{IQR}$) sinalizam **valores atípicos (*outliers*)**.
+- **Lendo um boxplot:** A **caixa** delimita o intervalo interquartil ($Q_1$, percentil 25%, até $Q_3$, percentil 75%, cobrindo os 50% centrais dos dados); a **linha central** marca a **mediana** ($Q_2$); os **pontos além dos bigodes** ($Q_1 - 1,5\ \mathrm{IQR}$ ou $Q_3 + 1,5\ \mathrm{IQR}$) sinalizam **valores atípicos (*outliers*)**.
 
 ---
 

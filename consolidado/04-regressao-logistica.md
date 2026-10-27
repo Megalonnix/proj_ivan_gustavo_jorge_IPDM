@@ -289,7 +289,7 @@ $$
 p(X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X)}} \iff \frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1 X} \iff \mathrm{logit}(p) = \log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1 X
 $$
 
-- **Fronteira de decisão ($p = 0,5$):** ocorre quando $\mathrm{logit}(p) = 0 \implies x^* = -\beta_0 / \beta_1$.
+- **Fronteira de decisão ($p = 0,5$):** ocorre quando $\mathrm{logit}(p) = 0 \implies x^{\ast} = -\beta_0 / \beta_1$.
 - **Estimação por Máxima Verossimilhança:** os parâmetros $\hat{\beta}$ maximizam a probabilidade conjunta dos dados observados:
 
 $$
@@ -299,27 +299,27 @@ $$
 ### 2. Custo de Erro e Escolha do Limiar no Problema da Baixada Santista (Requisito do Lab)
 
 > **Qual erro (FP ou FN) custa mais caro no nosso problema — e que limiar usar?**  
-> Na vigilância epidemiológica da mortalidade de 60 a 69 anos pelas Secretarias de Saúde da Baixada Santista, um **Falso Negativo (FN)** significa deixar de sinalizar um município-ano que sofrerá alta mortalidade idosa (subalocando equipes e leitos onde vidas serão perdidas), enquanto um **Falso Positivo (FP)** significa apenas intensificar preventivamente a atenção básica em um município que acabará ficando abaixo da mediana. Portanto, **o Falso Negativo (FN) custa muito mais caro social e sanitariamente**. Para priorizar o **Recall (sensibilidade)** e reduzir os FNs, deve-se adotar um **limiar mais baixo e sensível** (como $c = 0,30$ ou o ponto ótimo de Youden $c = 0,477$, onde o recall sobe para $81,5\%$).
+> Na vigilância epidemiológica da mortalidade de 60 a 69 anos pelas Secretarias de Saúde da Baixada Santista, um **Falso Negativo (FN)** significa deixar de sinalizar um município-ano que sofrerá alta mortalidade idosa (subalocando equipes e leitos onde vidas serão perdidas), enquanto um **Falso Positivo (FP)** significa apenas intensificar preventivamente a atenção básica em um município que acabará ficando abaixo da mediana. Portanto, **o Falso Negativo (FN) custa muito mais caro social e sanitariamente**. Para priorizar o **Recall (sensibilidade)** e reduzir os FNs, deve-se adotar um **limiar mais baixo e sensível** (como $c = 0,30$ ou o ponto ótimo de Youden $c = 0,477$, onde o recall sobe para 81,5%).
 
 ### 3. Resolução dos Exercícios de Cálculo da Aula 05 (Slide 23/27)
 
 1. **Chances para $p = 0,8$:**
    - Cálculo: $\mathrm{odds} = \frac{p}{1 - p} = \frac{0,8}{1 - 0,8} = \frac{0,8}{0,2} = \mathbf{4,0}$ (leitura: "chances de 4 para 1 a favor").
-2. **Cadeia completa para $\mathrm{logit}(p) = -1 + 0,5x$ em $x = 2$ e ponto de virada $x^*$:**
+2. **Cadeia completa para $\mathrm{logit}(p) = -1 + 0,5x$ em $x = 2$ e ponto de virada $x^{\ast}$:**
    - Para $x = 2$: $\mathrm{logit}(p) = -1 + 0,5(2) = \mathbf{0}$; $\mathrm{odds} = e^0 = \mathbf{1,0}$; $p = \frac{1}{1 + 1} = \mathbf{0,50}$.
-   - Ponto de virada: $x^* = -\beta_0 / \beta_1 = -(-1)/0,5 = \mathbf{2,0}$. Percebe-se que $x = 2$ é exatamente a fronteira de decisão onde a probabilidade empata em $50\%$ ($\mathrm{logit} = 0$ e $\mathrm{odds} = 1$).
+   - Ponto de virada: $x^{\ast} = -\beta_0 / \beta_1 = -(-1)/0,5 = \mathbf{2,0}$. Percebe-se que $x = 2$ é exatamente a fronteira de decisão onde a probabilidade empata em 50% ($\mathrm{logit} = 0$ e $\mathrm{odds} = 1$).
 3. **Métricas da Matriz de Confusão ($\mathrm{VP} = 50, \mathrm{FP} = 5, \mathrm{FN} = 25, \mathrm{VN} = 120$; total $= 200$):**
-   - **Acurácia:** $\frac{\mathrm{VP} + \mathrm{VN}}{200} = \frac{50 + 120}{200} = \frac{170}{200} = \mathbf{0,850}$ ($85,0\%$).
-   - **Precisão:** $\frac{\mathrm{VP}}{\mathrm{VP} + \mathrm{FP}} = \frac{50}{50 + 5} = \frac{50}{55} \approx \mathbf{0,909}$ ($90,9\%$).
-   - **Recall (Sensibilidade):** $\frac{\mathrm{VP}}{\mathrm{VP} + \mathrm{FN}} = \frac{50}{50 + 25} = \frac{50}{75} \approx \mathbf{0,667}$ ($66,7\%$).
-   - *Frase interpretando o recall:* Entre todos os casos que eram **realmente positivos** ($75$ clientes), o modelo conseguiu detectar dois terços ($66,7\%$), deixando escapar $1$ em cada $3$ positivos como falso negativo.
+   - **Acurácia:** $\frac{\mathrm{VP} + \mathrm{VN}}{200} = \frac{50 + 120}{200} = \frac{170}{200} = \mathbf{0,850}$ (85,0%).
+   - **Precisão:** $\frac{\mathrm{VP}}{\mathrm{VP} + \mathrm{FP}} = \frac{50}{50 + 5} = \frac{50}{55} \approx \mathbf{0,909}$ (90,9%).
+   - **Recall (Sensibilidade):** $\frac{\mathrm{VP}}{\mathrm{VP} + \mathrm{FN}} = \frac{50}{50 + 25} = \frac{50}{75} \approx \mathbf{0,667}$ (66,7%).
+   - *Frase interpretando o recall:* Entre todos os casos que eram **realmente positivos** ($75$ clientes), o modelo conseguiu detectar dois terços (66,7%), deixando escapar $1$ em cada $3$ positivos como falso negativo.
 
 ### 4. Resolução dos Exercícios Conceituais da Aula 05 (Slide 24/27)
 
 - **Por que a reta linear não serve para prever probabilidade?** Por dois motivos: (1) para valores extremos de $X$, uma reta $\beta_0 + \beta_1 X$ prevê probabilidades **menores que $0$ ou maiores que $1$**, o que é matematicamente impossível; (2) a transição real de probabilidade entre $0$ e $1$ é não-linear (satura nas pontas em formato de **S**), violando a linearidade e a homocedasticidade.
 - **Razão de chances para $\hat{\beta}_1 = 1,1$ e $\hat{\beta}_1 = -1,1$:**
-  - Se $\hat{\beta}_1 = +1,1$: a cada $+1$ unidade no preditor, as chances são multiplicadas por $e^{1,1} \approx \mathbf{3,004}$ (triplicam, subindo $+200,4\%$).
-  - Se $\hat{\beta}_1 = -1,1$: a cada $+1$ no preditor, as chances são multiplicadas por $e^{-1,1} \approx \mathbf{0,333}$ (caem para um terço do valor anterior, redução de $-66,7\%$).
+  - Se $\hat{\beta}_1 = +1,1$: a cada $+1$ unidade no preditor, as chances são multiplicadas por $e^{1,1} \approx \mathbf{3,004}$ (triplicam, subindo +200,4%).
+  - Se $\hat{\beta}_1 = -1,1$: a cada $+1$ no preditor, as chances são multiplicadas por $e^{-1,1} \approx \mathbf{0,333}$ (caem para um terço do valor anterior, redução de -66,7%).
 - **Limiar e custo no crédito bancário:** Se conceder empréstimo a um inadimplente (errar na concessão) custa muito mais caro ao banco do que perder os juros de um bom pagador negado, o banco deve ser **conservador** e exigir alta probabilidade de pagamento para aprovar — subindo o limiar para **$c = 0,7$**. Com isso, a **precisão sobe** (quase todo aprovado realmente paga), mas o **recall cai** (mais bons pagadores têm crédito negado).
 
 ---
