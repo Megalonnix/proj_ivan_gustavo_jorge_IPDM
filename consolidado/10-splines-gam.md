@@ -46,7 +46,7 @@ $$f(x) = \beta_0 + \beta_1 x + \beta_2 x^2 + \beta_3 x^3 + \sum_{k=1}^{K} \theta
 
 Uma spline cúbica comum ainda se comporta como um polinômio de grau 3 fora dos nós extremos ($x < \xi_1$ e $x > \xi_K$), onde há poucos dados e a variância da estimativa dispara. A **Spline Natural** impõe a restrição adicional de que a função seja **estritamente linear além dos nós de fronteira** ($f''(x) = f'''(x) = 0$ para $x < \xi_1$ e $x > \xi_K$).
 
-- Isso economiza $4$ graus de liberdade ($2$ em cada ponta), estabilizando drasticamente as bordas. Com $K$ nós (incluindo os 2 das bordas), uma spline natural possui exatamente **$K$ graus de liberdade** (incluindo o intercepto, ou $\text{df} = K - 1$ colunas em `ns(x, df)` no R).
+- Isso economiza $4$ graus de liberdade ($2$ em cada ponta), estabilizando drasticamente as bordas. Com $K$ nós internos e $2$ nós de fronteira ($K_{\text{total}} = K + 2$), uma spline natural possui exatamente **$K + 2$ graus de liberdade** (incluindo o intercepto, ou $\text{df} = K + 1$ colunas em `ns(x, df)` no R).
 
 ### 1.3. Splines de Suavização (`smooth.spline`) e Graus de Liberdade Efetivos ($\text{edf}$)
 
@@ -163,69 +163,112 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 
 ---
 
-## 5. Resolução Completa dos Exercícios da Aula 10
+## 5. Resolução Completa dos Exercícios da Aula 10 (Slides 29/32 e 30/32)
 
-Para fundamentação teórica completa do grupo, resolvemos a seguir os exercícios de cálculo e conceituais da Aula 10.
+Para fundamentação teórica completa do grupo, resolvemos passo a passo todos os exercícios dos slides 29/32 e 30/32 da Aula 10 (`Aula 10 - Splines e Modelos Aditivos.PDF`).
 
-### Parte A: Exercícios de Cálculo
+### Parte A: Exercícios de Cálculo (Slide 29/32)
 
-#### Exercício 1: Base de Potências Truncadas e Continuidade no Nó
-*Enunciado:* Considere a função spline cúbica com um único nó em $\xi = 5$:
-$$f(x) = 10 + 2x - 0,1x^2 + 0,5(x - 5)_+^3.$$
-Calcule $f(4)$, $f(5)$ e $f(7)$. Verifique o valor da primeira e da segunda derivada imediatamente à esquerda ($x \to 5^-$) e à direita ($x \to 5^+$) do nó.
+#### Exercício 1: Contagem de Parâmetros na Spline Cúbica e na Spline Natural ($K = 4$ nós)
+*Enunciado:* Spline cúbica com $K = 4$ nós: quantos coeficientes têm os 5 polinômios soltos, quantas restrições os nós impõem e quantos parâmetros sobram? E a spline natural com esses 4 nós internos e os 2 de fronteira?
 
 *Resolução:*
-1. **Avaliação nos pontos:**
-   - Para $x = 4 \le 5$: o termo truncado $(4 - 5)_+^3 = 0$.
-     $$f(4) = 10 + 2(4) - 0,1(16) + 0 = 10 + 8 - 1,6 = \mathbf{16,4}.$$
-   - Para $x = 5$: $(5 - 5)_+^3 = 0$.
-     $$f(5) = 10 + 2(5) - 0,1(25) + 0 = 10 + 10 - 2,5 = \mathbf{17,5}.$$
-   - Para $x = 7 > 5$: o termo truncado liga e vale $(7 - 5)^3 = 2^3 = 8$.
-     $$f(7) = 10 + 2(7) - 0,1(49) + 0,5(8) = 10 + 14 - 4,9 + 4,0 = \mathbf{23,1}.$$
-2. **Derivadas em $x = 5$:**
-   - Para $x < 5$: $f'(x) = 2 - 0,2x$ e $f''(x) = -0,2$. Em $x \to 5^-$: $f'(5^-) = 2 - 1 = \mathbf{1,0}$ e $f''(5^-) = \mathbf{-0,2}$.
-   - Para $x > 5$: $f'(x) = 2 - 0,2x + 1,5(x-5)^2$ e $f''(x) = -0,2 + 3,0(x-5)$. Em $x \to 5^+$: $f'(5^+) = \mathbf{1,0}$ e $f''(5^+) = \mathbf{-0,2}$.
-   - *Conclusão:* $f$, $f'$ e $f''$ coincidem exatamente em $x = 5$, provando que a emenda cúbica é invisível (classe $C^2$).
+1. **Polinômios cúbicos soltos:** Com $K = 4$ nós, o eixo é dividido em $K + 1 = 5$ pedaços. Cada polinômio cúbico ($a + bx + cx^2 + dx^3$) tem $4$ coeficientes, totalizando:
+   $$5 \times 4 = \mathbf{20\text{ coeficientes soltos}}.$$
+2. **Restrições impostas pelos nós:** Em cada um dos $K = 4$ nós, exigimos continuidade do valor da função ($f$), da primeira derivada ($f'$) e da segunda derivada ($f''$), ou seja, $3$ restrições por nó:
+   $$4 \times 3 = \mathbf{12\text{ restrições}}.$$
+3. **Parâmetros livres na spline cúbica comum:**
+   $$20 - 12 = \mathbf{8\text{ parâmetros livres}} \quad (\text{fórmula geral: } K + 4 = 4 + 4 = 8).$$
+4. **Spline natural com 4 nós internos e 2 de fronteira ($K_{\text{total}} = 6$ nós):**
+   Uma spline cúbica com $6$ nós teria $6 + 4 = 10$ parâmetros. Porém, a spline natural exige que a curva seja uma **reta** ($f'' = 0$ e $f''' = 0$) antes do primeiro nó de fronteira e depois do último ($2 \times 2 = 4$ restrições extras nas pontas):
+   $$10 - 4 = \mathbf{6\text{ parâmetros livres}} \quad (\text{ou } K_{\text{internos}} + 2 = 4 + 2 = 6).$$
 
 ---
 
-#### Exercício 2: Contagem de Graus de Liberdade (Spline Cúbica vs. Spline Natural)
-*Enunciado:* Quantos parâmetros (incluindo o intercepto) possui uma spline cúbica comum com $K = 4$ nós internos? E se impusermos a condição de contorno de uma spline cúbica natural com os mesmos 4 nós internos (totalizando 6 nós com os 2 de fronteira)?
+#### Exercício 2: Base Truncada Linear por Pedaços e Continuidade no Nó
+*Enunciado:* Seja $f(x) = 100 + 2x + 3(x - 50)_+ - 4(x - 80)_+$, com $(u)_+ = \max(u, 0)$. Calcule $f(40), f(50), f(60)$ e $f(100)$ e a inclinação em cada pedaço. A curva é contínua em $x = 50$?
 
 *Resolução:*
-1. **Spline cúbica comum com $K = 4$ nós internos:**
-   $$\text{df} = 4 \text{ (polinômio cúbico base: } 1, x, x^2, x^3\text{)} + 4 \text{ (funções truncadas nos nós)} = \mathbf{8 \text{ parâmetros}}.$$
-   *(No R, `bs(x, knots = c(...), degree = 3)` cria $7$ colunas + $1$ intercepto do `lm` $= 8$).*
-2. **Spline cúbica natural com 4 nós internos + 2 de fronteira ($K_{\text{total}} = 6$):**
-   Partimos de uma spline cúbica com 6 nós ($6 + 4 = 10$ parâmetros) e descontamos $4$ restrições lineares nas duas extremidades ($f'' = f''' = 0$ à esquerda do primeiro nó e à direita do último):
-   $$\text{df}_{\text{natural}} = 10 - 4 = \mathbf{6 \text{ parâmetros}} \quad (\text{ou } 5 \text{ colunas em } \texttt{ns(x, df = 5)} + \text{intercepto}).$$
+1. **Valores de $f(x)$:**
+   - Em $x = 40$: ambos os termos truncados estão desligados ($40 \le 50$ e $40 \le 80$):
+     $$f(40) = 100 + 2(40) + 0 - 0 = \mathbf{180}.$$
+   - Em $x = 50$: $(50 - 50)_+ = 0$ e $(50 - 80)_+ = 0$:
+     $$f(50) = 100 + 2(50) + 0 - 0 = \mathbf{200}.$$
+   - Em $x = 60$: o primeiro nó ($50$) está ligado e o segundo ($80$) desligado:
+     $$f(60) = 100 + 2(60) + 3(60 - 50) - 0 = 220 + 30 = \mathbf{250}.$$
+   - Em $x = 100$: ambos os nós ($50$ e $80$) estão ligados:
+     $$f(100) = 100 + 2(100) + 3(100 - 50) - 4(100 - 80) = 300 + 150 - 80 = \mathbf{370}.$$
+2. **Inclinação ($f'(x)$) em cada pedaço:**
+   - **Pedaço 1 ($x < 50$):** $f(x) = 100 + 2x \implies \text{inclinação} = \mathbf{+2}$.
+   - **Pedaço 2 ($50 < x < 80$):** $f(x) = 100 + 2x + 3(x - 50) = -50 + 5x \implies \text{inclinação} = 2 + 3 = \mathbf{+5}$.
+   - **Pedaço 3 ($x > 80$):** $f(x) = -50 + 5x - 4(x - 80) = 270 + 1x \implies \text{inclinação} = 5 - 4 = \mathbf{+1}$.
+3. **Continuidade em $x = 50$:** **Sim, a curva é contínua em $x = 50$**, pois o limite pela esquerda $\lim_{x \to 50^-} (100 + 2x) = 200$ coincide exatamente com o limite pela direita $\lim_{x \to 50^+} [100 + 2x + 3(x-50)] = 200$. (Como as potências truncadas são de grau 1, a função é contínua mas possui "quina" na inclinação, que pula de $+2$ para $+5$ em $x = 50$).
 
 ---
 
-#### Exercício 3: Limites de $\lambda$ e $\text{edf}$ na Spline de Suavização
-*Enunciado:* Na spline de suavização que minimiza $\text{RSS} + \lambda \int [f''(t)]^2 dt$ em uma amostra com $n = 54$ valores distintos de $x$: (a) para qual modelo $\hat{f}_\lambda$ converge quando $\lambda \to 0$ e qual o seu $\text{edf}$? (b) para qual modelo converge quando $\lambda \to \infty$ e qual o seu $\text{edf}$?
+#### Exercício 3: Pedágio de Curvatura $\int_0^1 g''(t)^2 dt$ e Seleção por $\lambda$
+*Enunciado:* Em $[0, 1]$, calcule o pedágio $\int_0^1 g''(t)^2 dt$ de $g_1(x) = 3 + 2x$, $g_2(x) = x^2$ e $g_3(x) = x^3$. Três curvas candidatas têm RSS 52, 30 e 12 e pedágios 0, 4 e 30: qual minimiza o critério com $\lambda = 0{,}1$, com $\lambda = 1$ e com $\lambda = 10$?
 
 *Resolução:*
-- **(a) Quando $\lambda \to 0$:** A penalidade desaparece. O modelo busca zerar o $\text{RSS}$, tornando-se uma **spline cúbica natural que interpola exatamente todos os $54$ pontos** ($\text{RSS} = 0$). Os graus de liberdade efetivos vão para o teto: **$\text{edf} \to n = 54$** (viés zero na amostra, variância máxima).
-- **(b) Quando $\lambda \to \infty$:** Qualquer segunda derivada $f''(t) \neq 0$ produz penalidade infinita. Para manter o custo finito, a solução força $f''(t) = 0$ em todo o domínio, o que implica $f(x) = \beta_0 + \beta_1 x$. O modelo converge exatamente para a **reta de Mínimos Quadrados Ordinários (MQO)**, com **$\text{edf} \to 2$** (intercepto e inclinação).
+1. **Cálculo dos pedágios de rugosidade em $[0, 1]$:**
+   - Para $g_1(x) = 3 + 2x$ (reta): $g_1'(x) = 2 \implies g_1''(x) = 0 \implies \int_0^1 0^2\,dt = \mathbf{0}$.
+   - Para $g_2(x) = x^2$ (parábola): $g_2'(x) = 2x \implies g_2''(x) = 2 \implies \int_0^1 2^2\,dt = \int_0^1 4\,dt = \mathbf{4}$.
+   - Para $g_3(x) = x^3$ (cúbica): $g_3'(x) = 3x^2 \implies g_3''(x) = 6x \implies \int_0^1 (6t)^2\,dt = 36\left[\frac{t^3}{3}\right]_0^1 = \mathbf{12}$.
+2. **Comparação das três curvas candidatas pelo critério $\text{Custo}(\lambda) = \text{RSS} + \lambda \cdot \text{Pedágio}$:**
+   - Candidata 1: $\text{RSS}_1 = 52$, $\text{Ped}_1 = 0 \implies \text{Custo}_1(\lambda) = 52 + 0\lambda = 52$.
+   - Candidata 2: $\text{RSS}_2 = 30$, $\text{Ped}_2 = 4 \implies \text{Custo}_2(\lambda) = 30 + 4\lambda$.
+   - Candidata 3: $\text{RSS}_3 = 12$, $\text{Ped}_3 = 30 \implies \text{Custo}_3(\lambda) = 12 + 30\lambda$.
+   - **Com $\lambda = 0{,}1$:** $\text{Custo}_1 = 52$; $\text{Custo}_2 = 30 + 0{,}4 = 30{,}4$; $\text{Custo}_3 = 12 + 3{,}0 = \mathbf{15{,}0} \implies$ **vence a Curva 3** (pouco freio: ganha quem cola melhor nos pontos).
+   - **Com $\lambda = 1$:** $\text{Custo}_1 = 52$; $\text{Custo}_2 = 30 + 4 = \mathbf{34}$; $\text{Custo}_3 = 12 + 30 = 42 \implies$ **vence a Curva 2** (compromisso intermediário entre ajuste e suavidade).
+   - **Com $\lambda = 10$:** $\text{Custo}_1 = \mathbf{52}$; $\text{Custo}_2 = 30 + 40 = 70$; $\text{Custo}_3 = 12 + 300 = 312 \implies$ **vence a Curva 1** (freio pesado: ganha a reta com pedágio zero).
 
 ---
 
-### Parte B: Exercícios Conceituais
+#### Exercício 4: Predição e Aditividade no GAM
+*Enunciado:* Um GAM deu $\hat{\beta}_0 = 340$ e, para um imóvel, $\hat{f}_{\text{área}} = -20$, $\hat{f}_{\text{praia}} = +60$ e $\hat{f}_{\text{idade}} = +26$. Qual é a predição? Se o imóvel estivesse a 2 km, com $\hat{f}_{\text{praia}} = -11$, quanto ela mudaria — e por que só um termo muda?
 
-#### 1. Por que Splines vencem Polinômios de Grau Alto?
-- **Localidade vs. Globalidade:** Em um polinômio global de grau $g$ (Aula 06/07), alterar um único ponto extremo (como Mongaguá em 2022) altera todos os coeficientes $\beta_1, \dots, \beta_g$, fazendo a curva inteira chicotear de ponta a ponta. Nas splines, as funções de base são **locais**: uma mudança em um ponto afeta apenas o segmento entre os nós vizinhos, mantendo o restante da curva estável.
-- **Comportamento nas bordas:** A Spline Natural obriga a função a sair como uma reta ($f''=0$) fora dos nós extremos, eliminando a explosão de variância nas pontas.
-
-#### 2. Como o GAM contorna a Maldição da Dimensionalidade — e o que ele sacrifica?
-- **Como contorna:** Na Aula 09, vimos que suavizar $p$ variáveis simultaneamente exige vizinhanças $p$-dimensionais que ficam vazias rapidamente. O GAM substitui a função geral $f(x_1, \dots, x_p)$ pela **soma de funções de uma variável** $f_1(x_1) + \dots + f_p(x_p)$. Como cada $f_j$ é estimada em dimensão $1$, a taxa de convergência estatística permanece próxima da unidimensional, mantendo a interpretabilidade através dos **gráficos de efeito parcial** (Figura 1).
-- **O que sacrifica:** A forma aditiva pura **não captura interações entre preditores** (termos do tipo $f_{12}(x_1, x_2)$ em que a inclinação de $x_1$ muda conforme o nível de $x_2$). Para capturar interações complexas automaticamente, precisaremos das **Árvores de Decisão e Ensembles** (Aulas 11 e 12).
+*Resolução:*
+1. **Predição inicial (a 500 m da praia):**
+   $$\hat{y} = \hat{\beta}_0 + \hat{f}_{\text{área}} + \hat{f}_{\text{praia}} + \hat{f}_{\text{idade}} = 340 - 20 + 60 + 26 = \mathbf{406\text{ mil R\$}}.$$
+2. **Nova predição a 2 km da praia ($\hat{f}_{\text{praia}} = -11$):**
+   $$\hat{y}_{\text{novo}} = 340 - 20 - 11 + 26 = \mathbf{335\text{ mil R\$}}.$$
+   A predição muda em $-11 - (+60) = \mathbf{-71\text{ mil R\$}}$ (cai 71 mil reais).
+3. **Por que só um termo muda?** Porque o GAM assume uma **estrutura puramente aditiva** ($y = \beta_0 + f_1(x_1) + f_2(x_2) + f_3(x_3)$), sem termos de interação entre preditores. Assim, cada função $f_j(x_j)$ depende unicamente da sua própria coordenada $x_j$: ao afastar o imóvel da praia mantendo a área e a idade iguais, apenas a parcela $\hat{f}_{\text{praia}}$ é alterada.
 
 ---
 
-## 6. Documentos Complementares
+### Parte B: Exercícios Conceituais (Slide 30/32)
 
-- 🧮 **Script gerador:** [`estrutura/scriptsR/10-splines-gam.R`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/10-splines-gam.R)
-- 📋 **Output técnico bruto:** [`estrutura/scriptsR/10-splines-gam.md`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/10-splines-gam.md)
-- 📎 **Consolidado anterior:** [`consolidado/09-metodos-suavizacao.md`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/09-metodos-suavizacao.md)
-- 📄 **Entrega Formal (Pergunta de Pesquisa):** [`consolidado/entrega-1-pergunta.pdf`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/entrega-1-pergunta.pdf)
+#### 1. Global $\times$ por pedaços
+- **Por que um polinômio de grau 10 oscila nas pontas e uma spline natural com 10 graus de liberdade não?**  
+  No polinômio global de grau 10, um único conjunto de coeficientes precisa ajustar simultaneamente o centro e as extremidades; para curvar no meio da amostra, as potências altas ($x^8, x^9, x^{10}$) crescem explosivamente nas bordas onde há poucos dados (*fenômeno de Runge*). Na **spline natural com $\text{df} = 10$**, os polinômios têm grau baixo (grau 3) e atuam localmente entre nós adjacentes; além disso, a condição de contorno natural obriga a segunda derivada a ser zero fora dos nós de fronteira, fazendo a curva seguir em **linha reta comportada nas duas pontas**.
+
+#### 2. Os dois botões (Spline de Regressão vs. Spline de Suavização)
+- **Qual é o botão de cada uma e para que lado aumenta a flexibilidade?**  
+  - Na **Spline de Regressão (`ns`/`bs`)**, o botão é o número de **graus de liberdade $\text{df}$** (ou número de nós $K$): quanto **maior o $\text{df}$**, **maior a flexibilidade**.  
+  - Na **Spline de Suavização (`smooth.spline`)**, o botão físico é a **penalidade $\lambda$** (quanto **menor o $\lambda$**, maior a flexibilidade) ou, equivalentemente, os **graus de liberdade efetivos $\text{df}_\lambda$** (quanto **maior o $\text{df}_\lambda$**, maior a flexibilidade).
+- **Por que a curva de validação cruzada da primeira saiu serrilhada e a da segunda, lisa?**  
+  Na spline de regressão, ao passar de $\text{df} = 4$ para $\text{df} = 5$, todos os nós internos mudam discretamente de posição (de quartis para quintis), fazendo os polinômios saltarem quando um nó cai perto de um degrau dos dados. Na spline de suavização, os nós estão fixos em todas as observações desde o início e variamos apenas o freio contínuo $\lambda$ (ou $\text{df}_\lambda$), gerando uma curva em U perfeitamente lisa.
+
+#### 3. Aditivo (Hipótese do GAM e Falha por Interação)
+- **O que o GAM supõe sobre os preditores?**  
+  Supõe **aditividade**: o efeito de cada preditor $X_j$ sobre a resposta $Y$ é uma curva $f_j(X_j)$ que se soma às demais sem depender do valor dos outros preditores (ausência de interações sinergéticas).
+- **Exemplo imobiliário onde a hipótese falha:**  
+  No mercado imobiliário da Baixada Santista, o valor adicional de $+1\text{ m}^2$ de área útil na avenida da praia (orla de Santos) é muito maior do que $+1\text{ m}^2$ a 5 km da praia (há uma **interação positiva $\text{área} \times \text{distância}$**). O GAM aditivo puro aplicaria a mesma curva média de área tanto na orla quanto no interior, **subestimando o preço de apartamentos grandes na beira-mar** e **superestimando o de apartamentos grandes longe da praia** (para corrigir, seria necessário incluir uma superfície de interação `ti(area, dist)` ou usar árvores de decisão na Aula 11).
+
+#### 4. O efeito de $1\text{ m}^2$ vs. o efeito de 1 ano de idade no GAM da aula
+- **A diretoria quer "o efeito de $1\text{ m}^2$ a mais no preço". O GAM da aula responde?**  
+  **Não com um único número fixo.** Como a área recebeu uma curva não-linear ($\text{edf} = 8{,}27$, com dois degraus), o efeito marginal de $+1\text{ m}^2$ é a derivada local $\hat{f}'_{\text{área}}(x)$, que muda conforme o tamanho do imóvel (vale cerca de R\$ 0,3 mil/m² no patamar plano de 120–170 m², mas salta para R\$ 3 a 4 mil/m² nas rampas dos degraus).
+- **E "o efeito de 1 ano a mais de idade"?**  
+  **Sim!** Como a penalidade do GAM encolheu a curva da idade automaticamente para uma reta ($\text{edf} = 1{,}00$), sua inclinação é constante em todo o domínio: cada ano a mais de idade reduz o preço em um valor fixo (cerca de $-1{,}68$ mil R\$ por ano, mantendo área e distância constantes).
+
+---
+
+## Documentos complementares
+
+- 🧮 [`10-splines-gam.R`](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/10-splines-gam.R) — script R reprodutível desta atividade.
+- 📋 [Relatório técnico bruto (`10-splines-gam.md`)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/estrutura/scriptsR/10-splines-gam.md).
+- 📎 [Consolidado 08 — Regularização](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/08-regularizacao.md).
+- 📎 [Consolidado 09 — Métodos de Suavização](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/09-metodos-suavizacao.md).
+- 📎 [Consolidado 09 — Escolha da Pergunta](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/09-escolha-da-pergunta.md).
+- 📄 [Artigo Formal — Entrega 1 (PDF)](https://github.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/blob/main/consolidado/entrega-1-pergunta.pdf).

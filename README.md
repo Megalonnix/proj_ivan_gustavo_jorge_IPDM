@@ -136,7 +136,9 @@ proj_ivan_gustavo_jorge_(IPDM)/
     ├── TAE_aula06.PDF
     ├── TAE_aula07.PDF
     ├── TAE_aula08.PDF
-    └── TEA_aula09.PDF
+    ├── TEA_aula09.PDF
+    ├── TAE_aula09_suavizacao.PDF
+    └── TAE_aula10.PDF
 ```
 
 | Pasta | O que é |
@@ -165,9 +167,9 @@ Os números de página referem-se aos marcadores do PDF das aulas em `slides_aul
 | 06 | [06-regressao-logistica-treino-teste.md](consolidado/06-regressao-logistica-treino-teste.md) | `estrutura/scriptsR/06-regressao-logistica-treino-teste.R` | Aula 06 | pág. 27 | Classificação honesta fora da amostra com binarização estrita pela mediana do treino (prevenção de *data leakage*) em split 70/30 e CV 5-fold |
 | 07 | [07-reamostragem.md](consolidado/07-reamostragem.md) | `estrutura/scriptsR/07-reamostragem.R` | Aula 07 | pág. 23 | Validação cruzada $k$-fold para seleção de grau polinomial ($d \in \{1, 3, 12\}$) e *Bootstrap* não-paramétrico ($B=2.000$) para $\text{EP}_{\text{boot}}$ e $\text{IC}_{95\%}$ |
 | 08 | [08-regularizacao.md](consolidado/08-regularizacao.md) | `estrutura/scriptsR/08-regularizacao.R` | Aula 08 | pág. 29 | Regularização Ridge ($\alpha=0$), Lasso ($\alpha=1$) e Elastic Net ($\alpha=0{,}5$), regra de 1 erro-padrão ($\lambda_{1se}$) e seleção esparsa em espaço expandido ($p=19$) |
-| 09 | [09-metodos-suavizacao.md](consolidado/09-metodos-suavizacao.md) | `estrutura/scriptsR/09-metodos-suavizacao.R` | Aula 09 | pág. 17 | Suavizadores lineares locais $\hat{\mathbf{y}}=\mathbf{S}\mathbf{y}$: KNN regressão e Nadaraya–Watson com kernel Gaussiano, calibrados por CV 5-fold |
-| 10 | [10-splines-gam.md](consolidado/10-splines-gam.md) | `estrutura/scriptsR/10-splines-gam.R` | Aula 10 | — | *Splines* cúbicos naturais (`splines::ns`), *smoothing splines* ($\lambda\int[f''(t)]^2dt$, $\text{edf}=\text{tr}(\mathbf{S}_\lambda)$) e GAM semiparamétrico (`mgcv::gam`) |
-| 11 | [09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md) e [entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf) | `estrutura/codigo/09-escolha-da-pergunta.R` e `consolidado/entrega-1-pergunta.Rnw` | Entrega 1 | — | Comparação empírica e teórica entre duas perguntas candidatas (regressão vs. classificação) e artigo técnico compilado via `knitr::knit2pdf` |
+| 09 | [09-metodos-suavizacao.md](consolidado/09-metodos-suavizacao.md) | `estrutura/scriptsR/09-metodos-suavizacao.R` | Aula 09 | pág. 26 | Suavizadores lineares locais $\hat{\mathbf{y}}=\mathbf{S}\mathbf{y}$: KNN regressão e Nadaraya–Watson com kernel Gaussiano, calibrados por CV 5-fold |
+| 10 | [10-splines-gam.md](consolidado/10-splines-gam.md) | `estrutura/scriptsR/10-splines-gam.R` | Aula 10 | pág. 35 | *Splines* cúbicos naturais (`splines::ns`), *smoothing splines* ($\lambda\int[f''(t)]^2dt$, $\text{edf}=\text{tr}(\mathbf{S}_\lambda)$) e GAM semiparamétrico (`mgcv::gam`) |
+| 11 | [09-escolha-da-pergunta.md](consolidado/09-escolha-da-pergunta.md) e [entrega-1-pergunta.pdf](consolidado/entrega-1-pergunta.pdf) | `estrutura/codigo/09-escolha-da-pergunta.R` e `consolidado/entrega-1-pergunta.Rnw` | Aula 09 (Oficina) | pág. 17 | Comparação empírica e teórica entre duas perguntas candidatas (regressão vs. classificação) e artigo técnico compilado via `knitr::knit2pdf` |
 
 ---
 
