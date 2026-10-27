@@ -227,34 +227,45 @@ Para consolidar o rigor teórico da **Aula 07** (`slides_aulas/TAE_aula07.PDF` �
 
 ### 1. Formulação Matemática da Validação Cruzada $k$-Fold e do Bootstrap
 
-- **Validação Cruzada em $k$ Dobras ($\text{CV}_{(k)}$):** Particiona-se o conjunto de dados $D = \{(x_i, y_i)\}_{i=1}^n$ em $k$ subconjuntos disjuntos $D_1, \dots, D_k$ de tamanhos aproximadamente iguais ($|D_j| \approx n/k$). Para cada dobra $j \in \{1, \dots, k\}$, ajusta-se o modelo $\hat{f}^{(-j)}$ nos dados restantes $D \setminus D_j$ e calcula-se o erro quadrático médio na dobra retida $D_j$:
-  $$\text{MSE}_j = \frac{1}{|D_j|}\sum_{i \in D_j}\left(y_i - \hat{f}^{(-j)}(x_i)\right)^2, \qquad \text{CV}_{(k)} = \frac{1}{k}\sum_{j=1}^{k}\text{MSE}_j$$
-  No caso limite $k = n$ (*Leave-One-Out Cross-Validation*, LOOCV), para um ajustador linear $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ com alavancagens $h_{ii} = (\mathbf{H})_{ii}$, vale o atalho algébrico fechado sem reajustar $n$ vezes:
-  $$\text{LOOCV} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}_i}{1 - h_{ii}}\right)^2$$
+- **Validação Cruzada em $k$ Dobras ($\mathrm{CV}_{(k)}$):** Particiona-se o conjunto de dados $D = \lbrace (x_i, y_i) \rbrace_{i=1}^n$ em $k$ subconjuntos disjuntos $D_1, \dots, D_k$ de tamanhos aproximadamente iguais ($\lvert D_j\rvert \approx n/k$). Para cada dobra $j \in \lbrace 1, \dots, k \rbrace$, ajusta-se o modelo $\hat{f}^{(-j)}$ nos dados restantes $D \setminus D_j$ e calcula-se o erro quadrático médio na dobra retida $D_j$:
 
-- **Erro-Padrão e Intervalo Percentílico Bootstrap:** Dada uma estatística $\hat{\theta} = s(D)$, geram-se $B$ amostras bootstrap $D^{*(1)}, \dots, D^{*(B)}$ de tamanho $n$ sorteadas **com reposição** de $D$ (em média, cada amostra bootstrap contém $1 - (1 - 1/n)^n \approx 1 - e^{-1} \approx 63{,}2\%$ das observações originais distintas). Calcula-se $\hat{\theta}^{*(b)} = s(D^{*(b)})$ e estima-se o erro-padrão empírico:
-  $$\text{EP}_{\text{boot}}(\hat{\theta}) = \sqrt{\frac{1}{B - 1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\theta}^*\right)^2}, \quad \text{onde } \bar{\theta}^* = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*(b)}$$
-  O intervalo de confiança percentílico de $95\%$ é dado pelos quantis empíricos de ordem $2{,}5\%$ e $97{,}5\%$ de $\{\hat{\theta}^{*(b)}\}_{b=1}^B$: $\text{IC}_{95\%}^{\text{boot}} = \left[q_{0,025}^*;\; q_{0,975}^*\right]$.
+$$
+\mathrm{MSE}_j = \frac{1}{\lvert D_j\rvert}\sum_{i \in D_j}\left(y_i - \hat{f}^{(-j)}(x_i)\right)^2, \qquad \mathrm{CV}_{(k)} = \frac{1}{k}\sum_{j=1}^{k}\mathrm{MSE}_j
+$$
+
+No caso limite $k = n$ (*Leave-One-Out Cross-Validation*, LOOCV), para um ajustador linear $\hat{\mathbf{y}} = \mathbf{H}\mathbf{y}$ com alavancagens $h_{ii} = (\mathbf{H})_{ii}$, vale o atalho algébrico fechado sem reajustar $n$ vezes:
+
+$$
+\mathrm{LOOCV} = \frac{1}{n}\sum_{i=1}^{n}\left(\frac{y_i - \hat{y}_i}{1 - h_{ii}}\right)^2
+$$
+
+- **Erro-Padrão e Intervalo Percentílico Bootstrap:** Dada uma estatística $\hat{\theta} = s(D)$, geram-se $B$ amostras bootstrap $D^{*(1)}, \dots, D^{*(B)}$ de tamanho $n$ sorteadas **com reposição** de $D$ (em média, cada amostra bootstrap contém $1 - (1 - 1/n)^n \approx 1 - e^{-1} \approx 63{,}2\%$ das observações originais distintas). Calcula-se $\hat{\theta}^{*(b)} = s(D^{*(b)})$ e estima-se o erro-padrão empírico (onde $\bar{\theta}^* = \frac{1}{B}\sum_{b=1}^{B}\hat{\theta}^{*(b)}$):
+
+$$
+\mathrm{EP}_{\mathrm{boot}}(\hat{\theta}) = \sqrt{\frac{1}{B - 1}\sum_{b=1}^{B}\left(\hat{\theta}^{*(b)} - \bar{\theta}^*\right)^2}
+$$
+
+O intervalo de confiança percentílico de $95\%$ é dado pelos quantis empíricos de ordem $2{,}5\%$ e $97{,}5\%$ de $\lbrace\hat{\theta}^{*(b)}\rbrace_{b=1}^B$: $\mathrm{IC}_{95\%}^{\mathrm{boot}} = \left[q_{0,025}^*;\; q_{0,975}^*\right]$.
 
 - **Frase síntese de entrega do Laboratório (Slide 20/20):**  
-  > *"O coeficiente de escolaridade ($\hat{\beta}_1 = -2{,}10$) **não é estatisticamente distinguível de zero**, pois seu intervalo de confiança bootstrap de 95% ($[-18{,}87;\; +11{,}81]$, com $\text{EP}_{\text{boot}} = 7{,}92$) atravessa o zero com ampla folga."*
+  > *"O coeficiente de escolaridade ($\hat{\beta}_1 = -2{,}10$) **não é estatisticamente distinguível de zero**, pois seu intervalo de confiança bootstrap de 95% ($[-18{,}87;\; +11{,}81]$, com $\mathrm{EP}_{\mathrm{boot}} = 7{,}92$) atravessa o zero com ampla folga."*
 
 ### 2. Exercícios de Cálculo (Slide 17/20 — Aula 07)
 
-1. **Cálculo direto de $\text{CV}_{(5)}$ e RMSE:**  
-   Dados os erros quadráticos médios nas $k = 5$ dobras: $\text{MSE}_j = (940,\; 1120,\; 860,\; 1310,\; 1020)$ (com $y$ em milhares de R\$):
-   $$\text{CV}_{(5)} = \frac{940 + 1120 + 860 + 1310 + 1020}{5} = \frac{5.250}{5} = 1.050\text{ (mil R\$)}^2$$
-   $$\text{RMSE}_{CV} = \sqrt{1.050} \approx 32{,}40\text{ mil reais}$$
+1. **Cálculo direto de $\mathrm{CV}_{(5)}$ e RMSE:**  
+   Dados os erros quadráticos médios nas $k = 5$ dobras: $\mathrm{MSE}_j = (940,\; 1120,\; 860,\; 1310,\; 1020)$ (com $y$ em milhares de reais):
+   - Média das dobras: $\mathrm{CV}_{(5)} = \frac{940 + 1120 + 860 + 1310 + 1020}{5} = \frac{5.250}{5} = \mathbf{1.050}$ (mil reais ao quadrado).
+   - Raiz do erro quadrático médio: $\mathrm{RMSE}_{\mathrm{CV}} = \sqrt{1.050} \approx \mathbf{32{,}40}$ **mil reais**.
 
-2. **Comparação de dois candidatos por $\text{CV}_{(5)}$ (média vs. estabilidade entre dobras):**  
+2. **Comparação de dois candidatos por $\mathrm{CV}_{(5)}$ (média vs. estabilidade entre dobras):**  
    - **Candidato A:** dobras $(1210,\; 980,\; 1150,\; 1040,\; 1120)$  
-     $$\text{CV}_{(5)}(A) = \frac{5.500}{5} = 1.100, \qquad s_A = \sqrt{\frac{(110)^2 + (-120)^2 + 50^2 + (-60)^2 + 20^2}{4}} = \sqrt{8.250} \approx 90{,}83$$
+     - $\mathrm{CV}_{(5)}(A) = \frac{5.500}{5} = 1.100$, com desvio-padrão entre dobras $s_A = \sqrt{\frac{(110)^2 + (-120)^2 + 50^2 + (-60)^2 + 20^2}{4}} = \sqrt{8.250} \approx \mathbf{90{,}83}$.
    - **Candidato B:** dobras $(1020,\; 1310,\; 760,\; 1440,\; 890)$  
-     $$\text{CV}_{(5)}(B) = \frac{5.420}{5} = 1.084, \qquad s_B = \sqrt{\frac{(-64)^2 + 226^2 + (-324)^2 + 356^2 + (-194)^2}{4}} = \sqrt{81.130} \approx 284{,}83$$
+     - $\mathrm{CV}_{(5)}(B) = \frac{5.420}{5} = 1.084$, com desvio-padrão entre dobras $s_B = \sqrt{\frac{(-64)^2 + 226^2 + (-324)^2 + 356^2 + (-194)^2}{4}} = \sqrt{81.130} \approx \mathbf{284{,}83}$.
    - **Quem vence e o que mais chama atenção?** O Candidato B vence por margem mínima na média ($1.084$ contra $1.100$, diferença de $1{,}5\%$), mas apresenta **dispersão entre dobras mais de três vezes maior** ($s_B \approx 284{,}8$ vs. $s_A \approx 90{,}8$). Portanto, A é substancialmente mais estável e previsível fora da amostra, enquanto B sofre de alta variância dependendo da partição.
 
 3. **Leitura de saída de Bootstrap ($B = 1.000$):**  
-   Dados $\hat{\theta} = 2{,}4$, $\text{EP}_{\text{boot}} = 0{,}3$ e $\text{IC}_{95\%}^{\text{boot}} = [1{,}85;\; 3{,}02]$:  
+   Dados $\hat{\theta} = 2{,}4$, $\mathrm{EP}_{\mathrm{boot}} = 0{,}3$ e $\mathrm{IC}_{95\%}^{\mathrm{boot}} = [1{,}85;\; 3{,}02]$:  
    - **Leitura:** Estimamos o parâmetro em $2{,}4$ com incerteza típica de reamostragem de $\pm 0{,}3$; em $95\%$ das amostras bootstrap o parâmetro situou-se entre $1{,}85$ e $3{,}02$.  
    - **O valor $\theta = 0$ é plausível?** **Não.** Como o zero está completamente fora do intervalo $[1{,}85;\; 3{,}02]$ (a mais de $6$ erros-padrão de distância de $\hat{\theta}$), há forte evidência estatística de que $\theta > 0$.
 

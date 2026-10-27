@@ -15,7 +15,7 @@
 
 Nos Blocos I e II do curso (Aulas 01 a 08), todos os modelos ajustados tinham uma **forma funcional rígida pré-estabelecida**:
 - Uma reta linear: $y = \beta_0 + \beta_1 x$ (Aula 04);
-- Uma curva logística em S: $\text{logit}(p) = X\beta$ (Aula 05);
+- Uma curva logística em S: $\mathrm{logit}(p) = X\beta$ (Aula 05);
 - Polinômios globais: $y = \beta_0 + \beta_1 x + \dots + \beta_d x^d$ (Aulas 06 e 07);
 - Penalizações para frear coeficientes: Ridge e Lasso (Aula 08).
 
@@ -52,20 +52,20 @@ Aplicamos exatamente o protocolo às 54 observações da Baixada Santista (9 mun
 |---|---|---|---|---|---|
 | **Reta (MQO)** | — (paramétrico) | Rígido global | **13,4295** | 3,6646 | *Linha de base (0,0%)* |
 | **KNN-regressão** | **$k = 20$** vizinhos | Média local uniforme | **12,5767** | 3,5464 | **-6,35%** |
-| **Kernel Smoothing** | **$h = 0,0070$** ($0,10 \times \text{sd}$) | Média ponderada gaussiana | **12,4573** | 3,5295 | **-7,24%** |
+| **Kernel Smoothing** | **$h = 0,0070$** ($0,10 \times \mathrm{sd}$) | Média ponderada gaussiana | **12,4573** | 3,5295 | **-7,24%** |
 
 #### Grade de Busca de $k$ (KNN):
-- $k = 3$: $\text{MSE} = 14,9243$ (alta variância, serrilha seguindo ruídos locais);
-- $k = 5$: $\text{MSE} = 12,7052$;
-- $k = 10$: $\text{MSE} = 12,9605$;
-- **$k = 20$**: **$\text{MSE} = 12,5767$** $\leftarrow$ **Mínimo global de CV**;
-- $k = 40$: $\text{MSE} = 14,6372$ (alto viés, quase a média global).
+- $k = 3$: $\mathrm{MSE} = 14,9243$ (alta variância, serrilha seguindo ruídos locais);
+- $k = 5$: $\mathrm{MSE} = 12,7052$;
+- $k = 10$: $\mathrm{MSE} = 12,9605$;
+- **$k = 20$**: **$\mathrm{MSE} = 12,5767$** $\leftarrow$ **Mínimo global de CV**;
+- $k = 40$: $\mathrm{MSE} = 14,6372$ (alto viés, quase a média global).
 
 #### Grade de Busca de $h$ (Kernel):
-- $h = 0,0035$ ($0,05 \times \text{sd}$): $\text{MSE} = 14,0373$ (janela estreita, excesso de oscilação local);
-- **$h = 0,0070$** ($0,10 \times \text{sd}$): **$\text{MSE} = 12,4573$** $\leftarrow$ **Melhor $h$ absoluto**;
-- $h = 0,0140$ ($0,20 \times \text{sd}$): $\text{MSE} = 12,9854$;
-- $h = 0,0280$ ($0,40 \times \text{sd}$): $\text{MSE} = 12,8697$ (sino largo, achatando inflexões).
+- $h = 0,0035$ ($0,05 \times \mathrm{sd}$): $\mathrm{MSE} = 14,0373$ (janela estreita, excesso de oscilação local);
+- **$h = 0,0070$** ($0,10 \times \mathrm{sd}$): **$\mathrm{MSE} = 12,4573$** $\leftarrow$ **Melhor $h$ absoluto**;
+- $h = 0,0140$ ($0,20 \times \mathrm{sd}$): $\mathrm{MSE} = 12,9854$;
+- $h = 0,0280$ ($0,40 \times \mathrm{sd}$): $\mathrm{MSE} = 12,8697$ (sino largo, achatando inflexões).
 
 ---
 
@@ -108,7 +108,7 @@ Conforme ensinado nos slides 13 e 15 da Aula 09:
 ![Efeito do Botão de Flexibilidade](https://raw.githubusercontent.com/Megalonnix/proj_ivan_gustavo_jorge_IPDM/main/estrutura/scriptsR/figuras/09-metodos-suavizacao_img3.png)
 *(Arquivo local: `estrutura/scriptsR/figuras/09-metodos-suavizacao_img3.png`)*
 
-- **Painel Esquerdo (Kernel):** Com $h = 0,0035$ ($0,05 \times \text{sd}$), o sino é tão estreito que a curva "treme" para capturar cada observação individual (overfitting local). Com $h = 0,0280$ ($0,40 \times \text{sd}$), o sino é largo demais e achata o relevo real da distribuição.
+- **Painel Esquerdo (Kernel):** Com $h = 0,0035$ ($0,05 \times \mathrm{sd}$), o sino é tão estreito que a curva "treme" para capturar cada observação individual (overfitting local). Com $h = 0,0280$ ($0,40 \times \mathrm{sd}$), o sino é largo demais e achata o relevo real da distribuição.
 - **Painel Direito (KNN):** Com $k = 3$, vemos o clássico aspecto "serrilhado", com saltos bruscos a cada ponto. Com $k = 40$, quase dois terços da amostra entram na janela, transformando o preditor num patamar estático.
 
 ---
@@ -119,7 +119,7 @@ Conforme ensinado nos slides 13 e 15 da Aula 09:
 
 Na nossa Pergunta 1 de pesquisa (`09-escolha-da-pergunta.md`), documentamos que o tempo (`ano`) exerce um papel determinante sobre a mortalidade de idosos devido ao **choque sanitário da COVID-19**.
 - Se tentarmos ajustar uma **reta paramétrica** para `ano`, o MSE de validação cruzada é desastroso (**$16,12$**), pois uma reta assume que a mortalidade sobe ou desce de forma monótona para sempre.
-- O **Kernel Nadaraya-Watson** com banda temporal $h = 0,86$ anos atinge **$\text{MSE} = 10,83$** (redução de 32,8% do erro!), capturando com perfeição o ciclo epidemiológico real:
+- O **Kernel Nadaraya-Watson** com banda temporal $h = 0,86$ anos atinge **$\mathrm{MSE} = 10,83$** (redução de 32,8% do erro!), capturando com perfeição o ciclo epidemiológico real:
   - Estabilidade relativa entre 2014 e 2018 (~17 a 18 mortes por mil);
   - Explosão não-linear no biênio pandêmico 2020–2022 (pico superior a 25 mortes por mil);
   - Recuperação expressiva e queda acentuada em 2024 (~14 a 16 mortes por mil).
@@ -133,19 +133,22 @@ O slide 26 alerta:
 > *"Deu NaN no kernel? É a janela fixa sem vizinhos: aumente h."*
 
 ### Por que o `NaN` ocorre matematicamente?
-A fórmula de Nadaraya-Watson calcula a predição como uma razão ponderada:
-$$\hat{f}(x_0) = \frac{\sum_{i=1}^n K_h(x_0, x_i) \, y_i}{\sum_{i=1}^n K_h(x_0, x_i)}, \quad \text{onde } K_h(x_0, x_i) = \exp\left(-\frac{1}{2}\left(\frac{x_i - x_0}{h}\right)^2\right)$$
+A fórmula de Nadaraya-Watson calcula a predição como uma razão ponderada, onde $K_h(x_0, x_i) = \exp\left(-\frac{1}{2}\left(\frac{x_i - x_0}{h}\right)^2\right)$:
+
+$$
+\hat{f}(x_0) = \frac{\sum_{i=1}^n K_h(x_0, x_i) \, y_i}{\sum_{i=1}^n K_h(x_0, x_i)}
+$$
 
 Se a largura de banda $h$ for pequena demais e tentarmos prever em um ponto $x_0$ situado em uma região esparsa (por exemplo, na transição entre $0,45$ e $0,50$ onde há poucos municípios, ou além de $0,58$ na borda superior):
-1. A distância $|x_i - x_0| / h$ ultrapassa 4 ou 5 desvios para todas as observações $i = 1, \dots, n$;
+1. A distância $\lvert x_i - x_0\rvert / h$ ultrapassa 4 ou 5 desvios para todas as observações $i = 1, \dots, n$;
 2. A densidade normal sob o ponto flutuante do computador atinge zero exato (`dnorm() == 0`);
 3. O denominador vira zero: $\sum_{i=1}^n K_h(x_0, x_i) = 0$;
-4. A fração torna-se $0 / 0 = \text{NaN}$.
+4. A fração torna-se $0 / 0 = \mathrm{NaN}$.
 
 ### Como o problema foi tratado no script?
-- Na grade de busca, utilizamos múltiplos de $\text{sd}(x)$: $h \in [0,05 \times \text{sd}, 0,40 \times \text{sd}]$.
-- Em $h = 0,05 \times \text{sd} = 0,0035$, todas as dobras mantiveram densidade suficiente para evitar `NaN`.
-- O $h$ ótimo de CV ($h = 0,0070 = 0,10 \times \text{sd}$) garante que, para qualquer ponto da Baixada Santista, haja pelo menos 8 a 15 municípios com peso superior a 1%, eliminando completamente o risco de indefinição numérica.
+- Na grade de busca, utilizamos múltiplos de $\mathrm{sd}(x)$: $h \in [0,05 \times \mathrm{sd}, 0,40 \times \mathrm{sd}]$.
+- Em $h = 0,05 \times \mathrm{sd} = 0,0035$, todas as dobras mantiveram densidade suficiente para evitar `NaN`.
+- O $h$ ótimo de CV ($h = 0,0070 = 0,10 \times \mathrm{sd}$) garante que, para qualquer ponto da Baixada Santista, haja pelo menos 8 a 15 municípios com peso superior a 1%, eliminando completamente o risco de indefinição numérica.
 
 ---
 
@@ -156,21 +159,21 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 ### Parte A: Exercícios de Cálculo (Slide 24)
 
 #### Exercício 1: KNN com Vários $k$
-*Enunciado:* Sete imóveis: áreas $(50, 55, 62, 70, 80, 96, 110)$ e preços $(150, 170, 160, 210, 230, 300, 320)$. Preveja o preço de um imóvel de $74\text{ m}^2$ por KNN com $k = 1, 3, 5, 7$. Para onde a predição caminha quando $k$ cresce?
+*Enunciado:* Sete imóveis: áreas $(50, 55, 62, 70, 80, 96, 110)$ e preços $(150, 170, 160, 210, 230, 300, 320)$. Preveja o preço de um imóvel de $74\,\mathrm{m}^2$ por KNN com $k = 1, 3, 5, 7$. Para onde a predição caminha quando $k$ cresce?
 
 *Resolução:*
 1. Distâncias até $x_0 = 74$:
-   - $|70 - 74| = 4$ (preço 210)
-   - $|80 - 74| = 6$ (preço 230)
-   - $|62 - 74| = 12$ (preço 160)
-   - $|55 - 74| = 19$ (preço 170)
-   - $|96 - 74| = 22$ (preço 300)
-   - $|50 - 74| = 24$ (preço 150)
-   - $|110 - 74| = 36$ (preço 320)
+   - $\lvert 70 - 74\rvert = 4$ (preço 210)
+   - $\lvert 80 - 74\rvert = 6$ (preço 230)
+   - $\lvert 62 - 74\rvert = 12$ (preço 160)
+   - $\lvert 55 - 74\rvert = 19$ (preço 170)
+   - $\lvert 96 - 74\rvert = 22$ (preço 300)
+   - $\lvert 50 - 74\rvert = 24$ (preço 150)
+   - $\lvert 110 - 74\rvert = 36$ (preço 320)
 2. Predições:
-   - **$k = 1$:** Vizinhança $\{70\} \implies \hat{y} = \mathbf{210,0}$
-   - **$k = 3$:** Vizinhança $\{70, 80, 62\} \implies \hat{y} = \frac{210 + 230 + 160}{3} = \mathbf{200,0}$
-   - **$k = 5$:** Vizinhança $\{70, 80, 62, 55, 96\} \implies \hat{y} = \frac{210 + 230 + 160 + 170 + 300}{5} = \mathbf{214,0}$
+   - **$k = 1$:** Vizinhança $\lbrace 70 \rbrace \implies \hat{y} = \mathbf{210,0}$
+   - **$k = 3$:** Vizinhança $\lbrace 70, 80, 62 \rbrace \implies \hat{y} = \frac{210 + 230 + 160}{3} = \mathbf{200,0}$
+   - **$k = 5$:** Vizinhança $\lbrace 70, 80, 62, 55, 96 \rbrace \implies \hat{y} = \frac{210 + 230 + 160 + 170 + 300}{5} = \mathbf{214,0}$
    - **$k = 7$:** Todas as 7 observações $\implies \hat{y} = \frac{150+170+160+210+230+300+320}{7} = \mathbf{220,0}$
 3. *Comportamento:* Quando $k$ cresce, a predição caminha monotonicamente para a **média global da amostra** ($\bar{y} = 220$). O modelo perde flexibilidade local e aumenta o viés, reduzindo a variância a zero.
 
@@ -198,10 +201,10 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 *Enunciado:* Validação cruzada deu: $k=2 \implies 1300$; $k=5 \implies 950$; $k=10 \implies 900$; $k=20 \implies 940$; $k=50 \implies 1500$. Qual $k$ minimiza? Com erro padrão 60 no fundo, qual $k$ a regra de 1 SE escolhe — e por que aqui "mais simples" é $k$ maior?
 
 *Resolução:*
-1. $k$ que minimiza o erro médio: **$k = 10$** com $\text{CV} = 900$.
-2. Limite da regra de 1 SE: $\text{CV}_{\min} + \text{SE} = 900 + 60 = \mathbf{960}$.
+1. $k$ que minimiza o erro médio: **$k = 10$** com $\mathrm{CV} = 900$.
+2. Limite da regra de 1 SE: $\mathrm{CV}_{\mathrm{min}} + \mathrm{SE} = 900 + 60 = \mathbf{960}$.
 3. Modelos com erro dentro do intervalo $[900, 960]$: $k = 5$ (950), $k = 10$ (900) e $k = 20$ (940).
-4. *Escolha da regra:* A regra de 1 SE escolhe o **modelo mais parcimonioso/simples**. No KNN, quanto maior o $k$, menor é o número de graus de liberdade efetivos ($df \approx n/k$) e menor é a variância. Logo, o modelo mais simples e rígido é aquele com o **maior $k$**. A regra escolhe **$k = 20$**.
+4. *Escolha da regra:* A regra de 1 SE escolhe o **modelo mais parcimonioso/simples**. No KNN, quanto maior o $k$, menor é o número de graus de liberdade efetivos ($\mathrm{df} \approx n/k$) e menor é a variância. Logo, o modelo mais simples e rígido é aquele com o **maior $k$**. A regra escolhe **$k = 20$**.
 
 ---
 
@@ -214,8 +217,7 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
    - Para $p = 8$: $l = 0,10^{1/8} = \mathbf{0,7499}$ (precisa cobrir $75,0\%$ de cada dimensão — quase o domínio inteiro!).
 2. Para uma caixa fixa de lado $l = 0,10$ em $p = 4$:
    - O volume da caixa é $V = 0,1^4 = 0,0001$ ($1/10.000$ do espaço total).
-   - Para que essa fração minúscula contenha em média 10 observações uniformes, a base precisa ter:
-     $$n \approx \frac{10}{0,1^4} = 10 \times 10.000 = \mathbf{100.000 \text{ observações}}.$$
+   - Para que essa fração minúscula contenha em média 10 observações uniformes, a base precisa ter $n \approx \frac{10}{0,1^4} = 10 \times 10.000 = \mathbf{100.000}$ **observações**.
 
 ---
 
@@ -231,8 +233,8 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 - **O que resolveria?** Trocar a média local por uma **regressão linear local** ajustada em cada vizinhança (como o estimador **LOESS** / `geom_smooth()` / `lowess`) ou modelos de **Splines de regressão** (Aula 10), que conseguem extrapolar a inclinação até os limites do domínio.
 
 #### 3. Qual Modelo Responde? (Interpretabilidade vs Extrapolação)
-- **"O efeito marginal de $+1\text{ m}^2$ no preço":** O método adequado é a **reta linear paramétrica (MQO da Aula 04)**. O coeficiente $\beta_1$ resume exatamente a taxa marginal constante em um único parâmetro com intervalo de confiança e teste de hipótese. Modelos de Kernel produzem derivadas locais variáveis a cada ponto, sem um único número de resumo executivo.
-- **"O preço de um imóvel de $300\text{ m}^2$, maior que todos da base":** O Kernel é completamente inadequado para extrapolação fora do suporte dos dados: longe de todos os pontos conhecidos, os pesos gaussianos chegam a zero e o modelo devolve `NaN` ou achata artificialmente. A reta paramétrica consegue extrapolar matematicamente ao longo de sua fórmula (embora com risco de extrapolação conceitual).
+- **"O efeito marginal de $+1\,\mathrm{m}^2$ no preço":** O método adequado é a **reta linear paramétrica (MQO da Aula 04)**. O coeficiente $\beta_1$ resume exatamente a taxa marginal constante em um único parâmetro com intervalo de confiança e teste de hipótese. Modelos de Kernel produzem derivadas locais variáveis a cada ponto, sem um único número de resumo executivo.
+- **"O preço de um imóvel de $300\,\mathrm{m}^2$, maior que todos da base":** O Kernel é completamente inadequado para extrapolação fora do suporte dos dados: longe de todos os pontos conhecidos, os pesos gaussianos chegam a zero e o modelo devolve `NaN` ou achata artificialmente. A reta paramétrica consegue extrapolar matematicamente ao longo de sua fórmula (embora com risco de extrapolação conceitual).
 
 #### 4. Muitos Preditores (A Maldição na Prática)
 - **Por que o colega com 40 preditores falhou no KNN?** Em 40 dimensões, o espaço hiperdimensional é incomensuravelmente vasto e vazio. Conforme vimos na conta da maldição ($l = 0,1^{1/40} \approx 0,944$), para encontrar qualquer vizinho é necessário cobrir praticamente $95\%$ de cada variável. Os pontos tornam-se todos equidistantes entre si, perdendo o conceito de vizinhança local; o KNN degenera em uma média global ruidosa.

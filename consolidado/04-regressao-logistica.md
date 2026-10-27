@@ -283,13 +283,18 @@ A próxima pergunta natural: será que o problema é o modelo, ou é a forma com
 
 ### 1. Função Logística, Chances (*Odds*), Logit e Máxima Verossimilhança
 
-Na classificação binária ($Y \in \{0, 1\}$), modelamos a probabilidade condicional $p(X) = P(Y = 1 \mid X)$ comprimindo o preditor linear $z = \beta_0 + \beta_1 X$ através da função sigmoide logística:
+Na classificação binária ($Y \in \lbrace 0, 1 \rbrace$), modelamos a probabilidade condicional $p(X) = P(Y = 1 \mid X)$ comprimindo o preditor linear $z = \beta_0 + \beta_1 X$ através da função sigmoide logística:
 
-$$p(X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X)}} \iff \underbrace{\frac{p(X)}{1 - p(X)}}_{\text{chances (odds)}} = e^{\beta_0 + \beta_1 X} \iff \underbrace{\log\left(\frac{p(X)}{1 - p(X)}\right)}_{\text{logit}(p)} = \beta_0 + \beta_1 X.$$
+$$
+p(X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X)}} \iff \frac{p(X)}{1 - p(X)} = e^{\beta_0 + \beta_1 X} \iff \mathrm{logit}(p) = \log\left(\frac{p(X)}{1 - p(X)}\right) = \beta_0 + \beta_1 X
+$$
 
-- **Fronteira de decisão ($p = 0,5$):** ocorre quando $\text{logit}(p) = 0 \implies x^* = -\beta_0 / \beta_1$.
-- **Estimação por Máxima Verossimilhança:** os parâmetros $\hat{\boldsymbol{\beta}}$ maximizam a probabilidade conjunta dos dados observados:
-  $$L(\boldsymbol{\beta}) = \prod_{i=1}^{n} p(x_i)^{y_i} \bigl(1 - p(x_i)\bigr)^{1 - y_i}.$$
+- **Fronteira de decisão ($p = 0,5$):** ocorre quando $\mathrm{logit}(p) = 0 \implies x^* = -\beta_0 / \beta_1$.
+- **Estimação por Máxima Verossimilhança:** os parâmetros $\hat{\beta}$ maximizam a probabilidade conjunta dos dados observados:
+
+$$
+L(\beta) = \prod_{i=1}^{n} p(x_i)^{y_i} \bigl(1 - p(x_i)\bigr)^{1 - y_i}
+$$
 
 ### 2. Custo de Erro e Escolha do Limiar no Problema da Baixada Santista (Requisito do Lab)
 
@@ -299,14 +304,14 @@ $$p(X) = \frac{1}{1 + e^{-(\beta_0 + \beta_1 X)}} \iff \underbrace{\frac{p(X)}{1
 ### 3. Resolução dos Exercícios de Cálculo da Aula 05 (Slide 23/27)
 
 1. **Chances para $p = 0,8$:**
-   $$\text{odds} = \frac{p}{1 - p} = \frac{0,8}{1 - 0,8} = \frac{0,8}{0,2} = \mathbf{4,0} \quad (\text{leitura: ``chances de 4 para 1 a favor''}).$$
-2. **Cadeia completa para $\text{logit}(p) = -1 + 0,5x$ em $x = 2$ e ponto de virada $x^*$:**
-   - Para $x = 2$: $\text{logit}(p) = -1 + 0,5(2) = \mathbf{0}$; $\text{odds} = e^0 = \mathbf{1,0}$; $p = \frac{1}{1 + 1} = \mathbf{0,50}$.
-   - Ponto de virada: $x^* = -\beta_0 / \beta_1 = -(-1)/0,5 = \mathbf{2,0}$. Percebe-se que $x = 2$ é exatamente a fronteira de decisão onde a probabilidade empata em $50\%$ ($\text{logit} = 0$ e $\text{odds} = 1$).
-3. **Métricas da Matriz de Confusão ($\text{VP} = 50, \text{FP} = 5, \text{FN} = 25, \text{VN} = 120$; total $= 200$):**
-   - $\text{Acurácia} = \frac{\text{VP} + \text{VN}}{200} = \frac{50 + 120}{200} = \frac{170}{200} = \mathbf{0,850}$ ($85,0\%$).
-   - $\text{Precisão} = \frac{\text{VP}}{\text{VP} + \text{FP}} = \frac{50}{50 + 5} = \frac{50}{55} \approx \mathbf{0,909}$ ($90,9\%$).
-   - $\text{Recall (Sensibilidade)} = \frac{\text{VP}}{\text{VP} + \text{FN}} = \frac{50}{50 + 25} = \frac{50}{75} \approx \mathbf{0,667}$ ($66,7\%$).
+   - Cálculo: $\mathrm{odds} = \frac{p}{1 - p} = \frac{0,8}{1 - 0,8} = \frac{0,8}{0,2} = \mathbf{4,0}$ (leitura: "chances de 4 para 1 a favor").
+2. **Cadeia completa para $\mathrm{logit}(p) = -1 + 0,5x$ em $x = 2$ e ponto de virada $x^*$:**
+   - Para $x = 2$: $\mathrm{logit}(p) = -1 + 0,5(2) = \mathbf{0}$; $\mathrm{odds} = e^0 = \mathbf{1,0}$; $p = \frac{1}{1 + 1} = \mathbf{0,50}$.
+   - Ponto de virada: $x^* = -\beta_0 / \beta_1 = -(-1)/0,5 = \mathbf{2,0}$. Percebe-se que $x = 2$ é exatamente a fronteira de decisão onde a probabilidade empata em $50\%$ ($\mathrm{logit} = 0$ e $\mathrm{odds} = 1$).
+3. **Métricas da Matriz de Confusão ($\mathrm{VP} = 50, \mathrm{FP} = 5, \mathrm{FN} = 25, \mathrm{VN} = 120$; total $= 200$):**
+   - **Acurácia:** $\frac{\mathrm{VP} + \mathrm{VN}}{200} = \frac{50 + 120}{200} = \frac{170}{200} = \mathbf{0,850}$ ($85,0\%$).
+   - **Precisão:** $\frac{\mathrm{VP}}{\mathrm{VP} + \mathrm{FP}} = \frac{50}{50 + 5} = \frac{50}{55} \approx \mathbf{0,909}$ ($90,9\%$).
+   - **Recall (Sensibilidade):** $\frac{\mathrm{VP}}{\mathrm{VP} + \mathrm{FN}} = \frac{50}{50 + 25} = \frac{50}{75} \approx \mathbf{0,667}$ ($66,7\%$).
    - *Frase interpretando o recall:* Entre todos os casos que eram **realmente positivos** ($75$ clientes), o modelo conseguiu detectar dois terços ($66,7\%$), deixando escapar $1$ em cada $3$ positivos como falso negativo.
 
 ### 4. Resolução dos Exercícios Conceituais da Aula 05 (Slide 24/27)

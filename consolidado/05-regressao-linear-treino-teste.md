@@ -237,44 +237,44 @@ Para consolidar o rigor teórico da **Aula 06** (`slides_aulas/TAE_aula06.PDF` �
 
 ### 1. Formulação Matricial Polinomial e Decomposição Viés–Variância
 
-Um polinômio de grau $d$ sobre um preditor escalar $x$ é linear nos parâmetros $\boldsymbol{\beta} = (\beta_0, \beta_1, \dots, \beta_d)^\top$ e escreve-se na forma matricial:
+Um polinômio de grau $d$ sobre um preditor escalar $x$ é linear nos parâmetros $\beta = (\beta_0, \beta_1, \dots, \beta_d)^\top$ e escreve-se na forma matricial $\mathbf{y} = \mathbf{X}\beta + \varepsilon$:
 
-$$\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}, \quad \text{onde } \mathbf{X} = \begin{bmatrix} 1 & x_1 & x_1^2 & \cdots & x_1^d \\ 1 & x_2 & x_2^2 & \cdots & x_2^d \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & x_n & x_n^2 & \cdots & x_n^d \end{bmatrix}$$
+$$
+\mathbf{X} = \begin{bmatrix} 1 & x_1 & x_1^2 & \cdots & x_1^d \\ 1 & x_2 & x_2^2 & \cdots & x_2^d \\ \vdots & \vdots & \vdots & \ddots & \vdots \\ 1 & x_n & x_n^2 & \cdots & x_n^d \end{bmatrix}
+$$
 
-Avaliado apenas no conjunto de treino $D_{\text{treino}}$, o erro quadrático médio $\text{MSE}_{\text{treino}}$ é monotonicamente não-crescente com $d$. Porém, para um ponto novo $(x_0, y_0) \notin D_{\text{treino}}$ gerado por $y_0 = f(x_0) + \varepsilon$ (com $\mathbb{E}[\varepsilon]=0$ e $\text{Var}(\varepsilon)=\sigma^2$), o **erro quadrático esperado de teste** decompõe-se em três termos não-negativos:
+Avaliado apenas no conjunto de treino $D_{\mathrm{tr}}$, o erro quadrático médio $\mathrm{MSE}_{\mathrm{tr}}$ é monotonicamente não-crescente com $d$. Porém, para um ponto novo $(x_0, y_0) \notin D_{\mathrm{tr}}$ gerado por $y_0 = f(x_0) + \varepsilon$ (com $\mathbb{E}[\varepsilon]=0$ e $\mathrm{Var}(\varepsilon)=\sigma^2$), o **erro quadrático esperado de teste** decompõe-se em três termos não-negativos (**Variância** + **Quadrado do Viés** + **Erro Irredutível**):
 
-$$\mathbb{E}\!\left[\left(y_0 - \hat{f}(x_0)\right)^2\right] = \underbrace{\text{Var}\!\left(\hat{f}(x_0)\right)}_{\text{Variância}} + \underbrace{\left[\text{Bias}\!\left(\hat{f}(x_0)\right)\right]^2}_{\text{Viés}^2} + \underbrace{\text{Var}(\varepsilon)}_{\text{Erro irredutível}}$$
+$$
+\mathbb{E}\!\left[\left(y_0 - \hat{f}(x_0)\right)^2\right] = \mathrm{Var}\!\left(\hat{f}(x_0)\right) + \left[\mathrm{Bias}\!\left(\hat{f}(x_0)\right)\right]^2 + \mathrm{Var}(\varepsilon)
+$$
 
-onde $\text{Bias}(\hat{f}(x_0)) = \mathbb{E}[\hat{f}(x_0)] - f(x_0)$. Aumentar a flexibilidade reduz o viés (aproxima a forma funcional verdadeira), mas infla a variância (o ajuste passa a oscilar conforme o ruído específico da amostra de treino), produzindo a clássica **curva em U** no erro de teste.
+onde $\mathrm{Bias}(\hat{f}(x_0)) = \mathbb{E}[\hat{f}(x_0)] - f(x_0)$. Aumentar a flexibilidade reduz o viés (aproxima a forma funcional verdadeira), mas infla a variância (o ajuste passa a oscilar conforme o ruído específico da amostra de treino), produzindo a clássica **curva em U** no erro de teste.
 
-- **Tradução do RMSE de teste para o dono do problema (Gestão Regional de Saúde — DRS-IV):** Na divisão 70/30, o Modelo A obtém $\text{RMSE}_{\text{teste}} = 3{,}8314$ e o Modelo B obtém $\text{RMSE}_{\text{teste}} = 3{,}7887$ óbitos por mil idosos (60–69 anos), ambos **piores** que o baseline ingênuo da média do treino ($\text{RMSE}_{\text{teste}} = 3{,}6782$). Em linguagem de gestão pública: prever a mortalidade de um município-ano inédito usando apenas escolaridade e distorção idade-série gera um erro típico de cerca de $3{,}8$ óbitos por mil habitantes — superior a simplesmente assumir a média regional de $19{,}9$ óbitos/mil.
+- **Tradução do RMSE de teste para o dono do problema (Gestão Regional de Saúde — DRS-IV):** Na divisão 70/30, o Modelo A obtém $\mathrm{RMSE}_{\mathrm{te}} = 3{,}8314$ e o Modelo B obtém $\mathrm{RMSE}_{\mathrm{te}} = 3{,}7887$ óbitos por mil idosos (60–69 anos), ambos **piores** que o baseline ingênuo da média do treino ($\mathrm{RMSE}_{\mathrm{te}} = 3{,}6782$). Em linguagem de gestão pública: prever a mortalidade de um município-ano inédito usando apenas escolaridade e distorção idade-série gera um erro típico de cerca de $3{,}8$ óbitos por mil habitantes — superior a simplesmente assumir a média regional de $19{,}9$ óbitos/mil.
 
 ### 2. Exercícios de Cálculo (Slide 19/23 — Aula 06)
 
 1. **Cálculo direto de MSE e RMSE no teste:**  
-   Em um conjunto de teste com $n_{\text{teste}} = 3$, observou-se $\mathbf{y} = (10, 12, 15)$ e o modelo previu $\hat{\mathbf{y}} = (11, 11, 16)$.  
+   Em um conjunto de teste com $n_{\mathrm{te}} = 3$, observou-se $\mathbf{y} = (10, 12, 15)$ e o modelo previu $\hat{\mathbf{y}} = (11, 11, 16)$.  
    - Erros no teste: $e_1 = 10 - 11 = -1$, $e_2 = 12 - 11 = +1$, $e_3 = 15 - 16 = -1$.  
-   - Erro quadrático médio de teste:
-     $$\text{MSE}_{\text{teste}} = \frac{1}{n_{\text{teste}}}\sum_{i=1}^{n_{\text{teste}}}(y_i - \hat{y}_i)^2 = \frac{(-1)^2 + 1^2 + (-1)^2}{3} = \frac{1 + 1 + 1}{3} = 1{,}00$$
-   - Raiz do erro quadrático médio:
-     $$\text{RMSE}_{\text{teste}} = \sqrt{\text{MSE}_{\text{teste}}} = \sqrt{1{,}00} = 1{,}00\text{ (na mesma unidade de } y\text{)}$$
+   - Erro quadrático médio de teste: $\mathrm{MSE}_{\mathrm{te}} = \frac{1}{n_{\mathrm{te}}}\sum_{i=1}^{n_{\mathrm{te}}}(y_i - \hat{y}_i)^2 = \frac{(-1)^2 + 1^2 + (-1)^2}{3} = \frac{1 + 1 + 1}{3} = \mathbf{1{,}00}$.  
+   - Raiz do erro quadrático médio: $\mathrm{RMSE}_{\mathrm{te}} = \sqrt{\mathrm{MSE}_{\mathrm{te}}} = \sqrt{1{,}00} = \mathbf{1{,}00}$ (na mesma unidade de $y$).
 
 2. **Decomposição Viés–Variância em $x_0$:**  
-   Dados $\text{Var}(\hat{f}(x_0)) = 0{,}05$, $\text{Bias}(\hat{f}(x_0)) = 0{,}2$ e $\text{Var}(\varepsilon) = 0{,}03$:  
-   - Cálculo do erro esperado:
-     $$\mathbb{E}\!\left[(y_0 - \hat{f}(x_0))^2\right] = 0{,}05 + (0{,}2)^2 + 0{,}03 = 0{,}05 + 0{,}04 + 0{,}03 = 0{,}12$$
-   - **Quem domina?** A variância ($0{,}05$) é ligeiramente superior ao quadrado do viés ($\text{Bias}^2 = 0{,}04$), embora ambos estejam quase em equilíbrio perto do fundo da curva em U. Para reduzir o erro esperado total, deve-se **reduzir ligeiramente (ou manter) a flexibilidade** do modelo para conter a variância sem inflar excessivamente o viés.
+   Dados $\mathrm{Var}(\hat{f}(x_0)) = 0{,}05$, $\mathrm{Bias}(\hat{f}(x_0)) = 0{,}2$ e $\mathrm{Var}(\varepsilon) = 0{,}03$:  
+   - Cálculo do erro esperado: $\mathbb{E}\!\left[(y_0 - \hat{f}(x_0))^2\right] = 0{,}05 + (0{,}2)^2 + 0{,}03 = 0{,}05 + 0{,}04 + 0{,}03 = \mathbf{0{,}12}$.
+   - **Quem domina?** A variância ($0{,}05$) é ligeiramente superior ao quadrado do viés ($\mathrm{Bias}^2 = 0{,}04$), embora ambos estejam quase em equilíbrio perto do fundo da curva em U. Para reduzir o erro esperado total, deve-se **reduzir ligeiramente (ou manter) a flexibilidade** do modelo para conter a variância sem inflar excessivamente o viés.
 
-3. **Leitura de $\text{RMSE}_{\text{teste}}$ na unidade do problema:**  
-   Se $\text{MSE}_{\text{teste}} = 2.500$ para um modelo que prevê preço de imóveis em milhares de reais:
-   $$\text{RMSE}_{\text{teste}} = \sqrt{2.500} = 50\text{ mil reais}$$
-   **Em uma frase para o dono do problema:** *"Ao avaliar um imóvel novo que não participou do treinamento, as estimativas de preço do modelo erram, tipicamente, em torno de R\$ 50 mil para mais ou para menos."*
+3. **Leitura de $\mathrm{RMSE}_{\mathrm{te}}$ na unidade do problema:**  
+   Se $\mathrm{MSE}_{\mathrm{te}} = 2.500$ para um modelo que prevê preço de imóveis em milhares de reais, temos $\mathrm{RMSE}_{\mathrm{te}} = \sqrt{2.500} = \mathbf{50}$ **mil reais**.  
+   **Em uma frase para o dono do problema:** *"Ao avaliar um imóvel novo que não participou do treinamento, as estimativas de preço do modelo erram, tipicamente, em torno de 50 mil reais para mais ou para menos."*
 
 ### 3. Exercícios Conceituais (Slide 20/23 — Aula 06)
 
-1. **Treino $\times$ teste para um leigo:**  
+1. **Treino vs. teste para um leigo:**  
    Avaliar um modelo nos mesmos dados usados para ajustá-lo é como medir o aprendizado de um estudante aplicando na prova exatamente a lista de exercícios cujo gabarito ele decorou na véspera: a nota será alta mesmo que ele não tenha compreendido a matéria. Separar um conjunto de teste inédito funciona como aplicar questões novas no dia do exame — é a única forma honesta de verificar se o modelo aprendeu um padrão generalizável ou apenas memorizou ruído.
-2. **Papel do conjunto de validação $\times$ conjunto de teste:**  
+2. **Papel do conjunto de validação vs. conjunto de teste:**  
    Quando comparamos muitos candidatos (por exemplo, graus polinomiais $d = 1, \dots, 10$) olhando repetidamente o mesmo conjunto de teste para escolher o vencedor, o próprio conjunto de teste passa a participar da decisão (seleção de hiperparâmetro) e seu erro torna-se otimista. O **conjunto de validação** absorve essa etapa de escolha entre candidatos, preservando o **conjunto de teste** trancado no cofre para uma única auditoria final do modelo já escolhido.
 3. **Caça ao vazamento (*data leakage*) na imputação pela média:**  
    Calcular a média da variável na base completa (treino + teste) antes de dividir os dados transfere informação numérica das observações futuras (teste) para dentro do conjunto de treinamento, violando a independência da avaliação. **Correção:** primeiro dividir a base em treino e teste; em seguida, calcular a média **exclusivamente no conjunto de treino** e usar esse mesmo valor fixo para imputar os faltantes tanto do treino quanto do teste.

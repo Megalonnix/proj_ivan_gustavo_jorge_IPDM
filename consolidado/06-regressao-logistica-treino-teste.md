@@ -233,21 +233,23 @@ Esta atividade articula a **Aula 05** (*Regressão Logística e Avaliação de C
 
 Seja $y_i \in \mathbb{R}_+$ a mortalidade contínua (60–69 anos) da observação $i$. Na validação cruzada em $k$ dobras ($D = \bigcup_{j=1}^k D_j$), o limiar de binarização da dobra $j$ é definido **exclusivamente sobre o subconjunto de treinamento** $D^{(-j)} = D \setminus D_j$:
 
-$$m^{(-j)} = \text{mediana}\!\left(\{y_i : i \in D^{(-j)}\}\right), \qquad z_i^{(j)} = \mathbb{I}\!\left(y_i > m^{(-j)}\right) \in \{0, 1\}$$
+$$
+m^{(-j)} = \mathrm{mediana}\!\left(\lbrace y_i : i \in D^{(-j)} \rbrace\right), \qquad z_i^{(j)} = \mathbb{I}\!\left(y_i > m^{(-j)}\right) \in \lbrace 0, 1 \rbrace
+$$
 
-O modelo logístico $\hat{p}^{(-j)}(\mathbf{x}) = \sigma\!\left(\hat{\beta}_0^{(-j)} + \mathbf{x}^\top\hat{\boldsymbol{\beta}}^{(-j)}\right)$ é estimado maximizando a log-verossimilhança apenas em $D^{(-j)}$, e suas probabilidades preditas $\hat{p}_i = \hat{p}^{(-j)}(\mathbf{x}_i)$ são confrontadas com os rótulos $z_i^{(j)}$ na dobra de teste $D_j$.
+O modelo logístico $\hat{p}^{(-j)}(\mathbf{x}) = \sigma\!\left(\hat{\beta}_0^{(-j)} + \mathbf{x}^\top\hat{\beta}^{(-j)}\right)$ é estimado maximizando a log-verossimilhança apenas em $D^{(-j)}$, e suas probabilidades preditas $\hat{p}_i = \hat{p}^{(-j)}(\mathbf{x}_i)$ são confrontadas com os rótulos $z_i^{(j)}$ na dobra de teste $D_j$.
 
-- **Por que calcular a mediana global $\text{mediana}(y_{1:n})$ seria vazamento?** Porque o valor mediano global depende da ordenação das observações de teste $D_j$; assim, o próprio rótulo $z_i$ e o corte da classe majoritária no treino já carregariam informação sobre a distribuição empírica do conjunto de teste antes mesmo do ajuste.
+- **Por que calcular a mediana global $\mathrm{mediana}(y_{1:n})$ seria vazamento?** Porque o valor mediano global depende da ordenação das observações de teste $D_j$; assim, o próprio rótulo $z_i$ e o corte da classe majoritária no treino já carregariam informação sobre a distribuição empírica do conjunto de teste antes mesmo do ajuste.
 
 ### 2. Quadro Comparativo: Avaliação na Amostra (Aula 05) vs. Fora da Amostra (Aula 06)
 
-| Candidato / Métrica | Na Amostra (*In-Sample*, $n=54$, Ativ. 04) | Teste Único 70/30 ($n_{\text{teste}}=17$, Ativ. 06) | Validação Cruzada 5-Fold ($n=54$, Ativ. 06) | Diagnóstico de Aprendizado Estatístico |
+| Candidato / Métrica | Na Amostra (*In-Sample*, $n=54$, Ativ. 04) | Teste Único 70/30 ($n_{\mathrm{te}}=17$, Ativ. 06) | Validação Cruzada 5-Fold ($n=54$, Ativ. 06) | Diagnóstico de Aprendizado Estatístico |
 |---|---|---|---|---|
-| **Baseline (classe majoritária)** | $\text{Acc} = 50{,}0\%$ | $\text{Acc} = 52{,}9\%$ | $\text{Acc} = 42{,}4\%$ | Oscila fora da amostra porque $m^{(-j)}$ é recalculado apenas no treino |
-| **Modelo A (`escolaridade`)** | $\text{Acc} = 53{,}7\%$<br>$\text{AUC} = 0{,}561$ | $\text{Acc} = 23{,}5\%$<br>$\text{AUC} = 0{,}264$ | $\text{Acc} = 48{,}2\%$<br>$\text{AUC} = 0{,}513$ | Aparente ganho na amostra era ilusão; fora da amostra equivale ao acaso ($\text{AUC} \approx 0{,}51$) |
-| **Modelo B (`escolaridade + distorcao_em`)** | — | $\text{Acc} = 52{,}9\%$<br>$\text{AUC} = 0{,}556$ | $\text{Acc} = 59{,}3\%$<br>$\text{AUC} = 0{,}679$ | A inclusão de `distorcao_em` agrega sinal discriminativo real ($\text{AUC}_{CV} = 0{,}679$, vencendo em 4/5 dobras) |
+| **Baseline (classe majoritária)** | $\mathrm{Acc} = 50{,}0\%$ | $\mathrm{Acc} = 52{,}9\%$ | $\mathrm{Acc} = 42{,}4\%$ | Oscila fora da amostra porque $m^{(-j)}$ é recalculado apenas no treino |
+| **Modelo A (`escolaridade`)** | $\mathrm{Acc} = 53{,}7\%$<br>$\mathrm{AUC} = 0{,}561$ | $\mathrm{Acc} = 23{,}5\%$<br>$\mathrm{AUC} = 0{,}264$ | $\mathrm{Acc} = 48{,}2\%$<br>$\mathrm{AUC} = 0{,}513$ | Aparente ganho na amostra era ilusão; fora da amostra equivale ao acaso ($\mathrm{AUC} \approx 0{,}51$) |
+| **Modelo B (`escolaridade + distorcao_em`)** | — | $\mathrm{Acc} = 52{,}9\%$<br>$\mathrm{AUC} = 0{,}556$ | $\mathrm{Acc} = 59{,}3\%$<br>$\mathrm{AUC} = 0{,}679$ | A inclusão de `distorcao_em` agrega sinal discriminativo real ($\mathrm{AUC}_{\mathrm{CV}} = 0{,}679$, vencendo em 4/5 dobras) |
 
-- **Tradução para o dono do problema (DRS-IV Baixada Santista):** Avaliado honestamente em municípios-ano que não participaram do treinamento (CV 5-fold), o classificador logístico simples baseado apenas em escolaridade não distingue mortalidade alta de baixa melhor que uma moeda ($\text{AUC} = 0{,}513$). Ao adicionar a taxa de distorção idade-série no Ensino Médio (Modelo B), a probabilidade de o modelo atribuir maior escore de risco a um município-ano verdadeiramente crítico sobe para $67{,}9\%$ ($\text{AUC} = 0{,}679$), mas como veremos no estudo comparativo da **Atividade 09**, prever a taxa contínua primeiro e aplicar o corte na mediana posteriormente atinge $\text{AUC} = 0{,}890$, demonstrando que a binarização precoce desperdiça informação quantitativa valiosa.
+- **Tradução para o dono do problema (DRS-IV Baixada Santista):** Avaliado honestamente em municípios-ano que não participaram do treinamento (CV 5-fold), o classificador logístico simples baseado apenas em escolaridade não distingue mortalidade alta de baixa melhor que uma moeda ($\mathrm{AUC} = 0{,}513$). Ao adicionar a taxa de distorção idade-série no Ensino Médio (Modelo B), a probabilidade de o modelo atribuir maior escore de risco a um município-ano verdadeiramente crítico sobe para $67{,}9\%$ ($\mathrm{AUC} = 0{,}679$), mas como veremos no estudo comparativo da **Atividade 09**, prever a taxa contínua primeiro e aplicar o corte na mediana posteriormente atinge $\mathrm{AUC} = 0{,}890$, demonstrando que a binarização precoce desperdiça informação quantitativa valiosa.
 
 ---
 
