@@ -1,0 +1,52 @@
+54 registros; seed 1; treino 70% e teste 30%; CV5 com mesmas dobras para os modelos.
+            Avaliacao   Modelo     RMSE      MAE  Acuracia     Brier
+Base        Teste 30%     Base 3.678190 2.973391 0.5294118 0.2493877
+Multipla    Teste 30% Multipla 3.788706 3.099945 0.5294118 0.2525307
+Simples     Teste 30%  Simples 3.831414 3.191363 0.2352941 0.2636660
+Base1     CV5 externa     Base 3.859931 2.985502 0.5000000 0.2509715
+Multipla1 CV5 externa Multipla 4.052161 3.144983 0.5925926 0.2562156
+Simples1  CV5 externa  Simples 3.911708 3.017980 0.4814815 0.2523372
+
+AUC média por modelo (corte de classe varia por treino):
+    Modelo       AUC
+1     Base 0.5000000
+2 Multipla 0.6785714
+3  Simples 0.5128571
+                   Dobra   Modelo       AUC
+Dobra 1.Base     Dobra 1     Base 0.5000000
+Dobra 2.Base     Dobra 2     Base 0.5000000
+Dobra 3.Base     Dobra 3     Base 0.5000000
+Dobra 4.Base     Dobra 4     Base 0.5000000
+Dobra 5.Base     Dobra 5     Base 0.5000000
+Dobra 1.Multipla Dobra 1 Multipla 0.6428571
+Dobra 2.Multipla Dobra 2 Multipla 0.9642857
+Dobra 3.Multipla Dobra 3 Multipla 0.3571429
+Dobra 4.Multipla Dobra 4 Multipla 0.6666667
+Dobra 5.Multipla Dobra 5 Multipla 0.7619048
+Dobra 1.Simples  Dobra 1  Simples 0.3214286
+Dobra 2.Simples  Dobra 2  Simples 0.7142857
+Dobra 3.Simples  Dobra 3  Simples 0.3571429
+Dobra 4.Simples  Dobra 4  Simples 0.6000000
+Dobra 5.Simples  Dobra 5  Simples 0.5714286
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: America/Sao_Paulo
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_4.5.2

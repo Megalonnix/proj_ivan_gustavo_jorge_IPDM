@@ -1,0 +1,10 @@
+source('estrutura/comum.R')
+vars <- c('riqueza','escolaridade','distorcao_em','mortalidade_60_69')
+por_municipio <- aggregate(dados[vars],dados['municipio'],mean)
+por_ano <- aggregate(dados[vars],dados['ano'],mean)
+g <- 'consolidados-aulas/graficos/02b';dir.create(g,recursive=TRUE,showWarnings=FALSE)
+figura(g,'01-mortalidade-por-ano',{boxplot(mortalidade_60_69~ano,data=dados,col='lightblue',xlab='Ano',ylab='Mortalidade 60–69 por mil')})
+figura(g,'02-trajetorias-municipais',{ys <- split(dados,dados$municipio);plot(range(dados$ano),range(dados$mortalidade_60_69),type='n',xlab='Ano',ylab='Mortalidade 60–69 por mil');for(i in seq_along(ys))lines(ys[[i]]$ano,ys[[i]]$mortalidade_60_69,col=i,type='b');legend('topleft',names(ys),col=seq_along(ys),lty=1,cex=.65)})
+figura(g,'03-boxplot-municipios',{par(mar=c(9,5,2,1));boxplot(mortalidade_60_69~municipio,data=dados,las=2,col='lightblue',xlab='',ylab='Mortalidade por mil')})
+capture.output({print(por_municipio);print(por_ano);print(sessionInfo())},file='estrutura/codigos/02b-numeros.txt')
+# O relatório didático canônico consolidados-aulas/02b-analise-exploratoria-segmentada.md já incorpora estas tabelas e figuras.

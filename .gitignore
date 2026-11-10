@@ -18,5 +18,5 @@ to.delete/
 *.toc
 *.synctex.gz
 *-concordance.tex
-consolidado/entrega-1-pergunta.tex
-consolidado/figure/
+entregas/entrega-1/entrega-1-pergunta.tex
+entregas/entrega-1/figure/

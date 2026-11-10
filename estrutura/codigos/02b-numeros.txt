@@ -1,0 +1,39 @@
+     municipio   riqueza escolaridade distorcao_em mortalidade_60_69
+1     Bertioga 0.5510000    0.4773333     15.23200          18.95344
+2      Cubatão 0.5065000    0.4850000     19.88480          18.76687
+3      Guarujá 0.4326667    0.4490000     15.81326          19.09208
+4     Itanhaém 0.3938333    0.5325000     15.54467          22.26548
+5     Mongaguá 0.3573333    0.4508333     17.30606          23.92389
+6      Peruíbe 0.3821667    0.4651667     14.72473          21.14912
+7 Praia Grande 0.4096667    0.5528333     17.11154          20.50534
+8       Santos 0.5010000    0.5420000     12.79660          15.25555
+9  São Vicente 0.3583333    0.4293333     18.94757          19.23888
+   ano   riqueza escolaridade distorcao_em mortalidade_60_69
+1 2014 0.4491111    0.4065556     18.84813          19.03686
+2 2016 0.4285556    0.4718889     17.99720          18.76492
+3 2018 0.4414444    0.5104444     18.31396          19.26749
+4 2020 0.4340000    0.5337778     16.03819          21.28541
+5 2022 0.4265556    0.4893333     14.81000          24.65824
+6 2024 0.4153333    0.5106667     12.23333          16.42084
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: America/Sao_Paulo
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_4.5.2

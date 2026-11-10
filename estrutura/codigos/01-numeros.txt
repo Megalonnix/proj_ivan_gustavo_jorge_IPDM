@@ -1,0 +1,82 @@
+# Relatório da Atividade 01 — Dicionário de Variáveis e Tipagem
+
+**Gerado por:** `01-dicionario-variaveis.R`  
+**Data:** 2026-11-09 00:01:46  
+**Origem:** `../bancoDeDados/df_ipdm_baixada_por_municipio.csv`  
+
+> **Alvo do projeto:** `mortalidade_60_69` (por mil hab.).
+> O IPDM NÃO é mais o alvo: ele é composto por riqueza + longevidade +
+> escolaridade, e usá-lo como resposta gera circularidade com os preditores.
+
+## 1. Dimensões
+
+- Observações (n) = 54
+- Preditores potenciais (p) = 9
+- Municípios = 9
+- Anos = 2014, 2016, 2018, 2020, 2022, 2024
+- n/p = 6 — modelagem parcimoniosa.
+
+## 2. Dicionário
+
+```
+                                      Coluna_Original  Nome_Padronizado
+1                                            cod_ibge          cod_ibge
+2                                           Municipio         municipio
+3                                                 Ano               ano
+4                                Riqueza [índice 0-1]           riqueza
+5                            Longevidade [índice 0-1]       longevidade
+6                           Escolaridade [índice 0-1]      escolaridade
+7                                   IPDM [índice 0-1]              ipdm
+8   Taxas de mortalidade  60 a 69 anos (por mil hab.) mortalidade_60_69
+9  Taxas de distorção idade-série no Ensino Médio (%)      distorcao_em
+10      Produto Interno Bruto per capita (R$ de 2024)    pib_per_capita
+        Tipo_Estatistico  Tipo_R Valores_Distintos Nulos
+1          Identificador  factor                 9     0
+2    Qualitativa Nominal  factor                 9     0
+3  Quantitativa Discreta integer                 6     0
+4  Quantitativa Contínua numeric                47     0
+5  Quantitativa Contínua numeric                44     0
+6  Quantitativa Contínua numeric                48     0
+7  Quantitativa Contínua numeric                50     0
+8  Quantitativa Contínua numeric                54     0
+9  Quantitativa Contínua numeric                54     0
+10 Quantitativa Contínua numeric                45     0
+```
+
+## 3. Classes
+
+```
+         cod_ibge         municipio               ano           riqueza 
+         "factor"          "factor"         "integer"         "numeric" 
+      longevidade      escolaridade              ipdm mortalidade_60_69 
+        "numeric"         "numeric"         "numeric"         "numeric" 
+     distorcao_em    pib_per_capita 
+        "numeric"         "numeric" 
+```
+
+## 4. Amostra
+
+```
+  cod_ibge municipio  ano riqueza longevidade escolaridade      ipdm
+1  3506359  Bertioga 2014   0.575       0.609        0.363 0.5156667
+2  3506359  Bertioga 2016   0.559       0.639        0.440 0.5460000
+3  3506359  Bertioga 2018   0.548       0.653        0.483 0.5613333
+4  3506359  Bertioga 2020   0.553       0.672        0.551 0.5920000
+5  3506359  Bertioga 2022   0.519       0.633        0.508 0.5533333
+  mortalidade_60_69 distorcao_em pib_per_capita
+1          17.69156     17.26543       46417.74
+2          16.23510     16.45526       45937.18
+3          17.12161     16.79530       46417.74
+4          22.19854     15.07601       41444.84
+5          25.42855     13.30000       34785.52
+```
+
+## 5. Nota metodológica
+
+Preditores **circulares** com o alvo (excluídos dos modelos):
+- `longevidade` — componente do IPDM, altamente correlacionado com mortalidade.
+- `ipdm` — composto que contém longevidade.
+
+Preditores **válidos** para mortalidade_60_69:
+`escolaridade`, `distorcao_em`, `pib_per_capita`, `ano`, `riqueza`.
+

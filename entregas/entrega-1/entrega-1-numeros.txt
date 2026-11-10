@@ -1,0 +1,39 @@
+                    Modelo     RMSE      MAE       AUC  Acuracia
+1                     Base 3.842490 2.968771        NA        NA
+2           MQO estrutural 2.204412 1.710573        NA        NA
+3 MQO estrutural + sociais 2.444362 1.880560        NA        NA
+4                Logistica       NA       NA 0.6785714 0.6436364
+5           MQO binarizado       NA       NA 0.8900000 0.8672727
+           Variavel                   Unidade
+1 mortalidade_60_69 mortes por mil habitantes
+2           riqueza                    indice
+3      escolaridade                    indice
+4      distorcao_em                percentual
+  Dobra  MSE_Base  MSE_MQO
+1     1  8.401540 4.469078
+2     2 14.470335 5.205865
+3     3 20.117809 3.261628
+4     4 23.323654 5.971284
+5     5  7.510291 5.389301
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: America/Sao_Paulo
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_4.5.2

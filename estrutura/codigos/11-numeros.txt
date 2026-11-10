@@ -1,0 +1,62 @@
+Y excluída de X; X padronizada; seed 1; nstart 50
+   PC Individual Acumulada
+1 PC1  0.3895761 0.3895761
+2 PC2  0.3667760 0.7563522
+3 PC3  0.1417831 0.8981352
+4 PC4  0.1018648 1.0000000
+                       PC1         PC2
+riqueza         0.68951971  0.07105293
+escolaridade    0.28907627 -0.63800346
+distorcao_em   -0.05750751  0.71868743
+pib_per_capita  0.66158171  0.26719178
+   K  Silhueta
+1  2 0.3545537
+2  3 0.3270010
+3  4 0.3299267
+4  5 0.3543416
+5  6 0.3427785
+6  7 0.3417475
+7  8 0.3471059
+8  9 0.3344525
+9 10 0.3412390
+K escolhido: 2 
+  riqueza escolaridade distorcao_em pib_per_capita
+1  0.5195    0.5014444     15.97113      112233.34
+2  0.3890    0.4799444     16.57464       32753.01
+                                                        1 
+  "riqueza acima da média; pib_per_capita acima da média" 
+                                                        2 
+"riqueza abaixo da média; pib_per_capita abaixo da média" 
+      Completa
+Kmeans  1  2
+     1 16  2
+     2 36  0
+      Simples
+Kmeans  1  2
+     1 16  2
+     2 36  0
+  Grupo  N    Media       DP      Min      Max
+1     1 18 17.65862 3.011491 13.94251 25.42855
+2     2 36 21.02913 3.761673 15.29262 32.99677
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: America/Sao_Paulo
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_4.5.2  cluster_2.1.8.2

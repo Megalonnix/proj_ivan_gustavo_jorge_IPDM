@@ -1,0 +1,59 @@
+54 linhas; resposta mortalidade_60_69; seed 1; R: R version 4.5.2 (2025-10-31) 
+               Modelo   MSE_CV5 RMSE_CV5  MSE_OOB
+1                Base 14.899067 3.859931       NA
+2  MQO socioeconomico 15.109417 3.887083       NA
+3 MQO municipio + ano  4.849619 2.202185       NA
+4      GAM estrutural  5.522245 2.349946       NA
+5       Arvore podada 14.899067 3.859931       NA
+6             Bagging 11.167729 3.341815 9.490450
+7       Random forest  9.871261 3.141856 9.742346
+  dobra        cp mtry
+1     1 0.2315658    1
+2     2 0.2745960    1
+3     3 0.2336312    1
+4     4 0.2673184    1
+5     5 0.3315751    1
+CP final: 0.08623795 mtry final: 1 OOB MSE: 9.742346 
+  mtry      OOB
+1    1 9.307809
+2    2 9.557198
+3    3 9.979658
+4    5 9.490450
+n= 54 
+
+node), split, n, deviance, yval
+      * denotes terminal node
+
+ 1) root 54 785.755100 19.90563  
+   2) municipio=Bertioga,Cubatão,Guarujá,Santos,São Vicente 30 195.120100 18.26136 *
+   3) municipio=Itanhaém,Mongaguá,Peruíbe,Praia Grande 24 408.141500 21.96096  
+     6) ano>=2023 4   1.030559 16.05529 *
+     7) ano< 2023 20 239.701800 23.14209  
+      14) ano< 2021 16  64.720710 21.79907 *
+      15) ano>=2021 4  30.683710 28.51419 *
+         ano    municipio distorcao_em      riqueza escolaridade 
+   4.2230707    1.5354199    1.4189077    1.3853076    0.1700164 
+R version 4.5.2 (2025-10-31)
+Platform: x86_64-pc-linux-gnu
+Running under: Ubuntu 26.04 LTS
+
+Matrix products: default
+BLAS:   /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/blas/libblas.so.3.12.1 
+LAPACK: /tmp/ipdm-r/root/usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.12.1;  LAPACK version 3.12.0
+
+locale:
+ [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
+ [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
+ [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
+[10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+
+time zone: America/Sao_Paulo
+tzcode source: system (glibc)
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+loaded via a namespace (and not attached):
+[1] compiler_4.5.2       Matrix_1.7-4         mgcv_1.9-4          
+[4] rpart_4.1.24         splines_4.5.2        nlme_3.1-168        
+[7] grid_4.5.2           randomForest_4.7-1.2 lattice_0.22-9      
