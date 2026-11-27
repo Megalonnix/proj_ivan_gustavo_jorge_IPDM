@@ -2,6 +2,9 @@
 assets/
 to.delete/
 
+# Extração local dos PDFs (trabalho interno; não é entrega)
+_pdf_extract/
+
 # Histórico e sessão do R
 .Rhistory
 .RData
@@ -18,5 +21,18 @@ to.delete/
 *.toc
 *.synctex.gz
 *-concordance.tex
-entregas/entrega-1/entrega-1-pergunta.tex
-entregas/entrega-1/figure/
+entregas/**/*.tex
+entregas/**/*.log
+entregas/**/*.aux
+entregas/**/*.bbl
+entregas/**/*.blg
+entregas/**/*.out
+entregas/**/*.toc
+entregas/**/*.synctex.gz
+entregas/**/*-concordance.tex
+entregas/**/figure/
+
+# Sistema
+Thumbs.db
+Desktop.ini
+.DS_Store

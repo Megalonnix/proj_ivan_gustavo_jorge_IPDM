@@ -75,7 +75,7 @@ Nesta atividade unificada da **Aula 06**, regressão e classificação compartil
 
 ## 5. Fundamentação Matemática e Resolução dos Exercícios (Aula 06)
 
-Para consolidar o rigor teórico da **Aula 06** ([`slides_aulas/TAE_aula06.PDF`](../slides_aulas/TAE_aula06.PDF) — *Treino, teste e o compromisso viés–variância*), apresentamos a formulação matricial polinomial, a decomposição do erro esperado de teste e as soluções dos exercícios dos slides 19–20/23.
+Para consolidar o rigor teórico da **Aula 06** ([`materiais-aulas/Aula 06 - Avaliação e Seleção de Modelos.PDF`](../materiais-aulas/Aula%2006%20-%20Avalia%C3%A7%C3%A3o%20e%20Sele%C3%A7%C3%A3o%20de%20Modelos.PDF) — *Treino, teste e o compromisso viés–variância*), apresentamos a formulação matricial polinomial, a decomposição do erro esperado de teste e as soluções dos exercícios dos slides 19–20/23.
 
 ### 5.1. Formulação Matricial Polinomial e Decomposição Viés–Variância
 

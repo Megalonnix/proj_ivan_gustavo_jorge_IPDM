@@ -223,7 +223,7 @@ O caminho está cada vez mais claro. Todas as abordagens até aqui bateram na me
 
 ## Fundamentação Matemática e Resolução dos Exercícios (Aula 07)
 
-Para consolidar o rigor teórico da **Aula 07** ([`slides_aulas/TAE_aula07.PDF`](../slides_aulas/TAE_aula07.PDF) — *Reamostragem: validação cruzada e bootstrap*), apresentamos as equações formais dos estimadores de reamostragem, a frase síntese exigida no laboratório (slide 20/20) e as soluções dos exercícios dos slides 17–18/20.
+Para consolidar o rigor teórico da **Aula 07** ([`materiais-aulas/Aula 07 - Métodos de Reamostragem.PDF`](../materiais-aulas/Aula%2007%20-%20M%C3%A9todos%20de%20Reamostragem.PDF) — *Reamostragem: validação cruzada e bootstrap*), apresentamos as equações formais dos estimadores de reamostragem, a frase síntese exigida no laboratório (slide 20/20) e as soluções dos exercícios dos slides 17–18/20.
 
 ### 1. Formulação Matemática da Validação Cruzada $k$-Fold e do Bootstrap
 

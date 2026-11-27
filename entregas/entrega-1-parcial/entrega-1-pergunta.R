@@ -4,7 +4,7 @@ set.seed(1)
 #  BLOCO DO BANCO DE DADOS E VALIDAÇÃO CRUZADA: IPDM Baixada Santista
 # =========================================================================
 arq_csv <- "../../estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv"
-if (!file.exists(arq_csv)) stop("Execute a entrega a partir de entregas/entrega-1.")
+if (!file.exists(arq_csv)) stop("Execute a entrega a partir de entregas/entrega-1-parcial.")
 
 bruto <- read.csv(arq_csv, sep = ";", dec = ",", fileEncoding = "latin1",
                   check.names = FALSE, stringsAsFactors = FALSE)

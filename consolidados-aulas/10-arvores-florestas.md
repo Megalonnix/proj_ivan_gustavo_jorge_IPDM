@@ -142,7 +142,7 @@ Medindo a importância dos preditores pelo **aumento absoluto do MSE OOB ao perm
 
 ## 6. Resolução Completa dos Exercícios da Aula 11 (Slides 25/28 e 26/28)
 
-Para fundamentação teórica completa do grupo, apresentamos a resolução passo a passo de todos os exercícios dos slides 25/28 e 26/28 da Aula 11 ([`slides_aulas/Aula 11 - Árvores de Decisão e Random Forest.PDF`](../slides_aulas/Aula%2011%20-%20%C3%81rvores%20de%20Decis%C3%A3o%20e%20Random%20Forest.PDF)).
+Para fundamentação teórica completa do grupo, apresentamos a resolução passo a passo de todos os exercícios dos slides 25/28 e 26/28 da Aula 11 ([`materiais-aulas/Aula 11 - Árvores de Decisão e Random Forest.PDF`](../materiais-aulas/Aula%2011%20-%20%C3%81rvores%20de%20Decis%C3%A3o%20e%20Random%20Forest.PDF)).
 
 ### Parte A: Exercícios de Cálculo (Slide 25/28)
 

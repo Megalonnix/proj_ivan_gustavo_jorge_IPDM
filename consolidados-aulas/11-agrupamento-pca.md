@@ -161,7 +161,7 @@ Consultando a variável resposta $Y$ (`mortalidade_60_69`) **após** a definiç�
 
 ## 6. Resolução Completa dos Exercícios da Aula 12 (Slides 26/29 e 27/29)
 
-Para fundamentação teórica completa do grupo, resolvemos passo a passo todos os exercícios dos slides 26/29 e 27/29 da Aula 12 ([`slides_aulas/Aula 12 - Agrupamento e Componentes Principais.PDF`](../slides_aulas/Aula%2012%20-%20Agrupamento%20e%20Componentes%20Principais.PDF)).
+Para fundamentação teórica completa do grupo, resolvemos passo a passo todos os exercícios dos slides 26/29 e 27/29 da Aula 12 ([`materiais-aulas/Aula 12 - Agrupamento e Componentes Principais.PDF`](../materiais-aulas/Aula%2012%20-%20Agrupamento%20e%20Componentes%20Principais.PDF)).
 
 ### Parte A: Exercícios de Cálculo (Slide 26/29)
 
@@ -252,4 +252,6 @@ Para fundamentação teórica completa do grupo, resolvemos passo a passo todos 
 - 🧮 **Script gerador:** [`11-agrupamento-pca.R`](../estrutura/codigos/11-agrupamento-pca.R)
 - 📋 **Auditoria numérica:** [`11-numeros.txt`](../estrutura/codigos/11-numeros.txt)
 - 📊 **Atribuições de grupos e escores PCA:** [`11-grupos.csv`](../estrutura/codigos/11-grupos.csv)
-- 📄 **Artigo da Entrega 1 (PDF):** [`../entregas/entrega-1/entrega-1-pergunta.pdf`](../entregas/entrega-1/entrega-1-pergunta.pdf)
+- 📄 **Artigo da Entrega 1 (PDF):** [`../entregas/entrega-1-parcial/entrega-1-pergunta.pdf`](../entregas/entrega-1-parcial/entrega-1-pergunta.pdf)
+- 📄 **Artigo Final — Entrega 2 (PDF):** [`../entregas/entrega-2-final/artigo-final/artigo-final.pdf`](../entregas/entrega-2-final/artigo-final/artigo-final.pdf)
+- 📊 **Apresentação Final (PDF):** [`../entregas/entrega-2-final/apresentacao-final/apresentacao.pdf`](../entregas/entrega-2-final/apresentacao-final/apresentacao.pdf)

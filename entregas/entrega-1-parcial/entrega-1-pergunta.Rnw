@@ -6,7 +6,7 @@
 %
 % Compilar:
 %   RStudio: botão "Compile PDF" (com knitr configurado)
-%   Terminal (na pasta entregas/entrega-1/):
+%   Terminal (na pasta entregas/entrega-1-parcial/):
 %     Rscript -e "knitr::knit2pdf('entrega-1-pergunta.Rnw')"
 % ==========================================================
 \documentclass[12pt,a4paper,oneside]{article}

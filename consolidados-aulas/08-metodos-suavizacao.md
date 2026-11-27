@@ -154,7 +154,7 @@ Se a largura de banda $h$ for pequena demais e tentarmos prever em um ponto $x_0
 
 ## 6. Resolução Completa dos Exercícios da Aula 09
 
-Para fundamentação teórica completa do grupo, resolvemos formalmente todos os exercícios dos slides 24 e 25 da Aula 09 ([`slides_aulas/TAE_aula09.PDF`](../slides_aulas/TAE_aula09.PDF)).
+Para fundamentação teórica completa do grupo, resolvemos formalmente todos os exercícios dos slides 24 e 25 da Aula 09 ([`materiais-aulas/Aula 09 - Métodos de Suavização.PDF`](../materiais-aulas/Aula%2009%20-%20M%C3%A9todos%20de%20Suaviza%C3%A7%C3%A3o.PDF)).
 
 ### Parte A: Exercícios de Cálculo (Slide 24)
 

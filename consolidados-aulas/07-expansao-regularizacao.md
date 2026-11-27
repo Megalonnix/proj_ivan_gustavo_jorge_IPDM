@@ -175,7 +175,7 @@ Dos **19 preditores candidatos**, o Lasso zerou **11 colunas de ruído/redundân
 
 ## 5. Resolução Completa dos Exercícios da Aula 08
 
-Para fundamentação teórica completa, apresentamos a resolução dos exercícios dos slides 21 e 22 da Aula 08 ([`slides_aulas/TAE_aula08.PDF`](../slides_aulas/TAE_aula08.PDF)).
+Para fundamentação teórica completa, apresentamos a resolução dos exercícios dos slides 21 e 22 da Aula 08 ([`materiais-aulas/Aula 08 - Expansão e Regularização.PDF`](../materiais-aulas/Aula%2008%20-%20Expans%C3%A3o%20e%20Regulariza%C3%A7%C3%A3o.PDF)).
 
 ### Parte A: Exercícios de Cálculo (Slide 21/24)
 

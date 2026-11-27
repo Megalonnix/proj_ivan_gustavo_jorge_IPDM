@@ -170,7 +170,7 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 
 ## 5. Resolução Completa dos Exercícios da Aula 10 (Slides 29/32 e 30/32)
 
-Para fundamentação teórica completa do grupo, resolvemos passo a passo todos os exercícios dos slides 29/32 e 30/32 da Aula 10 ([`slides_aulas/TAE_aula10.PDF`](../slides_aulas/TAE_aula10.PDF)).
+Para fundamentação teórica completa do grupo, resolvemos passo a passo todos os exercícios dos slides 29/32 e 30/32 da Aula 10 ([`materiais-aulas/Aula 10 - Splines e Modelos Aditivos.PDF`](../materiais-aulas/Aula%2010%20-%20Splines%20e%20Modelos%20Aditivos.PDF)).
 
 ### Parte A: Exercícios de Cálculo (Slide 29/32)
 
@@ -266,5 +266,5 @@ Para fundamentação teórica completa do grupo, resolvemos passo a passo todos 
 - 📋 [Relatório técnico bruto (`09-splines-modelos-aditivos.md`)](../estrutura/codigos/09-numeros.txt).
 - 📎 [Consolidado 08 — Regularização](07-expansao-regularizacao.md).
 - 📎 [Consolidado 09 — Métodos de Suavização](08-metodos-suavizacao.md).
-- 📎 [Consolidado 09 — Escolha da Pergunta](../entregas/entrega-1/escolha-da-pergunta.md).
-- 📄 [Artigo Formal — Entrega 1 (PDF)](../entregas/entrega-1/entrega-1-pergunta.pdf).
+- 📎 [Consolidado 09 — Escolha da Pergunta](../entregas/entrega-1-parcial/escolha-da-pergunta.md).
+- 📄 [Artigo Formal — Entrega 1 (PDF)](../entregas/entrega-1-parcial/entrega-1-pergunta.pdf).
