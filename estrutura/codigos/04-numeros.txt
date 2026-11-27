@@ -17,8 +17,8 @@
 
 ## Figuras
 
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/04/04-probabilidades.png` — Curva sigmoide
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/04/04-curva-roc.png` — ROC
+- `consolidados-aulas/graficos/04/04-probabilidades.png` — Curva sigmoide
+- `consolidados-aulas/graficos/04/04-curva-roc.png` — ROC
 
 ## Output bruto
 
@@ -77,7 +77,7 @@ real  0  1
    0 10 17
    1  8 19
 
-[OK] Figuras gravadas em: /home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/04
+[OK] Figuras gravadas em: consolidados-aulas/graficos/04
 ```
 
 ## Notas

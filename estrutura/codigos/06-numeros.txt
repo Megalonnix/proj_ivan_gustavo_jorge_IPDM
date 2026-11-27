@@ -1,4 +1,4 @@
-# Relatório da Atividade 07 — Reamostragem
+# Relatório da Atividade 06 — Reamostragem (Aula 07)
 
 **Gerado por:** `06-metodos-reamostragem.R`  
 **Data:** 2026-11-09 00:01:04  
@@ -23,8 +23,8 @@
 
 ## Figuras
 
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/06/07-validacao-cruzada.png` — Volatilidade: splits avulsos vs CV(5)
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/06/07-bootstrap.png` — Distribuição bootstrap de β1
+- `consolidados-aulas/graficos/06/06-validacao-cruzada.png` — Volatilidade: splits avulsos vs CV(5)
+- `consolidados-aulas/graficos/06/06-bootstrap.png` — Distribuição bootstrap de β1
 
 ## Output bruto
 
@@ -53,7 +53,7 @@ IC 95% analítico: [-19.2201; 15.0283]
 IC 95% bootstrap: [-18.8741; 11.8109]
 0 dentro do IC bootstrap? SIM
 
-[OK] Figuras em: /home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/06
+[OK] Figuras em: consolidados-aulas/graficos/06
 ```
 
 ## Notas

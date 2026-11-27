@@ -104,12 +104,12 @@ Conforme ensinado nos slides 13 e 15 da Aula 09:
 
 ---
 
-### Figura 3: O Dilema de Ajuste (Treme vs Achata)
-![Efeito do Botão de Flexibilidade](graficos/08/03-efeito-flexibilidade.png)
+### Figura 3: Estrutura Local da Densidade de `riqueza`
+![Estrutura local da relação em riqueza](graficos/08/03-efeito-flexibilidade.png)
 *(Arquivo local: `graficos/08/03-efeito-flexibilidade.png`)*
 
-- **Painel Esquerdo (Kernel):** Com $h = 0,0035$ ($0,05 \times \mathrm{sd}$), o sino é tão estreito que a curva "treme" para capturar cada observação individual (overfitting local). Com $h = 0,0280$ ($0,40 \times \mathrm{sd}$), o sino é largo demais e achata o relevo real da distribuição.
-- **Painel Direito (KNN):** Com $k = 3$, vemos o clássico aspecto "serrilhado", com saltos bruscos a cada ponto. Com $k = 40$, quase dois terços da amostra entram na janela, transformando o preditor num patamar estático.
+- O gráfico evidencia por que o ajuste local precisa equilibrar o botão de flexibilidade: a densidade de `riqueza` concentra três regimes bem separados — o **patamar** de menor renda (em torno de `0,35`), a zona de **queda/transição** (`0,42`) e o **repique** industrial/central (`0,51`).
+- No **Kernel**, se a banda $h$ for estreita demais (ex.: $h = 0,0035$), a estimativa segue ruídos locais pontuais; se for larga demais (ex.: $h = 0,0280$), ela mistura esses três regimes e achata a transição. No **KNN**, ocorre o paralelo com $k$ muito pequeno (curva serrilhada) versus $k$ grande demais (patamar estático).
 
 ---
 
@@ -117,12 +117,12 @@ Conforme ensinado nos slides 13 e 15 da Aula 09:
 ![Dinâmica Temporal](graficos/08/04-dinamica-temporal.png)
 *(Arquivo local: `graficos/08/04-dinamica-temporal.png`)*
 
-Na nossa Pergunta 1 de pesquisa (`09-escolha-da-pergunta.md`), documentamos que o tempo (`ano`) exerce um papel determinante sobre a mortalidade de idosos devido ao **choque sanitário da COVID-19**.
-- Se tentarmos ajustar uma **reta paramétrica** para `ano`, o MSE de validação cruzada é desastroso (**$16,12$**), pois uma reta assume que a mortalidade sobe ou desce de forma monótona para sempre.
-- O **Kernel Nadaraya-Watson** com banda temporal $h = 0,86$ anos atinge **$\mathrm{MSE} = 10,83$** (redução de 32,8% do erro!), capturando com perfeição o ciclo epidemiológico real:
-  - Estabilidade relativa entre 2014 e 2018 (~17 a 18 mortes por mil);
-  - Explosão não-linear no biênio pandêmico 2020–2022 (pico superior a 25 mortes por mil);
-  - Recuperação expressiva e queda acentuada em 2024 (~14 a 16 mortes por mil).
+Na nossa Pergunta 1 de pesquisa ([`escolha-da-pergunta.md`](../entregas/entrega-1-parcial/escolha-da-pergunta.md)), documentamos que o tempo (`ano`) exerce um papel determinante sobre a mortalidade de idosos devido ao **choque sanitário da COVID-19**.
+- Ao tentar ajustar uma **reta paramétrica** sobre `ano`, o modelo linear força uma tendência monótona que ignora o ciclo da pandemia.
+- O **Kernel Nadaraya-Watson** com banda temporal $h = 0,86$ anos acompanha visualmente a inflexão da série ao longo das edições:
+  - Estabilidade relativa entre 2014 e 2018 (~19 mortes por mil);
+  - Elevação no biênio pandêmico 2020–2022 (pico médio próximo de 25 mortes por mil);
+  - Recuperação e queda acentuada em 2024 (~16 mortes por mil).
 Este resultado ilustra com clareza o poder dos métodos não-paramétricos: **descobrir a anatomia do fenômeno sem forçar uma hipótese funcional falsa**.
 
 ---
@@ -246,7 +246,7 @@ Para fundamentação teórica completa do grupo, resolvemos formalmente todos os
 
 ## 7. Conexão com o Bloco III e Próximos Passos
 
-A Atividade 09 marca com sucesso a inauguração do **Bloco III (Modelos Flexíveis)** em nosso projeto:
+A Atividade 08 (Aula 09) marca com sucesso a inauguração do **Bloco III (Modelos Flexíveis)** em nosso projeto:
 1. Comprovamos empiricamente que as taxas de mortalidade na Baixada Santista possuem não-linearidades reais que a reta de MQO é incapaz de capturar;
 2. Tanto o KNN ($k=20$) quanto o Kernel de Nadaraya-Watson ($h=0,0070$) reduziram o erro de validação cruzada em relação ao MQO;
 3. O Kernel smoothing superou todos os métodos ao oferecer uma curva diferenciável e clinicamente plausível, destacando o impacto do parque industrial de Cubatão e o choque pandêmico de 2020–2022.

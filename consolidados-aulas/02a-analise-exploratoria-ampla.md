@@ -96,11 +96,11 @@ Nenhum valor ausente. Não vamos precisar imputar, descartar nem modelar buracos
 
 Toda análise precisa de uma referência. Se o modelo não bate o baseline, ele não ganhou nada — apenas embaralhou.
 
-**Baseline de regressão:** prever sempre a média do alvo.
+**Dispersão descritiva e referência de regressão:** prever sempre a média do alvo.
 
-    RMSE_baseline = sd(Y) = 3.8504
+    sd(Y) = 3,8504   |   RMSE in-sample da média = 3,8146
 
-Traduzindo: se eu simplesmente disser "todo município-ano tem mortalidade ≈ 19,9", meu erro típico seria de 3,85 mortes por mil habitantes. Qualquer modelo de regressão precisa entregar RMSE **abaixo disso** para ter valor.
+Traduzindo: `sd(Y) = 3,8504` é o desvio-padrão amostral (denominador $n - 1$), e o erro quadrático médio *in-sample* ao dizer "todo município-ano tem mortalidade ≈ 19,91" é `3,8146` (denominador $n$). Nas atividades com validação cruzada (`05` em diante), a linha de base honesta será calculada exclusivamente pela média do treino em cada dobra (RMSE CV5 ≈ `3,84`–`3,86`). Qualquer modelo de regressão precisa entregar RMSE fora da amostra **abaixo dessa referência** para ter valor.
 
 **Baseline de classificação:** chutar sempre a classe majoritária.
 
@@ -160,7 +160,7 @@ Não devemos forçar um resultado que o dado não mostra. A elegância do trabal
 1. **Preditores válidos:** `escolaridade`, `distorcao_em`, `pib_per_capita`, `ano`, `riqueza`. Excluídos por circularidade: `longevidade`, `ipdm`.
 2. **Correlações são fracas** — o sinal, se existir, não é linear simples.
 3. **n/p = 6** — parcimônia ou regularização são obrigatórias.
-4. **Baselines fixados:** RMSE = 3,8504 (regressão) e 50% de acurácia (classificação).
+4. **Referências fixadas:** dispersão amostral `sd(Y) = 3,8504` (RMSE *in-sample* da média `3,8146`; o baseline honesto por dobra de treino será medido na Atividade 05) e 50% de acurácia na classificação.
 5. **Distribuição do alvo é assimétrica à direita** — a normalidade dos resíduos será questão aberta.
 6. **Heterogeneidade entre municípios** é real e visível.
 
@@ -187,7 +187,7 @@ $$
 $$
 
 > **Frase de entrega da Aula 03 (forma da distribuição de `mortalidade_60_69`):**  
-> *"A taxa de mortalidade de 60 a 69 anos na Baixada Santista é **assimétrica à direita** (média $19,91$ maior que a mediana $19,53$, com cauda superior estendendo-se até $33,00$ mortes/mil hab. em Mongaguá/2022), afastando-se da simetria da Normal teórica e lembrando uma distribuição **Gama ou Lognormal** deslocada."*
+> *"A taxa de mortalidade de 60 a 69 anos na Baixada Santista é **assimétrica à direita** (média $19,91$ maior que a mediana $19,40$, com cauda superior estendendo-se até $33,00$ mortes/mil hab. em Mongaguá/2022), afastando-se da simetria da Normal teórica e lembrando uma distribuição **Gama ou Lognormal** deslocada."*
 
 ### 2. Resolução dos Exercícios de Cálculo da Aula 03 (Slide 16/19)
 
@@ -217,7 +217,7 @@ $$
 - 🧮 [`02a-analise-exploratoria-ampla.R`](../estrutura/codigos/02a-analise-exploratoria-ampla.R) — **a fonte** deste documento.
 
 **Demais documentos relacionados:**
-- 📋 [Relatório técnico do script (`02a-analise-exploratoria-ampla.md`)](../estrutura/codigos/02a-numeros.txt) — output bruto, sem a camada didática.
+- 📋 [Auditoria numérica do script (`02a-numeros.txt`)](../estrutura/codigos/02a-numeros.txt) — output bruto, sem a camada didática.
 - 📊 [Banco de dados (CSV)](../estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv).
 - 📄 [Dicionário de dados (PDF)](dicionario/dicionario_ipdm_baixada.pdf).
 - 📝 [Dicionário de dados (fonte LaTeX)](dicionario/dicionario_ipdm_baixada.tex).

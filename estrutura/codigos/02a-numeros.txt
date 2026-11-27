@@ -20,9 +20,9 @@ Excluídos por circularidade: `longevidade`, `ipdm`.
 
 ## Figuras geradas
 
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/02a/01-histograma-mortalidade.png` — Histograma do alvo + Normal teórica
-- `../../consolidados-aulas/graficos/02b/03-boxplot-municipios.png` — Boxplot do alvo por município
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/02a/03-escolaridade-mortalidade.png` — Dispersão Escolaridade × Mortalidade
+- `consolidados-aulas/graficos/02a/01-histograma-mortalidade.png` — Histograma do alvo + Normal teórica
+- `consolidados-aulas/graficos/02b/03-boxplot-municipios.png` — Boxplot do alvo por município
+- `consolidados-aulas/graficos/02a/03-escolaridade-mortalidade.png` — Dispersão Escolaridade × Mortalidade
 
 ## Output bruto
 
@@ -88,7 +88,7 @@ Unidade de Y: mortes por mil habitantes na faixa 60–69.
  3rd Qu.:1.0     
  Max.   :1.0     
 
-[OK] Figuras gravadas em: /home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/02a
+[OK] Figuras gravadas em: consolidados-aulas/graficos/02a
 ```
 
 ## Notas

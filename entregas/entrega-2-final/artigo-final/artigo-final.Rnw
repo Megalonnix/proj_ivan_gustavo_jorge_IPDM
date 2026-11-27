@@ -66,125 +66,8 @@ options(OutDec = ",", digits = 4)
 @
 
 <<modelo, include=FALSE>>=
-# Banco limpo gerado por entrega-2-banco.R (sem vazamento)
-banco <- read.csv("entrega-2-dados.csv", stringsAsFactors = FALSE)
-dados <- data.frame(
-  municipio         = factor(banco$municipio),
-  ano_f             = factor(banco$ano),
-  mortalidade_60_69 = banco$mortalidade_60_69
-)
-
-f1 <- function(x, d = 2) formatC(x, format = "f", digits = d, big.mark = ".", decimal.mark = ",")
-
-n_obs <- nrow(dados)
-media_global <- mean(dados$mortalidade_60_69)
-dp_global    <- sd(dados$mortalidade_60_69)
-
-medias_mun <- sort(tapply(banco$mortalidade_60_69, banco$municipio, mean))
-medias_ano <- tapply(banco$mortalidade_60_69, banco$ano, mean)
-
-separa_treino <- function(df, n_tr = 38L, seed = 42L) {
-  set.seed(seed)
-  repeat {
-    idx <- sort(sample.int(nrow(df), size = n_tr))
-    tr <- df[idx, , drop = FALSE]
-    if (all(levels(df$municipio) %in% as.character(tr$municipio)) &&
-        all(levels(df$ano_f) %in% as.character(tr$ano_f))) {
-      return(idx)
-    }
-  }
-}
-
-faz_dobras <- function(df, k = 5L, seed = 1L) {
-  set.seed(seed)
-  repeat {
-    d <- sample(rep(seq_len(k), length.out = nrow(df)))
-    ok <- TRUE
-    for (j in seq_len(k)) {
-      tr_j <- df[d != j, , drop = FALSE]
-      if (!all(levels(df$municipio) %in% as.character(tr_j$municipio)) ||
-          !all(levels(df$ano_f) %in% as.character(tr_j$ano_f))) {
-        ok <- FALSE
-        break
-      }
-    }
-    if (ok) return(d)
-  }
-}
-
-idx_tr <- separa_treino(dados, n_tr = 38L, seed = 42L)
-treino <- dados[idx_tr, , drop = FALSE]
-teste  <- dados[-idx_tr, , drop = FALSE]
-dobras <- faz_dobras(treino, k = 5L, seed = 1L)
-
-k <- 5L
-mse_base <- numeric(k); mae_base <- numeric(k)
-mse_mqo  <- numeric(k); mae_mqo  <- numeric(k)
-mse_arv  <- numeric(k); mae_arv  <- numeric(k)
-mse_bag  <- numeric(k); mae_bag  <- numeric(k)
-mse_rf   <- numeric(k); mae_rf   <- numeric(k)
-
-for (j in seq_len(k)) {
-  tr <- treino[dobras != j, , drop = FALSE]
-  va <- treino[dobras == j, , drop = FALSE]
-
-  p_base <- rep(mean(tr$mortalidade_60_69), nrow(va))
-  mse_base[j] <- mean((va$mortalidade_60_69 - p_base)^2)
-  mae_base[j] <- mean(abs(va$mortalidade_60_69 - p_base))
-
-  m_mqo <- lm(mortalidade_60_69 ~ municipio + ano_f, data = tr)
-  p_mqo <- predict(m_mqo, newdata = va)
-  mse_mqo[j] <- mean((va$mortalidade_60_69 - p_mqo)^2)
-  mae_mqo[j] <- mean(abs(va$mortalidade_60_69 - p_mqo))
-
-  set.seed(1)
-  ctrl <- rpart::rpart.control(xval = 5L, minsplit = 2L, cp = 0)
-  arv_full <- rpart::rpart(mortalidade_60_69 ~ municipio + ano_f, data = tr, method = "anova", control = ctrl)
-  cpt <- arv_full$cptable
-  i_min <- which.min(cpt[, "xerror"])
-  lim_1se <- cpt[i_min, "xerror"] + cpt[i_min, "xstd"]
-  i_1se <- which(cpt[, "xerror"] <= lim_1se)[1]
-  arv_pod <- rpart::prune(arv_full, cp = cpt[i_1se, "CP"])
-  p_arv <- predict(arv_pod, newdata = va)
-  mse_arv[j] <- mean((va$mortalidade_60_69 - p_arv)^2)
-  mae_arv[j] <- mean(abs(va$mortalidade_60_69 - p_arv))
-
-  set.seed(1)
-  m_bag <- randomForest::randomForest(mortalidade_60_69 ~ municipio + ano_f, data = tr, mtry = 2L, ntree = 500L)
-  p_bag <- predict(m_bag, newdata = va)
-  mse_bag[j] <- mean((va$mortalidade_60_69 - p_bag)^2)
-  mae_bag[j] <- mean(abs(va$mortalidade_60_69 - p_bag))
-
-  set.seed(1)
-  rf1 <- randomForest::randomForest(mortalidade_60_69 ~ municipio + ano_f, data = tr, mtry = 1L, ntree = 500L)
-  set.seed(1)
-  rf2 <- randomForest::randomForest(mortalidade_60_69 ~ municipio + ano_f, data = tr, mtry = 2L, ntree = 500L)
-  m_rf <- if (tail(rf1$mse, 1) <= tail(rf2$mse, 1)) rf1 else rf2
-  p_rf <- predict(m_rf, newdata = va)
-  mse_rf[j] <- mean((va$mortalidade_60_69 - p_rf)^2)
-  mae_rf[j] <- mean(abs(va$mortalidade_60_69 - p_rf))
-}
-
-rmse_cv_base <- sqrt(mean(mse_base)); mae_cv_base <- mean(mae_base)
-rmse_cv_mqo  <- sqrt(mean(mse_mqo));  mae_cv_mqo  <- mean(mae_mqo)
-rmse_cv_arv  <- sqrt(mean(mse_arv));  mae_cv_arv  <- mean(mae_arv)
-rmse_cv_bag  <- sqrt(mean(mse_bag));  mae_cv_bag  <- mean(mae_bag)
-rmse_cv_rf   <- sqrt(mean(mse_rf));   mae_cv_rf   <- mean(mae_rf)
-dp_dobras    <- sd(sqrt(mse_mqo))
-red_rmse     <- (1 - rmse_cv_mqo / rmse_cv_base) * 100
-
-modelo_final <- lm(mortalidade_60_69 ~ municipio + ano_f, data = treino)
-pred_teste <- predict(modelo_final, newdata = teste)
-rmse_teste_mqo  <- sqrt(mean((teste$mortalidade_60_69 - pred_teste)^2))
-mae_teste_mqo   <- mean(abs(teste$mortalidade_60_69 - pred_teste))
-rmse_teste_base <- sqrt(mean((teste$mortalidade_60_69 - mean(treino$mortalidade_60_69))^2))
-
-coef_est <- coef(modelo_final)
-diff_mong_santos <- unname(coef_est["municipioMongaguá"] - coef_est["municipioSantos"])
-diff_2022_2014   <- unname(coef_est["ano_f2022"])
-
-res_pad <- rstandard(modelo_final)
-idx_max <- which.max(abs(res_pad))
+# Carrega banco limpo, divisao 38/16, CV5, comparacao controlada e diagnosticos
+source("entrega-2-banco.R", local = knitr::knit_global())
 @
 
 \selectlanguage{brazil}
@@ -304,6 +187,7 @@ Média do treino & \Sexpr{f1(rmse_cv_base)} & \Sexpr{f1(mae_cv_base)} \\
 MQO: município + ano & \Sexpr{f1(rmse_cv_mqo)} & \Sexpr{f1(mae_cv_mqo)} \\
 \bottomrule
 \end{tabular}
+\fonte{Elaboração própria a partir do banco do projeto.}
 \end{table}
 
 No teste reservado, o RMSE foi \Sexpr{f1(rmse_teste_mqo)} e o MAE, \Sexpr{f1(mae_teste_mqo)}. A média do treino teve RMSE de \Sexpr{f1(rmse_teste_base)} no mesmo teste. Esses resultados não foram usados para ajustar o modelo.
@@ -346,6 +230,7 @@ Bagging & \Sexpr{f1(rmse_cv_bag)} & \Sexpr{f1(mae_cv_bag)} \\
 Floresta aleatória & \Sexpr{f1(rmse_cv_rf)} & \Sexpr{f1(mae_cv_rf)} \\
 \bottomrule
 \end{tabular}
+\fonte{Elaboração própria a partir do banco do projeto.}
 \end{table}
 
 A comparação utiliza somente o treino. O MQO foi mantido como modelo principal pela interpretação e pela especificação definida previamente. O teste reservado nesta reanálise não orientou a escolha de parâmetros.

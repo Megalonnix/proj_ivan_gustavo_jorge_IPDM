@@ -43,7 +43,7 @@ raiz_arvore <- as.character(a$modelo$frame$var[1])
 split_raiz <- if(raiz_arvore=='<leaf>') 'Árvore selecionada sem divisões (média global).' else paste(capture.output(a$modelo)[1:12],collapse='\n')
 g <- 'consolidados-aulas/graficos/10';dir.create(g,recursive=TRUE,showWarnings=FALSE)
 figura(g,'01-arvore-podada',{
- if(raiz_arvore=='<leaf>') {plot.new();text(.5,.5,paste('Árvore sem divisões\nMédia:',round(mean(d$y),3)))} else {plot(a$modelo,uniform=TRUE,margin=.15);text(a$modelo,use.n=TRUE,cex=.65)}
+ if(raiz_arvore=='<leaf>') {plot.new();text(.5,.5,paste('Árvore sem divisões\nMédia:',round(mean(d$y),3)))} else {plot(a$modelo,uniform=TRUE,margin=.15);text(a$modelo,use.n=TRUE,pretty=0,cex=.72)}
 })
 tab <- a$tabela;s2 <- mean((d$y-mean(d$y))^2)
 figura(g,'02-curva-poda-cp',{matplot(tab[,'nsplit']+1,tab[,c('rel error','xerror')]*s2,type='b',pch=c(1,16),xlab='Folhas',ylab='MSE interno (CV5)',col=c('steelblue','darkorange'));abline(h=(tab[which.min(tab[,'xerror']),'xerror']+tab[which.min(tab[,'xerror']),'xstd'])*s2,lty=2);legend('topright',c('Treino','CV interna','Limite 1-SE'),col=c('steelblue','darkorange','black'),lty=c(1,1,2))})

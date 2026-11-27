@@ -1,4 +1,4 @@
-# Relatório Técnico da Atividade 10 — Splines e GAM
+# Relatório Técnico da Atividade 09 — Splines e GAM (Aula 10)
 
 **Gerado por:** `09-splines-modelos-aditivos.R`  
 **Data:** 2026-11-09 00:01:09  

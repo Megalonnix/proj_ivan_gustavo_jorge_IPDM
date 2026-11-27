@@ -158,7 +158,7 @@ A contrapartida é o custo computacional. Rodar 2.000 regressões toma alguns se
 
 ### Figura 1 — 6 splits avulsos vs. CV(5)
 
-![Comparação entre 6 divisões treino/teste aleatórias e o erro da CV(5), por grau polinomial](graficos/06/07-validacao-cruzada.png)
+![Comparação entre 6 divisões treino/teste aleatórias e o erro da CV(5), por grau polinomial](graficos/06/06-validacao-cruzada.png)
 
 O gráfico mostra duas camadas de informação:
 
@@ -177,7 +177,7 @@ A lição visual é imediata: **quando as linhas cinzas ficam paralelas e aperta
 
 ### Figura 2 — Distribuição bootstrap de β₁
 
-![Histograma dos 2.000 valores de β₁ reamostrados](graficos/06/07-bootstrap.png)
+![Histograma dos 2.000 valores de β₁ reamostrados](graficos/06/06-bootstrap.png)
 
 O histograma mostra os 2.000 β₁'s gerados pelo bootstrap. Três linhas verticais de referência:
 
@@ -217,7 +217,7 @@ O que fica desta atividade:
 5. **IC bootstrap é assimétrico** — refletindo a não-normalidade do alvo.
 6. **Duas técnicas, dois propósitos:** CV mede previsão, bootstrap mede incerteza.
 
-O caminho está cada vez mais claro. Todas as abordagens até aqui bateram na mesma parede: **o sinal é fraco, o n é pequeno, os modelos complexos sobreajustam**. A atividade 08 fecha o ciclo com uma resposta direta a esse dilema: **regularização** — que encolhe os coeficientes justamente para não deixá-los explodir quando há muitos preditores e pouca evidência.
+O caminho está cada vez mais claro. Todas as abordagens até aqui bateram na mesma parede: **o sinal é fraco, o n é pequeno, os modelos complexos sobreajustam**. A atividade 07 (Aula 08) fecha o ciclo com uma resposta direta a esse dilema: **regularização** — que encolhe os coeficientes justamente para não deixá-los explodir quando há muitos preditores e pouca evidência.
 
 ---
 
@@ -272,7 +272,7 @@ O intervalo de confiança percentílico de 95% é dado pelos quantis empíricos 
 ### 3. Exercícios Conceituais (Slide 18/20 — Aula 07)
 
 1. **As duas queixas da divisão única:**  
-   A divisão única 70/30 sofre de (i) **alta variância da avaliação** (o MSE de teste muda drasticamente conforme a semente do sorteio, como demonstramos nos 200 splits da Atividade 05) e (ii) **viés pessimista / desperdício de dados** (apenas 70% das observações são usadas para treinar o modelo, o que em bases pequenas como $n = 54$ empobrece o ajuste). A validação cruzada $k$-fold reduz a variância ao promediar o erro sobre $k$ dobras onde cada ponto é testado exatamente uma vez, e reduz o viés pessimista ao treinar cada modelo com $(k-1)/k$ (80% ou 90%) da base.
+   A divisão única 70/30 sofre de (i) **alta variância da avaliação** (o MSE de teste muda drasticamente conforme a semente do sorteio, como demonstramos nos 6 splits aleatórios desta atividade e na avaliação da Atividade 05) e (ii) **viés pessimista / desperdício de dados** (apenas 70% das observações são usadas para treinar o modelo, o que em bases pequenas como $n = 54$ empobrece o ajuste). A validação cruzada $k$-fold reduz a variância ao promediar o erro sobre $k$ dobras onde cada ponto é testado exatamente uma vez, e reduz o viés pessimista ao treinar cada modelo com $(k-1)/k$ (80% ou 90%) da base.
 2. **Escolha do tamanho de $k$ na CV:**  
    - **Se $k$ for muito pequeno (ex.: $k = 2$):** Cada modelo é treinado com apenas metade dos dados (50%), o que superestima o erro de teste real (alto viés pessimista na estimativa do erro).  
    - **Se $k$ for muito grande (ex.: $k = n$, LOOCV):** Os $n$ conjuntos de treinamento compartilham $n - 2$ observações idênticas, tornando os modelos ajustados fortemente correlacionados entre si e exigindo alto custo computacional (além de maior variância na média das $n$ avaliações). Por isso $k = 5$ ou $k = 10$ são o ponto de equilíbrio padrão.
@@ -292,12 +292,11 @@ O intervalo de confiança percentílico de 95% é dado pelos quantis empíricos 
 - 🧮 [`06-metodos-reamostragem.R`](../estrutura/codigos/06-metodos-reamostragem.R) — **a fonte** deste documento.
 
 **Demais documentos relacionados:**
-- 📋 [Relatório técnico do script (`06-metodos-reamostragem.md`)](../estrutura/codigos/06-numeros.txt) — output bruto, sem a camada didática.
+- 📋 [Auditoria numérica do script (`06-numeros.txt`)](../estrutura/codigos/06-numeros.txt) — output bruto, sem a camada didática.
 - 📎 [Consolidado 01 — Dicionário de variáveis](01-dicionario-variaveis.md).
 - 📎 [Consolidado 02 — Análise exploratória](02a-analise-exploratoria-ampla.md).
 - 📎 [Consolidado 03 — Regressão linear](03-regressao-linear.md).
 - 📎 [Consolidado 04 — Regressão logística](04-regressao-logistica.md).
-- 📎 [Consolidado 05 — Treino/teste (regressão)](05-avaliacao-selecao-modelos.md).
-- 📎 [Consolidado 06 — Classificação honesta](05-avaliacao-selecao-modelos.md).
+- 📎 [Consolidado 05 — Avaliação e seleção de modelos (regressão e classificação)](05-avaliacao-selecao-modelos.md).
 - 📊 [Banco de dados (CSV)](../estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv).
 - 📄 [Dicionário de dados (PDF)](dicionario/dicionario_ipdm_baixada.pdf).

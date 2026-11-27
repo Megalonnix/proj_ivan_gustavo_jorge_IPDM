@@ -15,9 +15,9 @@
 | # | Etapa | O que fizemos | O problema que restou |
 |---|---|---|---|
 | **03 / 04** | MQO e Logística | Ajuste na amostra cheia ($n=54$) | Risco de autoengano; sinais instáveis |
-| **05 / 06** | Treino / Teste | Divisão 70/30 e métricas honestas | Alta volatilidade entre divisões |
-| **07** | Reamostragem | CV(5) + Bootstrap + Polinômios (grau 12) | Medimos o sobreajuste ($\mathrm{RMSE} = 240$), mas medir não é consertar |
-| **08** | **Expansão e Regularização** | **Acelerador (`model.matrix`) + Freio (Ridge, Lasso, Elastic Net)** | **Controlar a variância penalizando coeficientes grandes ($\lambda$ por CV)** |
+| **05** | Avaliação e Seleção | Divisão treino/teste e CV(5) | Alta volatilidade entre divisões simples |
+| **06** | Reamostragem | CV(5) + Bootstrap + Polinômios (grau 12) | Medimos o sobreajuste ($\mathrm{RMSE} = 240$), mas medir não é consertar |
+| **07** | **Expansão e Regularização** | **Acelerador (`model.matrix`) + Freio (Ridge, Lasso, Elastic Net)** | **Controlar a variância penalizando coeficientes grandes ($\lambda$ por CV)** |
 
 ---
 
@@ -25,7 +25,7 @@
 
 Chegamos à última atividade do Bloco II. O diagnóstico acumulado nas etapas anteriores é claro:
 - **$n = 54$ é pequeno** para muitos preditores.
-- **Modelos complexos sem restrição explodem** (como o polinômio de grau 12 da Atividade 07) ou sofrem de **colinearidade** (preditores dizendo quase a mesma coisa inflam os erros-padrão).
+- **Modelos complexos sem restrição explodem** (como o polinômio de grau 12 da Atividade 06) ou sofrem de **colinearidade** (preditores dizendo quase a mesma coisa inflam os erros-padrão).
 
 Na **Aula 08**, combinamos dois movimentos opostos:
 1. **O acelerador (Expansão de Atributos):** fabricar colunas novas (potências $x^2$, interações $x_1 \times x_2$ e *dummies* $0/1$ para variáveis categóricas via `model.matrix`) para reduzir o viés.
@@ -236,5 +236,5 @@ Para fundamentação teórica completa, apresentamos a resolução dos exercíci
 ## Documentos Complementares
 
 - 🧮 **Script gerador:** [`07-expansao-regularizacao.R`](../estrutura/codigos/07-expansao-regularizacao.R)
-- 📋 **Relatório técnico bruto:** [`estrutura/codigos/07-expansao-regularizacao.md`](../estrutura/codigos/07-numeros.txt)
-- 📎 **Consolidados anteriores:** [`01`](01-dicionario-variaveis.md) · [`02`](02a-analise-exploratoria-ampla.md) · [`03`](03-regressao-linear.md) · [`04`](04-regressao-logistica.md) · [`05`](05-avaliacao-selecao-modelos.md) · [`06`](05-avaliacao-selecao-modelos.md) · [`07`](06-metodos-reamostragem.md)
+- 📋 **Auditoria numérica:** [`07-numeros.txt`](../estrutura/codigos/07-numeros.txt)
+- 📎 **Consolidados anteriores:** [`01`](01-dicionario-variaveis.md) · [`02a`](02a-analise-exploratoria-ampla.md) · [`02b`](02b-analise-exploratoria-segmentada.md) · [`03`](03-regressao-linear.md) · [`04`](04-regressao-logistica.md) · [`05`](05-avaliacao-selecao-modelos.md) · [`06`](06-metodos-reamostragem.md)

@@ -4,7 +4,7 @@ if (length(arq_ipdm)) setwd(dirname(normalizePath(arq_ipdm[1])))
 if (dir.exists("estrutura/codigos")) setwd("estrutura/codigos")
 set.seed(1)
 # =============================================================
-# ATIVIDADE 07 - REAMOSTRAGEM (CV + BOOTSTRAP)
+# ATIVIDADE 06 - REAMOSTRAGEM (CV + BOOTSTRAP)
 # Y: mortalidade_60_69
 # =============================================================
 if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
@@ -27,7 +27,8 @@ dados <- data.frame(
 )
 
 cazul <- "#276DC3"; claranja <- "#E66101"; croxo <- "#5E3C99"; cfill <- "#E0E7FF"
-pasta_fig <- normalizePath("../../consolidados-aulas/graficos/06"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig <- file.path("..", "..", "consolidados-aulas", "graficos", "06"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig_rel <- "consolidados-aulas/graficos/06"
 
 buffer <- character(0)
 add <- function(...) { txt <- paste0(...); cat(txt, "\n"); buffer <<- c(buffer, txt) }
@@ -78,11 +79,11 @@ curvas_av <- lapply(1:6, function(r) {
   })
 })
 
-arq1 <- file.path(pasta_fig, "07-validacao-cruzada.png")
+arq1 <- file.path(pasta_fig, "06-validacao-cruzada.png")
 png(arq1, width = 800, height = 700); par(mar = c(4,4,1,1), pty = "s")
 ymax <- max(sqrt(unlist(curvas_av))) * 1.05
 plot(seq_along(graus), sqrt(sapply(cvs, `[[`, "mean")), type = "l", lwd = 3, col = croxo,
-     ylim = c(0, ymax), xaxt = "n", xlab = "Grau do polinômio", ylab = "MSE",
+     ylim = c(0, ymax), xaxt = "n", xlab = "Grau do polinômio", ylab = "RMSE",
      main = "6 splits avulsos vs CV(5)")
 axis(1, at = seq_along(graus), labels = paste0("grau ", graus))
 for (r in seq_along(curvas_av))
@@ -114,7 +115,7 @@ add("IC 95% bootstrap: [", round(ci_boot[1], 4), "; ", round(ci_boot[2], 4), "]"
 add("0 dentro do IC bootstrap? ",
     ifelse(ci_boot[1] <= 0 && 0 <= ci_boot[2], "SIM", "NÃO"))
 
-arq2 <- file.path(pasta_fig, "07-bootstrap.png")
+arq2 <- file.path(pasta_fig, "06-bootstrap.png")
 png(arq2, width = 700, height = 700); par(mar = c(4,4,1,1), pty = "s")
 hist(b1_boot, breaks = 30, prob = TRUE, col = cfill, border = "white",
      xlab = "β1 reamostrado", ylab = "Densidade", main = "Bootstrap β1")
@@ -124,11 +125,10 @@ legend("topright", c("β1 MQO","IC 95%"),
        col = c(croxo,claranja), lwd = c(3,2), lty = c(1,2), bty = "n")
 dev.off()
 
-add(""); add("[OK] Figuras em: ", pasta_fig)
+add(""); add("[OK] Figuras em: ", pasta_fig_rel)
 
-arquivo_md <- "06-metodos-reamostragem.md"
 cabecalho <- c(
-  "# Relatório da Atividade 07 — Reamostragem",
+  "# Relatório da Atividade 06 — Reamostragem (Aula 07)",
   "",
   paste0("**Gerado por:** `06-metodos-reamostragem.R`  "),
   paste0("**Data:** ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "  "),
@@ -154,8 +154,8 @@ cabecalho <- c(
   "",
   "## Figuras",
   "",
-  paste0("- `", arq1, "` — Volatilidade: splits avulsos vs CV(5)"),
-  paste0("- `", arq2, "` — Distribuição bootstrap de β1"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq1)), "` — Volatilidade: splits avulsos vs CV(5)"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq2)), "` — Distribuição bootstrap de β1"),
   "",
   "## Output bruto",
   "", "```", paste(buffer, collapse = "\n"), "```",

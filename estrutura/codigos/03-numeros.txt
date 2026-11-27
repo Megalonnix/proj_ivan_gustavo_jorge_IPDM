@@ -18,12 +18,12 @@
 
 ## Figuras
 
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/03/03-reta-residuos.png` — Dispersão + reta + resíduos
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/03/03-residuos-simples.png` — Resíduos vs ajustados (simples)
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/03/03-vies-variancia.png` — Viés-variância
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/03/03-bootstrap-coeficiente.png` — Bootstrap β1
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/03/03-simples-multipla.png` — Simples vs múltipla
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/03/03-residuos-multipla.png` — Resíduos vs ajustados (múltipla)
+- `consolidados-aulas/graficos/03/03-reta-residuos.png` — Dispersão + reta + resíduos
+- `consolidados-aulas/graficos/03/03-residuos-simples.png` — Resíduos vs ajustados (simples)
+- `consolidados-aulas/graficos/03/03-vies-variancia.png` — Viés-variância
+- `consolidados-aulas/graficos/03/03-bootstrap-coeficiente.png` — Bootstrap β1
+- `consolidados-aulas/graficos/03/03-simples-multipla.png` — Simples vs múltipla
+- `consolidados-aulas/graficos/03/03-residuos-multipla.png` — Resíduos vs ajustados (múltipla)
 
 ## Output bruto
 
@@ -69,7 +69,7 @@ distorcao_em  0.15466    0.17042  0.9075  0.36839
 Correlação escolaridade × distorcao_em: -0.4531
 Shapiro (múltipla): W = 0.9213 | p = 0.00168
 
-[OK] Figuras gravadas em: /home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/03
+[OK] Figuras gravadas em: consolidados-aulas/graficos/03
 ```
 
 ## Notas

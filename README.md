@@ -148,26 +148,26 @@ Funil: dicionário → EDA → regressão/logística → CV/bootstrap → regula
 
 ## Como regenerar (se precisar)
 
-Instale os pacotes R necessários (além do R base e `splines`, que já acompanha o R):
+Pré-requisitos de sistema: **R** (com os pacotes abaixo, além de `splines` que já acompanha o R) e, caso queira recompilar os artigos em PDF a partir dos `.Rnw`, uma distribuição **LaTeX** (TeX Live, MiKTeX ou TinyTeX) com **BibTeX** e a classe **`abnTeX2`**.
 
 ```r
 install.packages(c("rpart", "randomForest", "glmnet", "mgcv", "cluster", "knitr"))
 ```
 
-Na raiz do repositório, para executar todas as atividades e entregas em lote:
+Na raiz do repositório, o lote executa todos os scripts R das atividades (`01`–`11`) e os scripts numéricos das Entregas 1 e 2, regenerando gráficos, CSVs e auditorias `*-numeros.txt` (sem recompilar os PDFs LaTeX):
 
 ```bash
 bash reproduzir.sh
 ```
 
-Ou execute uma atividade individualmente:
+Ou execute uma atividade individualmente (a partir da raiz):
 
 ```bash
 Rscript estrutura/codigos/01-dicionario-variaveis.R
 # ... até 11-agrupamento-pca.R
 ```
 
-Entrega 1:
+Entrega 1 (compilação LaTeX opcional em `entregas/entrega-1-parcial/`):
 
 ```bash
 cd entregas/entrega-1-parcial
@@ -175,7 +175,7 @@ Rscript entrega-1-pergunta.R
 Rscript -e "knitr::knit2pdf('entrega-1-pergunta.Rnw', bib_engine = 'bibtex')"
 ```
 
-Artigo final (MQO + comparação controlada em `abnTeX2`):
+Artigo final (na raiz do repositório; MQO + comparação controlada em `abnTeX2`):
 
 ```bash
 Rscript entregas/entrega-2-final/artigo-final/entrega-2-banco.R

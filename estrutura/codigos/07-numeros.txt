@@ -1,4 +1,4 @@
-# Relatório Técnico da Atividade 08 — Regularização
+# Relatório Técnico da Atividade 07 — Regularização (Aula 08)
 
 **Gerado por:** `07-expansao-regularizacao.R`  
 **Data:** 2026-11-09 00:01:06  
@@ -13,9 +13,9 @@
 
 ## Figuras
 
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/07/01-cv-lasso.png` — Curva em U (Lasso)
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/07/02-cv-ridge.png` — Curva em U (Ridge)
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/07/03-trilhas-coeficientes.png` — Trilhas de coeficientes
+- `consolidados-aulas/graficos/07/01-cv-lasso.png` — Curva em U (Lasso)
+- `consolidados-aulas/graficos/07/02-cv-ridge.png` — Curva em U (Ridge)
+- `consolidados-aulas/graficos/07/03-trilhas-coeficientes.png` — Trilhas de coeficientes
 
 ## Output bruto
 
@@ -105,6 +105,6 @@ ano_f2022                4.4663
 ano_f2024               -2.2226
 riqueza                 -6.6260
 
-[OK] Figuras em: /home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/07
+[OK] Figuras em: consolidados-aulas/graficos/07
 ```
 

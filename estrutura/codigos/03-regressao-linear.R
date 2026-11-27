@@ -42,7 +42,8 @@ x <- dados$escolaridade
 
 cazul <- "#276DC3"; claranja <- "#E66101"; cverde <- "#2CA02C"
 croxo <- "#5E3C99"; cfill <- "#E0E7FF"
-pasta_fig <- normalizePath("../../consolidados-aulas/graficos/03"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig <- file.path("..", "..", "consolidados-aulas", "graficos", "03"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig_rel <- "consolidados-aulas/graficos/03"
 
 buffer <- character(0)
 add <- function(...) { txt <- paste0(...); cat(txt, "\n"); buffer <<- c(buffer, txt) }
@@ -174,9 +175,8 @@ shap2 <- shapiro.test(resid(m2))
 add("Shapiro (múltipla): W = ", round(shap2$statistic, 4),
     " | p = ", round(shap2$p.value, 5))
 
-add(""); add("[OK] Figuras gravadas em: ", pasta_fig)
+add(""); add("[OK] Figuras gravadas em: ", pasta_fig_rel)
 
-arquivo_md <- "03-regressao-linear.md"
 cabecalho <- c(
   "# Relatório da Atividade 03 — Regressão Linear",
   "",
@@ -201,12 +201,12 @@ cabecalho <- c(
   "",
   "## Figuras",
   "",
-  paste0("- `", arq1, "` — Dispersão + reta + resíduos"),
-  paste0("- `", arq2, "` — Resíduos vs ajustados (simples)"),
-  paste0("- `", arq3, "` — Viés-variância"),
-  paste0("- `", arq4, "` — Bootstrap β1"),
-  paste0("- `", arq5, "` — Simples vs múltipla"),
-  paste0("- `", arq6, "` — Resíduos vs ajustados (múltipla)"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq1)), "` — Dispersão + reta + resíduos"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq2)), "` — Resíduos vs ajustados (simples)"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq3)), "` — Viés-variância"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq4)), "` — Bootstrap β1"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq5)), "` — Simples vs múltipla"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq6)), "` — Resíduos vs ajustados (múltipla)"),
   "",
   "## Output bruto",
   "", "```", paste(buffer, collapse = "\n"), "```",

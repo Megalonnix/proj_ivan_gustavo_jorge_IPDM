@@ -290,7 +290,7 @@ $$
 - 🧮 [`03-regressao-linear.R`](../estrutura/codigos/03-regressao-linear.R) — **a fonte** deste documento.
 
 **Demais documentos relacionados:**
-- 📋 [Relatório técnico do script (`03-regressao-linear.md`)](../estrutura/codigos/03-numeros.txt) — output bruto, sem a camada didática.
+- 📋 [Auditoria numérica do script (`03-numeros.txt`)](../estrutura/codigos/03-numeros.txt) — output bruto, sem a camada didática.
 - 📎 [Consolidado 01 — Dicionário de variáveis](01-dicionario-variaveis.md).
 - 📎 [Consolidado 02 — Análise exploratória](02a-analise-exploratoria-ampla.md).
 - 📊 [Banco de dados (CSV)](../estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv).

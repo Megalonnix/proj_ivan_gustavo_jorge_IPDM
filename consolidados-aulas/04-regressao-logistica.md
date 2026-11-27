@@ -330,7 +330,7 @@ $$
 - 🧮 [`04-regressao-logistica.R`](../estrutura/codigos/04-regressao-logistica.R) — **a fonte** deste documento.
 
 **Demais documentos relacionados:**
-- 📋 [Relatório técnico do script (`04-regressao-logistica.md`)](../estrutura/codigos/04-numeros.txt) — output bruto, sem a camada didática.
+- 📋 [Auditoria numérica do script (`04-numeros.txt`)](../estrutura/codigos/04-numeros.txt) — output bruto, sem a camada didática.
 - 📎 [Consolidado 01 — Dicionário de variáveis](01-dicionario-variaveis.md).
 - 📎 [Consolidado 02 — Análise exploratória](02a-analise-exploratoria-ampla.md).
 - 📎 [Consolidado 03 — Regressão linear](03-regressao-linear.md).

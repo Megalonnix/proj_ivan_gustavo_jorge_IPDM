@@ -50,7 +50,8 @@ p <- 4  # riqueza, escolaridade, distorcao_em e pib_per_capita
 
 cazul <- "#276DC3"; claranja <- "#E66101"; cverde <- "#2CA02C"
 croxo <- "#5E3C99"; cfill <- "#E0E7FF"
-pasta_fig <- normalizePath("../../consolidados-aulas/graficos/02a"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig <- file.path("..", "..", "consolidados-aulas", "graficos", "02a"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig_rel <- "consolidados-aulas/graficos/02a"
 
 buffer <- character(0)
 add <- function(...) { txt <- paste0(...); cat(txt, "\n"); buffer <<- c(buffer, txt) }
@@ -118,9 +119,8 @@ plot(dados$escolaridade, dados$mortalidade_60_69, pch = 19, col = cazul,
 abline(lm(mortalidade_60_69 ~ escolaridade, data = dados), col = claranja, lwd = 3)
 dev.off()
 
-add(""); add("[OK] Figuras gravadas em: ", pasta_fig)
+add(""); add("[OK] Figuras gravadas em: ", pasta_fig_rel)
 
-arquivo_md <- "02a-analise-exploratoria-ampla.md"
 cabecalho <- c(
   "# Relatório da Atividade 02 — Diagnóstico, Baseline e EDA",
   "",
@@ -144,9 +144,9 @@ cabecalho <- c(
   "",
   "## Figuras geradas",
   "",
-  paste0("- `", arq1, "` — Histograma do alvo + Normal teórica"),
-  paste0("- `", "../../consolidados-aulas/graficos/02b/03-boxplot-municipios.png", "` — Boxplot do alvo por município"),
-  paste0("- `", arq3, "` — Dispersão Escolaridade × Mortalidade"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq1)), "` — Histograma do alvo + Normal teórica"),
+  paste0("- `", "consolidados-aulas/graficos/02b/03-boxplot-municipios.png", "` — Boxplot do alvo por município"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq3)), "` — Dispersão Escolaridade × Mortalidade"),
   "",
   "## Output bruto",
   "", "```", paste(buffer, collapse = "\n"), "```",

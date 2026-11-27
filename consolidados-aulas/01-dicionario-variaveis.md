@@ -57,9 +57,7 @@ aprendeu algo sobre o mundo, mas porque estava olhando para uma pergunta viciada
 como prever o resultado de um campeonato usando como preditor a pontuação de um dos
 times — o resultado já está embutido.
 
-Por isso trocamos o alvo. Agora é **`mortalidade_60_69`**: uma medida externa, de
-desfecho real, que *não* foi usada para construir o IPDM. Faz sentido substantivo
-perguntar o que explica a mortalidade adulta nessa faixa — e é isso que vamos fazer.
+Por isso trocamos o alvo. Agora é **`mortalidade_60_69`**: uma medida concreta de desfecho demográfico (mortes por mil habitantes) que compõe a dimensão `longevidade` do IPDM. Exatamente por isso, ao elegê-la como alvo $Y$, excluímos `longevidade` e `ipdm` dos preditores — eliminando a circularidade e mantendo apenas indicadores socioeconômicos externos à longevidade.
 
 ## Preditores que sobraram (e os que foram descartados)
 
@@ -156,4 +154,4 @@ $$
 - 📄 [Dicionário de dados (PDF)](dicionario/dicionario_ipdm_baixada.pdf) — versão formatada, para leitura.
 - 📝 [Dicionário de dados (fonte LaTeX)](dicionario/dicionario_ipdm_baixada.tex) — para editar/recompilar.
 - 📊 [Banco de dados (CSV)](../estrutura/bancoDeDados/df_ipdm_baixada_por_municipio.csv) — os dados brutos.
-- 📋 [Relatório técnico do script (`01-dicionario-variaveis.md`)](../estrutura/codigos/01-numeros.txt) — output bruto do script, sem a camada didática.
+- 📋 [Auditoria numérica do script (`01-numeros.txt`)](../estrutura/codigos/01-numeros.txt) — output bruto do script, sem a camada didática.

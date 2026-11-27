@@ -1,14 +1,15 @@
 # Entrega 2 - Banco limpo e calculos canonicos do artigo final
 # Na raiz: Rscript entregas/entrega-2-final/artigo-final/entrega-2-banco.R
-# Gera em entregas/entrega-2-final/artigo-final/:
-#   entrega-2-dados.csv   (lido pelo artigo-final.Rnw)
-#   entrega-2-numeros.txt (auditoria numerica do artigo)
+# Tambem carregado diretamente por artigo-final.Rnw via source().
 
 for (pkg in c("rpart", "randomForest")) {
   if (!requireNamespace(pkg, quietly = TRUE)) {
     stop("Pacote ausente: ", pkg, ". Instale com install.packages(c('rpart', 'randomForest')).")
   }
 }
+
+wd_orig <- getwd()
+on.exit(setwd(wd_orig), add = TRUE)
 
 root <- if (file.exists(file.path("estrutura", "bancoDeDados", "df_ipdm_baixada_por_municipio.csv"))) {
   "."
@@ -22,15 +23,23 @@ setwd(root)
 saida <- file.path("entregas", "entrega-2-final", "artigo-final")
 dir.create(saida, recursive = TRUE, showWarnings = FALSE)
 
+pega_col <- function(df, padrao) {
+  idx <- grep(padrao, names(df), ignore.case = TRUE)
+  if (length(idx) != 1L) {
+    stop("Coluna nao encontrada ou ambigua para o padrao: ", padrao)
+  }
+  df[[idx]]
+}
+
 arq_csv <- file.path("estrutura", "bancoDeDados", "df_ipdm_baixada_por_municipio.csv")
 bruto <- read.csv(arq_csv, sep = ";", dec = ",", fileEncoding = "latin1",
                   check.names = FALSE, stringsAsFactors = FALSE)
 
 # Banco limpo: apenas resposta e preditores definidos na pergunta (sem vazamento)
 banco <- data.frame(
-  municipio         = as.character(bruto[[2]]),
-  ano               = as.integer(bruto[[3]]),
-  mortalidade_60_69 = as.numeric(bruto[[8]]),
+  municipio         = as.character(pega_col(bruto, "^Municipio$")),
+  ano               = as.integer(pega_col(bruto, "^Ano$")),
+  mortalidade_60_69 = as.numeric(pega_col(bruto, "^Taxas de mortalidade")),
   stringsAsFactors  = FALSE
 )
 banco <- na.omit(banco)
@@ -44,6 +53,15 @@ dados <- data.frame(
   ano_f             = factor(banco$ano),
   mortalidade_60_69 = banco$mortalidade_60_69
 )
+
+f1 <- function(x, d = 2) formatC(x, format = "f", digits = d, big.mark = ".", decimal.mark = ",")
+
+n_obs <- nrow(dados)
+media_global <- mean(dados$mortalidade_60_69)
+dp_global    <- sd(dados$mortalidade_60_69)
+
+medias_mun <- sort(tapply(banco$mortalidade_60_69, banco$municipio, mean))
+medias_ano <- tapply(banco$mortalidade_60_69, banco$ano, mean)
 
 # Divisao treino (38) / teste reservado (16) garantindo cobertura de todos os niveis
 separa_treino <- function(df, n_tr = 38L, seed = 42L) {
@@ -137,47 +155,50 @@ for (j in seq_len(k)) {
   mae_rf[j] <- mean(abs(va$mortalidade_60_69 - p_rf))
 }
 
+rmse_cv <- function(m) sqrt(mean(m))
+rmse_cv_base <- rmse_cv(mse_base); mae_cv_base <- mean(mae_base)
+rmse_cv_mqo  <- rmse_cv(mse_mqo);  mae_cv_mqo  <- mean(mae_mqo)
+rmse_cv_arv  <- rmse_cv(mse_arv);  mae_cv_arv  <- mean(mae_arv)
+rmse_cv_bag  <- rmse_cv(mse_bag);  mae_cv_bag  <- mean(mae_bag)
+rmse_cv_rf   <- rmse_cv(mse_rf);   mae_cv_rf   <- mean(mae_rf)
+dp_dobras    <- sd(sqrt(mse_mqo))
+red_rmse     <- (1 - rmse_cv_mqo / rmse_cv_base) * 100
+
+tabela_cv <- data.frame(
+  Modelo = c("Media do treino", "MQO", "Arvore podada", "Bagging", "Floresta aleatoria"),
+  RMSE   = c(rmse_cv_base, rmse_cv_mqo, rmse_cv_arv, rmse_cv_bag, rmse_cv_rf),
+  MAE    = c(mae_cv_base, mae_cv_mqo, mae_cv_arv, mae_cv_bag, mae_cv_rf),
+  stringsAsFactors = FALSE
+)
+
 # Ajuste final nas 38 linhas de treino e avaliacao no teste reservado (16 linhas)
 modelo_final <- lm(mortalidade_60_69 ~ municipio + ano_f, data = treino)
 pred_teste <- predict(modelo_final, newdata = teste)
 media_treino <- mean(treino$mortalidade_60_69)
 
-rmse_cv <- function(m) sqrt(mean(m))
-tabela_cv <- data.frame(
-  Modelo = c("Media do treino", "MQO", "Arvore podada", "Bagging", "Floresta aleatoria"),
-  RMSE   = c(rmse_cv(mse_base), rmse_cv(mse_mqo), rmse_cv(mse_arv), rmse_cv(mse_bag), rmse_cv(mse_rf)),
-  MAE    = c(mean(mae_base), mean(mae_mqo), mean(mae_arv), mean(mae_bag), mean(mae_rf)),
-  stringsAsFactors = FALSE
-)
-
 rmse_teste_mqo  <- sqrt(mean((teste$mortalidade_60_69 - pred_teste)^2))
 mae_teste_mqo   <- mean(abs(teste$mortalidade_60_69 - pred_teste))
 rmse_teste_base <- sqrt(mean((teste$mortalidade_60_69 - media_treino)^2))
-dp_rmse_dobras  <- sd(sqrt(mse_mqo))
-reducao_rmse    <- (1 - rmse_cv(mse_mqo) / rmse_cv(mse_base)) * 100
-
-res_pad <- rstandard(modelo_final)
-idx_max_res <- which.max(abs(res_pad))
-
-medias_mun <- sort(tapply(banco$mortalidade_60_69, banco$municipio, mean))
-medias_ano <- tapply(banco$mortalidade_60_69, banco$ano, mean)
 
 coef_est <- coef(modelo_final)
 diff_mong_santos <- unname(coef_est["municipioMongaguá"] - coef_est["municipioSantos"])
 diff_2022_2014   <- unname(coef_est["ano_f2022"])
 
+res_pad <- rstandard(modelo_final)
+idx_max <- which.max(abs(res_pad))
+
 capture.output({
-  cat("n=", nrow(banco), " treino=", nrow(treino), " teste=", nrow(teste), " params=", length(coef_est), "\n", sep = "")
-  cat("media_global=", round(mean(banco$mortalidade_60_69), 2),
-      " dp_global=", round(sd(banco$mortalidade_60_69), 2), "\n", sep = "")
+  cat("n=", n_obs, " treino=", nrow(treino), " teste=", nrow(teste), " params=", length(coef_est), "\n", sep = "")
+  cat("media_global=", round(media_global, 2),
+      " dp_global=", round(dp_global, 2), "\n", sep = "")
   cat("\n--- Medias descritivas por municipio (54 linhas) ---\n")
   print(round(medias_mun, 2))
   cat("\n--- Medias descritivas por edicao (54 linhas) ---\n")
   print(round(medias_ano, 2))
   cat("\n--- Validacao em 5 partes no treino (38 linhas) ---\n")
   print(transform(tabela_cv, RMSE = round(RMSE, 2), MAE = round(MAE, 2)), row.names = FALSE)
-  cat(sprintf("reducao_rmse_mqo=%.2f%%\n", reducao_rmse))
-  cat(sprintf("dp_rmse_dobras_mqo=%.2f\n", dp_rmse_dobras))
+  cat(sprintf("reducao_rmse_mqo=%.2f%%\n", red_rmse))
+  cat(sprintf("dp_rmse_dobras_mqo=%.2f\n", dp_dobras))
   cat("\n--- Teste reservado (16 linhas) ---\n")
   cat(sprintf("rmse_teste_mqo=%.2f\n", rmse_teste_mqo))
   cat(sprintf("mae_teste_mqo=%.2f\n", mae_teste_mqo))
@@ -186,7 +207,7 @@ capture.output({
   cat(sprintf("contraste_mongagua_santos=%.2f\n", diff_mong_santos))
   cat(sprintf("contraste_2022_2014=%.2f\n", diff_2022_2014))
   cat(sprintf("maior_residuo_padronizado=%s %s (%.2f)\n",
-              as.character(treino$municipio[idx_max_res]),
-              as.character(treino$ano_f[idx_max_res]),
-              res_pad[idx_max_res]))
+              as.character(treino$municipio[idx_max]),
+              as.character(treino$ano_f[idx_max]),
+              res_pad[idx_max]))
 }, file = file.path(saida, "entrega-2-numeros.txt"))

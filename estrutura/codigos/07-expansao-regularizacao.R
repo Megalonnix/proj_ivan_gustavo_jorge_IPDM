@@ -4,7 +4,7 @@ if (length(arq_ipdm)) setwd(dirname(normalizePath(arq_ipdm[1])))
 if (dir.exists("estrutura/codigos")) setwd("estrutura/codigos")
 set.seed(1)
 # =============================================================
-# ATIVIDADE 08 - EXPANSÃO E REGULARIZAÇÃO
+# ATIVIDADE 07 - EXPANSÃO E REGULARIZAÇÃO
 # Y: mortalidade_60_69
 # Parte A: Expansão socioeconômica (p = 7)
 # Parte B: Expansão completa com model.matrix (municipio + factor(ano) + sociais, p = 19)
@@ -53,7 +53,8 @@ y <- dados$mortalidade_60_69
 n <- nrow(X); p <- ncol(X)
 
 cazul <- "#276DC3"; claranja <- "#E66101"; croxo <- "#5E3C99"
-pasta_fig <- normalizePath("../../consolidados-aulas/graficos/07")
+pasta_fig <- file.path("..", "..", "consolidados-aulas", "graficos", "07"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig_rel <- "consolidados-aulas/graficos/07"
 
 buffer <- character(0)
 add <- function(...) { txt <- paste0(...); cat(txt, "\n"); buffer <<- c(buffer, txt) }
@@ -184,13 +185,10 @@ add_print(sobrev_l_min)
 add(""); add("--- Sobreviventes do Lasso na Expansão Completa (lambda.1se) ---")
 add_print(sobrev_l_1se)
 
-add(""); add("[OK] Figuras em: ", pasta_fig)
+add(""); add("[OK] Figuras em: ", pasta_fig_rel)
 
-pastas_out_md <- c(file.path("estrutura", "scriptsR"), ".")
-pasta_out_md <- pastas_out_md[dir.exists(pastas_out_md)][1]
-arquivo_md <- file.path(pasta_out_md, "07-expansao-regularizacao.md")
 cabecalho <- c(
-  "# Relatório Técnico da Atividade 08 — Regularização",
+  "# Relatório Técnico da Atividade 07 — Regularização (Aula 08)",
   "",
   paste0("**Gerado por:** `07-expansao-regularizacao.R`  "),
   paste0("**Data:** ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "  "),
@@ -205,9 +203,9 @@ cabecalho <- c(
   "",
   "## Figuras",
   "",
-  paste0("- `", arq1, "` — Curva em U (Lasso)"),
-  paste0("- `", arq2, "` — Curva em U (Ridge)"),
-  paste0("- `", arq3, "` — Trilhas de coeficientes"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq1)), "` — Curva em U (Lasso)"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq2)), "` — Curva em U (Ridge)"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq3)), "` — Trilhas de coeficientes"),
   "",
   "## Output bruto",
   "", "```", paste(buffer, collapse = "\n"), "```",

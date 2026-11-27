@@ -4,7 +4,7 @@ if (length(arq_ipdm)) setwd(dirname(normalizePath(arq_ipdm[1])))
 if (dir.exists("estrutura/codigos")) setwd("estrutura/codigos")
 set.seed(1)
 # =============================================================
-# ATIVIDADE 10 - SPLINES E MODELOS ADITIVOS GENERALIZADOS (GAM)
+# ATIVIDADE 09 - SPLINES E MODELOS ADITIVOS GENERALIZADOS (GAM)
 # Banco: IPDM Baixada Santista (54 observações)
 # Resposta Y: mortalidade_60_69
 # Preditores: x1 = riqueza, x2 = escolaridade, x3 = distorcao_em
@@ -53,7 +53,7 @@ croxo    <- "#5E3C99"
 ccinza   <- "gray60"
 cfill    <- "#E0E7FF"
 
-pasta_fig <- normalizePath("../../consolidados-aulas/graficos/09")
+pasta_fig <- file.path("..", "..", "consolidados-aulas", "graficos", "09"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
 
 buffer <- character(0)
 add <- function(...) { txt <- paste0(...); cat(txt, "\n"); buffer <<- c(buffer, txt) }
@@ -165,7 +165,7 @@ frase_diagnostico_aula10 <- paste0(
 add("\n", frase_diagnostico_aula10)
 
 # Figuras
-arq1 <- file.path(pasta_fig, "10-spline-natural.png")
+arq1 <- file.path(pasta_fig, "09-efeitos-parciais-gam.png")
 png(arq1, width = 1100, height = 450, res = 110)
 par(mfrow = c(1, 3), mar = c(4.5, 4.5, 3, 1), pty = "s")
 plot(g, select = 1, scheme = 1, col = croxo, lwd = 2.5,
@@ -184,7 +184,7 @@ plot(g, select = 3, scheme = 1, col = cverde, lwd = 2.5,
 abline(h = 0, lty = 3, col = "gray50")
 dev.off()
 
-arq2 <- file.path(pasta_fig, "10-efeitos-gam.png")
+arq2 <- file.path(pasta_fig, "09-cv-spline-natural.png")
 png(arq2, width = 850, height = 650, res = 110)
 par(mar = c(4.5, 4.5, 3, 1), pty = "s")
 plot(dfs, cv_splines_x1, type = "b", pch = 16, col = claranja, lwd = 2.2,
@@ -195,9 +195,9 @@ plot(dfs, cv_splines_x1, type = "b", pch = 16, col = claranja, lwd = 2.2,
 grid(col = "gray85")
 lines(dfs, cv_splines_x1, type = "b", pch = 16, col = claranja, lwd = 2.2)
 abline(h = cv_base, lty = 2, col = "gray40", lwd = 1.8)
-text(7.2, cv_base + 0.25, paste0("Linha de Base (Média): ", fmt(cv_base, 2)), col = "gray40", cex = 0.85, font = 2)
+text(6.0, cv_base + 0.08, paste0("Linha de Base (Média): ", fmt(cv_base, 2)), col = "gray40", cex = 0.85, font = 2, pos = 3)
 abline(h = cv_mqo, lty = 3, col = "red", lwd = 1.8)
-text(7.2, cv_mqo + 0.25, paste0("MQO Linear: ", fmt(cv_mqo, 2)), col = "red", cex = 0.85, font = 2)
+text(6.0, cv_mqo + 0.08, paste0("MQO Linear: ", fmt(cv_mqo, 2)), col = "red", cex = 0.85, font = 2, pos = 3)
 points(melhor_df, melhor_cv_spline, pch = 16, cex = 2.4, col = cverde)
 text(melhor_df, melhor_cv_spline - 0.4,
      paste0("Mínimo: df = ", melhor_df, "\nMSE = ", fmt(melhor_cv_spline, 2)),
@@ -213,7 +213,7 @@ legend("topleft",
        bty = "o", bg = "white", cex = 0.85)
 dev.off()
 
-arq3 <- file.path(pasta_fig, "10-gam-estrutural.png")
+arq3 <- file.path(pasta_fig, "09-mqo-vs-spline-natural.png")
 png(arq3, width = 850, height = 650, res = 110)
 par(mar = c(4.5, 4.5, 3, 1), pty = "s")
 m_spline_opt <- lm(y ~ ns(x1, df = melhor_df) + x2 + x3, data = d)
@@ -255,7 +255,7 @@ legend("topright",
        bty = "o", bg = "white", cex = 0.85)
 dev.off()
 
-arq4 <- file.path(pasta_fig, "10-comparacao-modelos.png")
+arq4 <- file.path(pasta_fig, "09-efeito-distorcao-em.png")
 png(arq4, width = 850, height = 650, res = 110)
 par(mar = c(4.5, 4.5, 3, 1), pty = "s")
 plot(g, select = 3, scheme = 1, col = cverde, lwd = 3,
@@ -270,11 +270,8 @@ dev.off()
 
 add("\n[OK] Figuras geradas com sucesso.")
 
-pastas_out_md <- c(file.path("estrutura", "scriptsR"), ".")
-pasta_out_md <- pastas_out_md[dir.exists(pastas_out_md)][1]
-arquivo_md <- file.path(pasta_out_md, "09-splines-modelos-aditivos.md")
 cabecalho <- c(
-  "# Relatório Técnico da Atividade 10 — Splines e GAM",
+  "# Relatório Técnico da Atividade 09 — Splines e GAM (Aula 10)",
   "",
   paste0("**Gerado por:** `09-splines-modelos-aditivos.R`  "),
   paste0("**Data:** ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "  "),

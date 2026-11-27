@@ -1,4 +1,4 @@
-# Relatório da Atividade 09 — Métodos de Suavização
+# Relatório da Atividade 08 — Métodos de Suavização (Aula 09)
 
 **Gerado por:** `08-metodos-suavizacao.R`  
 **Data:** 2026-11-09 00:01:07  
@@ -18,10 +18,10 @@
 
 ## Figuras
 
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/08/01-ajustes-reta-knn-kernel.png` — Ajuste real: reta, KNN e kernel ótimo
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/08/02-cv-flexibilidade.png` — Curvas em U de validação (KNN e Kernel)
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/08/03-efeito-flexibilidade.png` — Estrutura local da relação
-- `/home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/08/04-dinamica-temporal.png` — Dinâmica temporal e choque da pandemia
+- `consolidados-aulas/graficos/08/01-ajustes-reta-knn-kernel.png` — Ajuste real: reta, KNN e kernel ótimo
+- `consolidados-aulas/graficos/08/02-cv-flexibilidade.png` — Curvas em U de validação (KNN e Kernel)
+- `consolidados-aulas/graficos/08/03-efeito-flexibilidade.png` — Estrutura local da relação
+- `consolidados-aulas/graficos/08/04-dinamica-temporal.png` — Dinâmica temporal e choque da pandemia
 
 ## Output bruto
 
@@ -34,7 +34,7 @@ Y: mortalidade_60_69 | X: riqueza
 2          KNN (k=20) 12.5767  3.5464         6.35%
 3 Kernel NW (h=0.007) 12.4573  3.5295         7.24%
 
-[OK] Figuras geradas em: /home/geminiano/Documents/projects/Estatistica/proj_ivan_gustavo_jorge_IPDM/consolidados-aulas/graficos/08
+[OK] Figuras geradas em: consolidados-aulas/graficos/08
 ```
 
 ## Notas

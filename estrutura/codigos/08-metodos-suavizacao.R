@@ -4,7 +4,7 @@ if (length(arq_ipdm)) setwd(dirname(normalizePath(arq_ipdm[1])))
 if (dir.exists("estrutura/codigos")) setwd("estrutura/codigos")
 set.seed(1)
 # =============================================================
-# ATIVIDADE 09 - MÉTODOS DE SUAVIZAÇÃO (KNN + KERNEL)
+# ATIVIDADE 08 - MÉTODOS DE SUAVIZAÇÃO (KNN + KERNEL)
 # Y: mortalidade_60_69 | X: riqueza
 # =============================================================
 if (requireNamespace("rstudioapi", quietly = TRUE) && rstudioapi::isAvailable()) {
@@ -63,7 +63,8 @@ names(cv_kernel) <- paste0("h=", round(hs, 4))
 melhor_h <- hs[which.min(cv_kernel)]
 
 cazul <- "#276DC3"; claranja <- "#E66101"; cverde <- "#2CA02C"; croxo <- "#5E3C99"
-pasta_fig <- normalizePath("../../consolidados-aulas/graficos/08"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig <- file.path("..", "..", "consolidados-aulas", "graficos", "08"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig_rel <- "consolidados-aulas/graficos/08"
 
 buffer <- character(0)
 add <- function(...) { txt <- paste0(...); cat(txt, "\n"); buffer <<- c(buffer, txt) }
@@ -193,11 +194,10 @@ legend("topleft",
        bty = "o", bg = "white", cex = 0.82)
 dev.off()
 
-add("\n[OK] Figuras geradas em: ", pasta_fig)
+add("\n[OK] Figuras geradas em: ", pasta_fig_rel)
 
-arquivo_md <- "08-metodos-suavizacao.md"
 cabecalho <- c(
-  "# Relatório da Atividade 09 — Métodos de Suavização",
+  "# Relatório da Atividade 08 — Métodos de Suavização (Aula 09)",
   "",
   paste0("**Gerado por:** `08-metodos-suavizacao.R`  "),
   paste0("**Data:** ", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "  "),
@@ -217,10 +217,10 @@ cabecalho <- c(
   "",
   "## Figuras",
   "",
-  paste0("- `", arq1, "` — Ajuste real: reta, KNN e kernel ótimo"),
-  paste0("- `", arq2, "` — Curvas em U de validação (KNN e Kernel)"),
-  paste0("- `", arq3, "` — Estrutura local da relação"),
-  paste0("- `", arq4, "` — Dinâmica temporal e choque da pandemia"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq1)), "` — Ajuste real: reta, KNN e kernel ótimo"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq2)), "` — Curvas em U de validação (KNN e Kernel)"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq3)), "` — Estrutura local da relação"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq4)), "` — Dinâmica temporal e choque da pandemia"),
   "",
   "## Output bruto",
   "", "```", paste(buffer, collapse = "\n"), "```",

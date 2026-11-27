@@ -81,7 +81,6 @@ add(""); add("================ DICIONÁRIO ================"); add_print(diciona
 add(""); add("================ sapply(dados, class) ================"); add_print(sapply(dados, class))
 add(""); add("================ AMOSTRA (5 LINHAS) ================"); add_print(head(dados, 5))
 
-arquivo_md <- "01-dicionario-variaveis.md"
 cabecalho <- c(
   "# Relatório da Atividade 01 — Dicionário de Variáveis e Tipagem",
   "",

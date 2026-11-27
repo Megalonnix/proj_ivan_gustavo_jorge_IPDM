@@ -15,11 +15,11 @@
 
 | # | Etapa | O que fizemos | O que descobrimos |
 |---|---|---|---|
-| **03 / 05 / 07** | Polinômios Globais | Graus 1, 3 e 12 em `escolaridade` | Polinômio de grau alto (12) oscila violentamente nas bordas ($\mathrm{RMSE}_{\mathrm{CV}} = 240$) |
-| **08** | Regularização ($L_1/L_2$) | Ridge, Lasso e Elastic Net | O Lasso descarta ruído socioeconômico e retém `municipio`, `ano` e `riqueza` |
-| **09 (Oficina)** | Escolha da Pergunta | Efeitos fixos (`municipio + ano`) vs Logística | `municipio + ano` reduz 42,6% do RMSE ($\mathrm{RMSE} = 2,20$) e domina a classificação ($\mathrm{AUC} = 0,89$) |
-| **09 (Suavização)** | KNN e Kernel | Médias locais em `riqueza` e `ano` | Kernel ($h=0,0070$) bate a reta em `riqueza` (-7,2% MSE), mas sofre com viés nas bordas e maldição da dimensionalidade para $p > 2$ |
-| **10** | **Splines e GAM** | **Polinômios por partes + modelos aditivos** | **Corrigimos a oscilação de borda (Spline Natural) e combinamos múltiplos preditores sem maldição da dimensionalidade (GAM)** |
+| **03 / 05 / 06** | Polinômios Globais | Graus 1, 3 e 12 em `escolaridade` | Polinômio de grau alto (12) oscila violentamente nas bordas ($\mathrm{RMSE}_{\mathrm{CV}} = 240$) |
+| **07** | Regularização ($L_1/L_2$) | Ridge, Lasso e Elastic Net | O Lasso descarta ruído socioeconômico e retém `municipio`, `ano` e `riqueza` |
+| **Entrega 1** | Escolha da Pergunta | Efeitos fixos (`municipio + ano`) vs Logística | `municipio + ano` reduz 42,6% do RMSE ($\mathrm{RMSE} = 2,20$) e domina a classificação ($\mathrm{AUC} = 0,89$) |
+| **08** | Suavização (KNN e Kernel) | Médias locais em `riqueza` e `ano` | Kernel ($h=0,0070$) bate a reta em `riqueza` (-7,2% MSE), mas sofre com viés nas bordas e maldição da dimensionalidade para $p > 2$ |
+| **09** | **Splines e GAM** | **Polinômios por partes + modelos aditivos** | **Corrigimos a oscilação de borda (Spline Natural) e combinamos múltiplos preditores sem maldição da dimensionalidade (GAM)** |
 
 ---
 
@@ -133,8 +133,8 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 ## 4. Análise Detalhada das Figuras
 
 ### Figura 1: Efeitos Parciais do GAM Socioeconômico (`s(x1)`, `s(x2)`, `s(x3)`)
-![Efeitos parciais do GAM](graficos/09/10-spline-natural.png)
-*(Arquivo local: `graficos/09/10-spline-natural.png`)*
+![Efeitos parciais do GAM](graficos/09/09-efeitos-parciais-gam.png)
+*(Arquivo local: `graficos/09/09-efeitos-parciais-gam.png`)*
 
 - **Leitura dos três painéis:** Cada gráfico mostra a contribuição isolada $\hat{f}_j(x_j)$ centrada em zero, mantendo os demais preditores fixos, acompanhada das bandas de confiança de $\pm 2$ EP (sombreado azul) e do tapete de observações (*rug plot*) no eixo horizontal.
 - **Autocontrole da penalidade:** Note como o GAM não força curvas onde não há evidência suficiente: `s(riqueza)` ($\mathrm{edf}=1,00$, inclinação negativa) e `s(escolaridade)` ($\mathrm{edf}=1,00$, quase plana) foram automaticamente encolhidas para retas pela penalidade $\lambda \int [f''(t)]^2 dt$. Apenas `s(distorcao_em)` ($\mathrm{edf}=1,77$) conservou curvatura côncava.
@@ -142,8 +142,8 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 ---
 
 ### Figura 2: Curva em U da Seleção de Flexibilidade ($\mathrm{df}$) na Spline Natural
-![Seleção de df da Spline Natural](graficos/09/10-efeitos-gam.png)
-*(Arquivo local: `graficos/09/10-efeitos-gam.png`)*
+![Seleção de df da Spline Natural](graficos/09/09-cv-spline-natural.png)
+*(Arquivo local: `graficos/09/09-cv-spline-natural.png`)*
 
 - Com $\mathrm{df} = 2$ (apenas 1 nó interno), o modelo ainda é rígido demais no lugar errado ($\mathrm{MSE} = 16,10$).
 - Em **$\mathrm{df} = 4$** (3 nós internos nos quartis de `riqueza`), a curva atinge o **fundo do U** ($\mathrm{MSE} = 14,43$), ficando abaixo tanto do MQO linear ($15,09$, linha vermelha pontilhada) quanto da linha de base ($14,76$, linha cinza tracejada).
@@ -152,8 +152,8 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 ---
 
 ### Figura 3: Reta MQO vs. Spline Natural ($\mathrm{df} = 4$) em `riqueza`
-![Reta MQO vs Spline Natural](graficos/09/10-gam-estrutural.png)
-*(Arquivo local: `graficos/09/10-gam-estrutural.png`)*
+![Reta MQO vs Spline Natural](graficos/09/09-mqo-vs-spline-natural.png)
+*(Arquivo local: `graficos/09/09-mqo-vs-spline-natural.png`)*
 
 - A **reta MQO (cinza tracejada)** impõe uma queda constante, subestimando a mortalidade na faixa intermediária e ignorando a estrutura em degraus da região.
 - A **Spline Natural com $\mathrm{df} = 4$ (verde contínua)** acompanha a queda acentuada entre os municípios de menor riqueza (Mongaguá/Peruíbe) e Santos (riqueza $\approx 0,50$), captura a estabilização/repique na faixa de Cubatão/Bertioga (riqueza $> 0,51$), e **sai em linha reta comportada nas duas extremidades** do gráfico, sem o efeito de achatamento horizontal do KNN nem o tremor de borda do polinômio global.
@@ -161,8 +161,8 @@ Já no **GAM Semiparamétrico Estrutural** (`y ~ municipio + s(ano, k=5) + s(riq
 ---
 
 ### Figura 4: O Padrão de Saturação em `distorcao_em` ($\mathrm{edf} = 1,77$)
-![Efeito parcial de distorção idade-série](graficos/09/10-comparacao-modelos.png)
-*(Arquivo local: `graficos/09/10-comparacao-modelos.png`)*
+![Efeito parcial de distorção idade-série](graficos/09/09-efeito-distorcao-em.png)
+*(Arquivo local: `graficos/09/09-efeito-distorcao-em.png`)*
 
 - Esta figura isola a descoberta não-linear do GAM socioeconômico: municípios com baixa distorção escolar (8% a 12%, como Santos) têm efeito parcial negativo sobre a mortalidade (cerca de $-2$ a $-3$ mortes/mil hab.). Conforme a distorção avança até 17%, o efeito parcial sobe para $+1$ morte/mil hab., estabilizando num **platô de saturação** entre 18% e 27%.
 
@@ -263,8 +263,8 @@ Para fundamentação teórica completa do grupo, resolvemos passo a passo todos 
 ## Documentos complementares
 
 - 🧮 [`09-splines-modelos-aditivos.R`](../estrutura/codigos/09-splines-modelos-aditivos.R) — script R reprodutível desta atividade.
-- 📋 [Relatório técnico bruto (`09-splines-modelos-aditivos.md`)](../estrutura/codigos/09-numeros.txt).
-- 📎 [Consolidado 08 — Regularização](07-expansao-regularizacao.md).
-- 📎 [Consolidado 09 — Métodos de Suavização](08-metodos-suavizacao.md).
-- 📎 [Consolidado 09 — Escolha da Pergunta](../entregas/entrega-1-parcial/escolha-da-pergunta.md).
+- 📋 [Auditoria numérica (`09-numeros.txt`)](../estrutura/codigos/09-numeros.txt).
+- 📎 [Consolidado 07 — Regularização](07-expansao-regularizacao.md).
+- 📎 [Consolidado 08 — Métodos de Suavização](08-metodos-suavizacao.md).
+- 📎 [Entrega 1 — Escolha da Pergunta](../entregas/entrega-1-parcial/escolha-da-pergunta.md).
 - 📄 [Artigo Formal — Entrega 1 (PDF)](../entregas/entrega-1-parcial/entrega-1-pergunta.pdf).

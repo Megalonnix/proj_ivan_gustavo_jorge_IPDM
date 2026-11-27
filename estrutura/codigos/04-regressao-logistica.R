@@ -31,7 +31,8 @@ dados$mortalidade_alta <- as.integer(dados$mortalidade_60_69 > mediana_mort)
 y <- dados$mortalidade_alta; x <- dados$escolaridade
 
 cazul <- "#276DC3"; claranja <- "#E66101"; croxo <- "#5E3C99"
-pasta_fig <- normalizePath("../../consolidados-aulas/graficos/04"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig <- file.path("..", "..", "consolidados-aulas", "graficos", "04"); if (!dir.exists(pasta_fig)) dir.create(pasta_fig, recursive = TRUE)
+pasta_fig_rel <- "consolidados-aulas/graficos/04"
 
 buffer <- character(0)
 add <- function(...) { txt <- paste0(...); cat(txt, "\n"); buffer <<- c(buffer, txt) }
@@ -109,9 +110,8 @@ add(""); add("Youden — limiar: ", round(melhor, 3),
 yhat_y <- as.integer(p > melhor)
 tab_y <- table(real = y, previsto = yhat_y); add_print(tab_y)
 
-add(""); add("[OK] Figuras gravadas em: ", pasta_fig)
+add(""); add("[OK] Figuras gravadas em: ", pasta_fig_rel)
 
-arquivo_md <- "04-regressao-logistica.md"
 cabecalho <- c(
   "# Relatório da Atividade 04 — Regressão Logística",
   "",
@@ -132,8 +132,8 @@ cabecalho <- c(
   "",
   "## Figuras",
   "",
-  paste0("- `", arq1, "` — Curva sigmoide"),
-  paste0("- `", arq2, "` — ROC"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq1)), "` — Curva sigmoide"),
+  paste0("- `", file.path(pasta_fig_rel, basename(arq2)), "` — ROC"),
   "",
   "## Output bruto",
   "", "```", paste(buffer, collapse = "\n"), "```",
